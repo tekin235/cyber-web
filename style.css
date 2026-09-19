@@ -1025,9 +1025,10 @@ html, body {
 }
 
 .dungeon-gate-trigger.unlocked .gate-lock-seal {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.6);
-  pointer-events: none;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translate(-50%, -50%) scale(0.6) !important;
+  pointer-events: none !important;
 }
 
 .dungeon-gate-trigger.unlocked .dungeon-gate-svg {

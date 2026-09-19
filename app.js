@@ -642,7 +642,7 @@ class SanctumApp {
   }
 
   completePortalWarp() {
-    if (!APP_STATE.isTransitioning && APP_STATE.currentScreen === 'pageDashboard') return;
+    if (!APP_STATE.isTransitioning) return;
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
@@ -651,36 +651,9 @@ class SanctumApp {
       this.dom.transitionWarpFlash.classList.add('flash-active');
     }
 
+    // Seamlessly redirect to standalone Page 3 (dashboard.html)
     setTimeout(() => {
-      // Transition to Page 3 (Dashboard)
-      this.showScreen('pageDashboard');
-
-      // Check return from introduction or persistent gate state
-      this.checkReturnFromIntro();
-
-      // Trigger choreographed Page 3 entrance animations after the flash
-      if (this.dom.pageDashboard) {
-        this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
-        void this.dom.pageDashboard.offsetWidth; // Force CSS reflow
-        this.dom.pageDashboard.classList.add('dashboard-enter-anim');
-
-        // Play ambient sanctuary chime / resonance
-        sfx.playDashboardReveal();
-
-        // Clean up entrance animation class once completed (~2.2s)
-        setTimeout(() => {
-          if (this.dom.pageDashboard) {
-            this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
-          }
-        }, 2200);
-      }
-
-      // Dissolve the warp flash smoothly
-      setTimeout(() => {
-        if (this.dom.transitionWarpFlash) {
-          this.dom.transitionWarpFlash.classList.remove('flash-active');
-        }
-      }, 120);
+      window.location.href = 'dashboard.html';
     }, 280);
   }
 
@@ -910,10 +883,8 @@ class SanctumApp {
     } else if (hash.includes('code') || hash.includes('access')) {
       this.showScreen('pageAccessCode');
     } else if (hash.includes('dashboard') || query.includes('dashboard')) {
-      this.showScreen('pageDashboard');
-      if (hash.includes('unlocked') || query.includes('unlocked')) {
-        this.unlockGateDOM();
-      }
+      // Forward to standalone Page 3 (dashboard.html)
+      window.location.href = 'dashboard.html';
     }
   }
 }
