@@ -1910,7 +1910,7 @@
             </div>
             <h3>The River Ferry Ledger</h3>
             <p>Opens with web application security. Change one number in a URL, see a stranger's data.</p>
-            <p class="room-lock-note" id="lock-note-idor">Requires: Complete Station 5 (The Runestone Memo)</p>
+            <p class="room-lock-note" id="lock-note-idor">Requires: Complete Station 5 or 6</p>
             <div class="room-card-footer" id="footer-room-idor" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1929,7 +1929,7 @@
             </div>
             <h3>The Mossy Ravine Bridge</h3>
             <p>Opens with path traversal. A file picker that never checks where you're pointing it.</p>
-            <p class="room-lock-note" id="lock-note-traversal">Requires: Complete Station 6 (The Hollow Willow Form)</p>
+            <p class="room-lock-note" id="lock-note-traversal">Requires: Complete Station 7 (The River Ferry Ledger)</p>
             <div class="room-card-footer" id="footer-room-traversal" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1948,7 +1948,7 @@
             </div>
             <h3>The Signal Fire Lookout</h3>
             <p>Opens with social engineering. No exploit code — just a very convincing voice.</p>
-            <p class="room-lock-note" id="lock-note-social">Requires: Complete Stations 7 &amp; 8 (Ferry Ledger &amp; Mossy Bridge)</p>
+            <p class="room-lock-note" id="lock-note-social">Requires: Complete Station 8 (The Mossy Ravine Bridge)</p>
             <div class="room-card-footer" id="footer-room-social" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -2724,10 +2724,10 @@
       if (['binexp', 'sqli', 'xss'].includes(id)) return true;
       if (id === 'wifi') return completed.includes('xss');
       if (id === 'crypto') return completed.includes('xss');
-      if (id === 'cmdinj') return completed.includes('wifi');
-      if (id === 'idor') return completed.includes('crypto');
-      if (id === 'traversal') return completed.includes('cmdinj');
-      if (id === 'social') return completed.includes('idor') && completed.includes('traversal');
+      if (id === 'cmdinj') return completed.includes('wifi') || completed.includes('crypto');
+      if (id === 'idor') return completed.includes('cmdinj') || completed.includes('crypto');
+      if (id === 'traversal') return completed.includes('idor');
+      if (id === 'social') return completed.includes('traversal');
       return false;
     }
 
