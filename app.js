@@ -476,6 +476,9 @@ class SanctumApp {
       // Valid access code accepted
       sfx.playClick();
       APP_STATE.accessCode = codeVal;
+      try {
+        sessionStorage.setItem('sanctumAuth', 'true');
+      } catch (e) {}
 
       if (this.dom.codeStatusMsg) {
         this.dom.codeStatusMsg.textContent = '✦ Clearance accepted. Opening sanctum portal...';
@@ -701,6 +704,7 @@ class SanctumApp {
     APP_STATE.accessCode = '';
 
     try {
+      sessionStorage.removeItem('sanctumAuth');
       sessionStorage.removeItem('justReturnedFromIntro');
       localStorage.removeItem('sanctumGateUnlocked');
     } catch (e) {}

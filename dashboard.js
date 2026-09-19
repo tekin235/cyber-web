@@ -290,6 +290,9 @@ class DashboardApp {
   }
 
   init() {
+    // 0. Instant Auth Guard check
+    if (!this.checkAuthGuard()) return;
+
     // 1. Initialize ambient cavern particles
     this.cavernParticles = new CavernParticleCanvas('cavernParticlesCanvas');
 
@@ -325,8 +328,9 @@ class DashboardApp {
     // 7. Intercept browser back button to logout
     this.setupBackToLogout();
 
-    // 8. Handle bfcache / browser back button navigation
+    // 8. Handle bfcache / browser navigation with auth re-verification
     window.addEventListener('pageshow', () => {
+      if (!this.checkAuthGuard()) return;
       this.checkReturnFromIntro();
     });
 
@@ -458,12 +462,29 @@ class DashboardApp {
   }
 
   // ===========================================================================
+  // AUTH GUARD (Redirects unauthorized visits to Login)
+  // ===========================================================================
+  checkAuthGuard() {
+    try {
+      if (sessionStorage.getItem('sanctumAuth') !== 'true') {
+        window.location.replace('index.html#login');
+        return false;
+      }
+    } catch (e) {
+      window.location.replace('index.html#login');
+      return false;
+    }
+    return true;
+  }
+
+  // ===========================================================================
   // LOGOUT (Reset & Return to Page 1: index.html)
   // ===========================================================================
   handleLogout() {
     DASHBOARD_STATE.isGateUnlocked = false;
 
     try {
+      sessionStorage.removeItem('sanctumAuth');
       sessionStorage.removeItem('justReturnedFromIntro');
       localStorage.removeItem('sanctumGateUnlocked');
     } catch (e) {}

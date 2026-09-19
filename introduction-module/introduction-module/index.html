@@ -7,7 +7,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="introduction-module/introduction.css" />
+  <link rel="stylesheet" href="introduction.css" />
+  <script>
+    // Instant Auth Guard (prevents unauthorized access or forward navigation after logout)
+    (function() {
+      try {
+        if (sessionStorage.getItem('sanctumAuth') !== 'true') {
+          window.location.replace('../../index.html#login');
+        }
+      } catch (e) {
+        window.location.replace('../../index.html#login');
+      }
+    })();
+    window.addEventListener('pageshow', function() {
+      try {
+        if (sessionStorage.getItem('sanctumAuth') !== 'true') {
+          window.location.replace('../../index.html#login');
+        }
+      } catch (e) {
+        window.location.replace('../../index.html#login');
+      }
+    });
+  </script>
   <style>
     :root {
       --font-display: 'Cinzel', serif;
