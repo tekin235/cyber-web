@@ -121,14 +121,40 @@
       <canvas id="cavernParticlesCanvas"></canvas>
     </div>
 
-    <!-- Atmospheric Clouds Parting Overlay -->
+    <!-- Atmospheric 3D Clouds Fly-Through & Chasm Overlay -->
     <div class="clouds-parting-overlay" id="cloudsOverlay" aria-hidden="true">
-      <div class="cloud-bank cloud-bank-left"></div>
-      <div class="cloud-bank cloud-bank-right"></div>
-      <div class="cloud-bank cloud-bank-top"></div>
-      <div class="cloud-bank cloud-bank-bottom"></div>
-      <div class="cloud-bank cloud-bank-center-glow"></div>
-      <div class="cloud-mist-veil"></div>
+      <div class="cloud-canyon-perspective">
+        <!-- Far Chasm Portal Horizon -->
+        <div class="cloud-horizon-glow"></div>
+
+        <!-- Left Cloud Canyon Wall (Towering dense clouds flanking on left) -->
+        <div class="cloud-wall cloud-wall-left-far"></div>
+        <div class="cloud-wall cloud-wall-left-mid"></div>
+        <div class="cloud-wall cloud-wall-left-near"></div>
+
+        <!-- Right Cloud Canyon Wall (Towering dense clouds flanking on right) -->
+        <div class="cloud-wall cloud-wall-right-far"></div>
+        <div class="cloud-wall cloud-wall-right-mid"></div>
+        <div class="cloud-wall cloud-wall-right-near"></div>
+
+        <!-- Overhead Cloud Canopy -->
+        <div class="cloud-wall cloud-canopy-top"></div>
+
+        <!-- Cloud Sea Floor -->
+        <div class="cloud-wall cloud-floor-bottom"></div>
+
+        <!-- Speed Cloud Wisps Rushing Past Camera -->
+        <div class="cloud-wisps-tunnel">
+          <div class="cloud-wisp wisp-1"></div>
+          <div class="cloud-wisp wisp-2"></div>
+          <div class="cloud-wisp wisp-3"></div>
+          <div class="cloud-wisp wisp-4"></div>
+          <div class="cloud-wisp wisp-5"></div>
+        </div>
+
+        <!-- Atmospheric Mist Veil -->
+        <div class="cloud-mist-veil"></div>
+      </div>
     </div>
 
     <!-- Minimalist Top Navigation -->

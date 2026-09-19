@@ -175,6 +175,41 @@ class SoundFX {
       this.playVictoryChime();
     }, 150);
   }
+
+  playCloudDive() {
+    if (!APP_STATE.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+
+    // Soft celestial wind whoosh as viewer dives between towering clouds
+    const bufferSize = this.ctx.sampleRate * 2.2;
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(280, this.ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 1.0);
+    filter.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 2.0);
+
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.15, this.ctx.currentTime + 0.8);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2.1);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    noise.start();
+    noise.stop(this.ctx.currentTime + 2.1);
+  }
 }
 
 const sfx = new SoundFX();
@@ -595,6 +630,7 @@ class SanctumApp {
     // Transition smoothly into Page 3 through the cloud parting animation
     setTimeout(() => {
       this.showScreen('pageDashboard');
+      sfx.playCloudDive();
 
       // Trigger Cloud Parting & Emergence Animation
       if (this.dom.pageDashboard) {
