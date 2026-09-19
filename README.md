@@ -1,4 +1,4 @@
-# Emberkeep - Cyber Web Experience
+# Cyber Workshop
 
 An immersive, gamified cyber portal and dungeon dashboard with medieval fantasy aesthetics, real-time spatial navigation, interactive trials, audio effects, and modal chambers.
 
