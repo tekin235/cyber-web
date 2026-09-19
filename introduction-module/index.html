@@ -842,6 +842,111 @@
       color: var(--color-emerald-bright);
     }
 
+    .room-lock-note {
+      margin-top: 10px;
+      font-size: 0.74rem;
+      color: #fbbf24;
+      font-family: var(--font-mono);
+      display: none;
+      line-height: 1.4;
+    }
+    .room-card.locked .room-lock-note {
+      display: block;
+    }
+
+    /* Runestone Cipher Tool */
+    .cipher-tool-card {
+      background: rgba(12, 34, 23, 0.92);
+      border: 1.5px solid rgba(52, 211, 153, 0.35);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      color: #ffffff;
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.75);
+    }
+
+    .cipher-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cipher-slider-row input[type=range] {
+      flex: 1;
+      accent-color: #10b981;
+      height: 8px;
+      cursor: pointer;
+    }
+
+    .cipher-shift-display {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-emerald-bright);
+      min-width: 90px;
+    }
+
+    .cipher-output-box {
+      background: #030a06;
+      border: 1.5px solid rgba(52, 211, 153, 0.3);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      color: #38bdf8;
+      min-height: 48px;
+      word-break: break-all;
+    }
+
+    /* Radio Dispatch Social Choices */
+    .radio-choices-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .radio-choice-btn {
+      text-align: left;
+      padding: 14px 18px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1.5px solid rgba(52, 211, 153, 0.28);
+      border-radius: 10px;
+      color: #f1f5f9;
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      transition: all 0.2s ease;
+    }
+
+    .radio-choice-btn:hover {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: var(--color-emerald-bright);
+      transform: translateX(4px);
+    }
+
+    /* Tool Input Row */
+    .tool-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .tool-input-row input {
+      flex: 1;
+      padding: 10px 14px;
+      background: #030a06;
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #ffffff;
+    }
+
     /* =========================================================================
        SCREENS 3, 4, 5: INTERACTIVE ROOM LAYOUTS (Woodland Research Field Stations)
        ========================================================================= */
@@ -1687,7 +1792,7 @@
 
         <div class="rooms-container">
           <!-- Room 1: Open -->
-          <div class="room-card" id="card-room-binexp" onclick="goScreen('room-binexp')">
+          <div class="room-card" id="card-room-binexp" onclick="handleRoomClick('binexp')">
             <div class="room-card-header">
               <div class="room-sigil-box">▧</div>
               <span class="room-status-badge" id="badge-room-binexp">Canopy Open</span>
@@ -1705,7 +1810,7 @@
           </div>
 
           <!-- Room 2: Open -->
-          <div class="room-card" id="card-room-sqli" onclick="goScreen('room-sqli')">
+          <div class="room-card" id="card-room-sqli" onclick="handleRoomClick('sqli')">
             <div class="room-card-header">
               <div class="room-sigil-box">≋</div>
               <span class="room-status-badge" id="badge-room-sqli">Canopy Open</span>
@@ -1723,7 +1828,7 @@
           </div>
 
           <!-- Room 3: Open -->
-          <div class="room-card" id="card-room-xss" onclick="goScreen('room-xss')">
+          <div class="room-card" id="card-room-xss" onclick="handleRoomClick('xss')">
             <div class="room-card-header">
               <div class="room-sigil-box">🪶</div>
               <span class="room-status-badge" id="badge-room-xss">Canopy Open</span>
@@ -1740,59 +1845,118 @@
             </div>
           </div>
 
-          <!-- Locked Teaser Rooms -->
-          <div class="room-card locked">
+          <!-- Room 4: Whispering Pines Wi-Fi -->
+          <div class="room-card locked" id="card-room-wifi" onclick="handleRoomClick('wifi')">
             <div class="room-card-header">
               <div class="room-sigil-box">⇄</div>
-              <span class="room-status-badge">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-wifi">Cave Locked</span>
             </div>
             <h3>The Whispering Pines Wi-Fi</h3>
             <p>Opens with network fundamentals. Watch credentials cross the wire in plain text.</p>
+            <p class="room-lock-note" id="lock-note-wifi">Requires: Complete Scene 3 (The Guestbook)</p>
+            <div class="room-card-footer" id="footer-room-wifi" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
-          <div class="room-card locked">
+          <!-- Room 5: The Runestone Memo -->
+          <div class="room-card locked" id="card-room-crypto" onclick="handleRoomClick('crypto')">
             <div class="room-card-header">
               <div class="room-sigil-box">✷</div>
-              <span class="room-status-badge">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-crypto">Cave Locked</span>
             </div>
             <h3>The Runestone Memo</h3>
             <p>Opens with cryptography session. A secret message that was "encrypted" — barely.</p>
+            <p class="room-lock-note" id="lock-note-crypto">Requires: Complete Scene 3 (The Guestbook)</p>
+            <div class="room-card-footer" id="footer-room-crypto" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
-          <div class="room-card locked">
+          <!-- Room 6: The Hollow Willow Form -->
+          <div class="room-card locked" id="card-room-cmdinj" onclick="handleRoomClick('cmdinj')">
             <div class="room-card-header">
               <div class="room-sigil-box">⌁</div>
-              <span class="room-status-badge">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-cmdinj">Cave Locked</span>
             </div>
             <h3>The Hollow Willow Form</h3>
             <p>Opens with terminal/privilege escalation. A form field that gets passed straight to a shell.</p>
+            <p class="room-lock-note" id="lock-note-cmdinj">Requires: Complete Station 4 (Whispering Pines Wi-Fi)</p>
+            <div class="room-card-footer" id="footer-room-cmdinj" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
-          <div class="room-card locked">
+          <!-- Room 7: The River Ferry Ledger -->
+          <div class="room-card locked" id="card-room-idor" onclick="handleRoomClick('idor')">
             <div class="room-card-header">
               <div class="room-sigil-box">▤</div>
-              <span class="room-status-badge">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-idor">Cave Locked</span>
             </div>
             <h3>The River Ferry Ledger</h3>
             <p>Opens with web application security. Change one number in a URL, see a stranger's data.</p>
+            <p class="room-lock-note" id="lock-note-idor">Requires: Complete Station 5 (The Runestone Memo)</p>
+            <div class="room-card-footer" id="footer-room-idor" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
-          <div class="room-card locked">
+          <!-- Room 8: The Mossy Ravine Bridge -->
+          <div class="room-card locked" id="card-room-traversal" onclick="handleRoomClick('traversal')">
             <div class="room-card-header">
               <div class="room-sigil-box">⛁</div>
-              <span class="room-status-badge">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-traversal">Cave Locked</span>
             </div>
             <h3>The Mossy Ravine Bridge</h3>
             <p>Opens with path traversal. A file picker that never checks where you're pointing it.</p>
+            <p class="room-lock-note" id="lock-note-traversal">Requires: Complete Station 6 (The Hollow Willow Form)</p>
+            <div class="room-card-footer" id="footer-room-traversal" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
-          <div class="room-card locked">
+          <!-- Room 9: The Signal Fire Lookout -->
+          <div class="room-card locked" id="card-room-social" onclick="handleRoomClick('social')">
             <div class="room-card-header">
               <div class="room-sigil-box">☏</div>
-              <span class="room-status-badge">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-social">Cave Locked</span>
             </div>
             <h3>The Signal Fire Lookout</h3>
             <p>Opens with social engineering. No exploit code — just a very convincing voice.</p>
+            <p class="room-lock-note" id="lock-note-social">Requires: Complete Stations 7 &amp; 8 (Ferry Ledger &amp; Mossy Bridge)</p>
+            <div class="room-card-footer" id="footer-room-social" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -2000,6 +2164,431 @@
       </div>
     </section>
 
+    <!-- ===================================================================== -->
+    <!-- SCREEN 6: INTERACTIVE ROOM — NETWORK WI-FI SNIFFING                   -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-wifi">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 4 — Whispering Pines Wi-Fi</div>
+          <h2>Whispering Pines Wi-Fi</h2>
+          <div class="room-sub-caption">Radio Terminal · unencrypted broadcast packets across the pine canopy</div>
+
+          <div class="dialogue-bubble" id="wf-dialogue">
+            An open access point is transmitting unencrypted packets across the canopy trail. 
+            Inspect the captured traffic log: <span class="hint">sniff or cat capture.pcap</span>
+          </div>
+
+          <div class="mech-box" id="wf-mech">
+            <span class="label">How this works</span>
+            Unencrypted HTTP and Wi-Fi networks transmit data in plaintext across the air. Anyone monitoring the channel with a packet capture tool can read passwords, session cookies, and private messages.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintWifi()">Need a hint? Fill command</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <div class="stage-title-group">
+              <h1>~/wifi-tap (Wire Monitor)</h1>
+              <span class="room-stage-badge" id="stage-badge-wifi" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetWifi()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="sanctum-terminal">
+            <div class="term-titlebar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="term-scroll-body" id="wf-body"></div>
+            <div class="term-input-container">
+              <span class="term-prompt-label">student@wifi-tap:~$</span>
+              <input type="text" id="wf-input" class="term-input-field" placeholder="type a command (sniff, cat capture.pcap)…" autocomplete="off" spellcheck="false" />
+            </div>
+          </div>
+
+          <div class="flag-banner-box" id="wf-flagbox">
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;cl34rt3xt_cr3ds_0n_th3_w1r3&#125;</span>
+            </div>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 7: INTERACTIVE ROOM — CRYPTOGRAPHY CIPHER                      -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-crypto">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 5 — Ancient Runestone Memo</div>
+          <h2>The Runestone Memo</h2>
+          <div class="room-sub-caption">Decryption Slate · decipher the intercepted ancient Caesar/ROT13 cipher</div>
+
+          <div class="dialogue-bubble" id="cr-dialogue">
+            An encrypted courier note was left in the hollow oak. The letters appear shifted by an ancient cipher. 
+            <span class="hint">Adjust the Shift slider to 13 (ROT13) to reveal the message.</span>
+          </div>
+
+          <div class="mech-box" id="cr-mech">
+            <span class="label">How this works</span>
+            ROT13 and Caesar ciphers shift each alphabet letter by a fixed position. Because they lack a secret key and have a tiny keyspace (26 positions), they can be broken in seconds.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintCrypto()">Need a hint? Auto-shift 13</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <div class="stage-title-group">
+              <h1>Runestone Decryption Slate</h1>
+              <span class="room-stage-badge" id="stage-badge-crypto" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetCrypto()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="cipher-tool-card">
+            <div style="font-size:0.85rem; color:#9bb1a4;">Intercepted Ciphertext from Canopy Courier:</div>
+            <div style="font-family:var(--font-mono); font-size:1.15rem; color:#fbbf24; background:#04120a; padding:12px; border-radius:8px; border:1px solid rgba(251,191,36,0.3);">
+              SYNT{p4rf4e_ebg13_punpx_fhpprff}
+            </div>
+
+            <div class="cipher-slider-row">
+              <label style="font-size:0.88rem; font-weight:600;">Cipher Shift:</label>
+              <input type="range" id="cr-slider" min="0" max="25" value="0" oninput="onCryptoSliderChange(this.value)" />
+              <span class="cipher-shift-display" id="cr-shift-label">Shift: 0</span>
+            </div>
+
+            <div style="font-size:0.85rem; color:#9bb1a4; margin-top:6px;">Decrypted Plaintext Preview:</div>
+            <div class="cipher-output-box" id="cr-output">
+              SYNT{p4rf4e_ebg13_punpx_fhpprff}
+            </div>
+          </div>
+
+          <div class="flag-banner-box" id="cr-flagbox">
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;c4es4r_rot13_crack_success&#125;</span>
+            </div>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 8: INTERACTIVE ROOM — COMMAND INJECTION                        -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-cmdinj">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 6 — The Hollow Willow Form</div>
+          <h2>The Hollow Willow Form</h2>
+          <div class="room-sub-caption">Diagnostics Terminal · form fields piped straight to OS shell execution</div>
+
+          <div class="dialogue-bubble" id="ci-dialogue">
+            This outpost server diagnostic tool pings target hosts without validating input. 
+            <span class="hint">Inject a shell delimiter: 127.0.0.1; cat flag.txt</span>
+          </div>
+
+          <div class="mech-box" id="ci-mech">
+            <span class="label">How this works</span>
+            Command injection occurs when server-side code executes shell commands using unescaped user input (e.g. <code>system("ping " + host)</code>). Characters like <code>;</code> or <code>&amp;&amp;</code> let you append unauthorized shell commands.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintCmdInj()">Need a hint? Fill injection</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <div class="stage-title-group">
+              <h1>Outpost Diagnostics Utility</h1>
+              <span class="room-stage-badge" id="stage-badge-cmdinj" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetCmdInj()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="tool-input-row">
+            <input type="text" id="ci-host-input" placeholder="Host to ping (e.g. 127.0.0.1)" value="127.0.0.1" />
+            <button type="button" class="btn-action teal" onclick="runCmdInj()">Ping Host</button>
+          </div>
+
+          <div class="sanctum-terminal" style="min-height:260px;">
+            <div class="term-titlebar"><span></span><span></span><span></span></div>
+            <div class="term-scroll-body" id="ci-body">
+              <div class="term-line echo">System diagnostic ready. Enter an IP or hostname to verify connection.</div>
+            </div>
+          </div>
+
+          <div class="flag-banner-box" id="ci-flagbox">
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;sh3ll_3x3c_fr0m_f0rm_1nj3ct&#125;</span>
+            </div>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 9: INTERACTIVE ROOM — IDOR LEDGER                              -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-idor">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 7 — River Ferry Ledger</div>
+          <h2>The River Ferry Ledger</h2>
+          <div class="room-sub-caption">Passenger Portal · unauthorized direct object reference via URL parameters</div>
+
+          <div class="dialogue-bubble" id="id-dialogue">
+            You're viewing your normal passenger ticket <code>#1042</code>. Notice how the URL references the ticket ID directly: <code>?id=1042</code>. 
+            <span class="hint">Change the ticket ID to 1001 to inspect the confidential Harbor Master record.</span>
+          </div>
+
+          <div class="mech-box" id="id-mech">
+            <span class="label">How this works</span>
+            Insecure Direct Object Reference (IDOR) happens when an application accesses database records using user-supplied parameters without verifying whether the user is authorized to access that specific record.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintIdor()">Need a hint? Inspect ID 1001</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <div class="stage-title-group">
+              <h1>acmewidgets.co/ferry/ticket (Browser)</h1>
+              <span class="room-stage-badge" id="stage-badge-idor" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetIdor()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="sanctum-browser">
+            <div class="browser-toolbar">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-addr-field" style="display:flex; align-items:center; gap:4px;">
+                <span>acmewidgets.co/ferry/ticket?id=</span>
+                <input type="number" id="id-addr-input" value="1042" style="width:70px; border:1px solid #94a3b8; border-radius:4px; padding:2px 6px; font-family:var(--font-mono); font-size:0.82rem;" onchange="loadIdorTicket(this.value)" />
+                <button type="button" class="btn-action teal small" style="padding:4px 10px; font-size:0.75rem;" onclick="loadIdorTicket(document.getElementById('id-addr-input').value)">Go</button>
+              </div>
+            </div>
+            <div class="browser-content-page" id="id-page"></div>
+          </div>
+
+          <div class="flag-banner-box" id="id-flagbox">
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;1d0r_p4ss3ng3r_l3dg3r_l34k&#125;</span>
+            </div>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 10: INTERACTIVE ROOM — PATH TRAVERSAL                          -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-traversal">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 8 — The Mossy Ravine Bridge</div>
+          <h2>The Mossy Ravine Bridge</h2>
+          <div class="room-sub-caption">Maintenance Viewer · unvalidated file paths escaping the web root</div>
+
+          <div class="dialogue-bubble" id="tr-dialogue">
+            This maintenance portal loads files directly from the filesystem using the <code>file</code> parameter. 
+            <span class="hint">Use ../ to escape the folder and read system files: ../../../../etc/passwd</span>
+          </div>
+
+          <div class="mech-box" id="tr-mech">
+            <span class="label">How this works</span>
+            Path traversal (dot-dot-slash) vulnerabilities happen when an application uses user-controlled paths with filesystem APIs without sanitizing <code>../</code> sequences, letting attackers read arbitrary confidential server files.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintTraversal()">Need a hint? Traverse to /etc/passwd</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <div class="stage-title-group">
+              <h1>acmewidgets.co/view?file= (Browser)</h1>
+              <span class="room-stage-badge" id="stage-badge-traversal" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetTraversal()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="sanctum-browser">
+            <div class="browser-toolbar">
+              <div class="browser-dots"><span></span><span></span><span></span></div>
+              <div class="browser-addr-field" style="display:flex; align-items:center; gap:4px;">
+                <span>acmewidgets.co/view?file=</span>
+                <input type="text" id="tr-addr-input" value="bridge_logs.txt" style="flex:1; border:1px solid #94a3b8; border-radius:4px; padding:2px 8px; font-family:var(--font-mono); font-size:0.82rem;" />
+                <button type="button" class="btn-action teal small" style="padding:4px 10px; font-size:0.75rem;" onclick="loadTraversalFile(document.getElementById('tr-addr-input').value)">Fetch File</button>
+              </div>
+            </div>
+            <div class="browser-content-page" id="tr-page"></div>
+          </div>
+
+          <div class="flag-banner-box" id="tr-flagbox">
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;d0t_d0t_sl4sh_tr4v3rs4l&#125;</span>
+            </div>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 11: INTERACTIVE ROOM — SOCIAL ENGINEERING DEFENSE              -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-social">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 9 — The Signal Fire Lookout</div>
+          <h2>The Signal Fire Lookout</h2>
+          <div class="room-sub-caption">Radio Dispatch Transceiver · defending against voice urgency & impersonation</div>
+
+          <div class="dialogue-bubble" id="so-dialogue">
+            An urgent incoming radio broadcast is demanding emergency access credentials. 
+            <span class="hint">Notice the artificial urgency and lack of identity verification. Challenge their protocol!</span>
+          </div>
+
+          <div class="mech-box" id="so-mech">
+            <span class="label">How this works</span>
+            Social engineering attacks exploit human psychology (urgency, fear, authority) rather than software bugs. The only effective defense is strictly adhering to verification protocols and never yielding credentials under pressure.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintSocial()">Need a hint? Security advice</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <div class="stage-title-group">
+              <h1>Emergency Radio Dispatch (146.520 MHz)</h1>
+              <span class="room-stage-badge" id="stage-badge-social" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetSocial()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="cipher-tool-card" style="border-color:rgba(251,191,36,0.4);">
+            <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.85rem; color:#fbbf24;">
+              <span>📡 INCOMING TRANSMISSION · PRIORITY URGENT</span>
+              <span>FREQ 146.520 MHz</span>
+            </div>
+            <div style="background:#020704; border:1px solid #163622; border-radius:8px; padding:16px; font-family:var(--font-mono); font-size:0.92rem; line-height:1.6; color:#e2e8f0;" id="so-transcript">
+              [CALLER]: "Lookout post, this is Superintendent Sterling from Regional HQ! We have a critical power breach at the underground cavern gate right now! I need you to read me the emergency keystone bypass code immediately or the whole sector goes dark!"
+            </div>
+
+            <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-top:8px;">Choose your response protocol:</div>
+            <div class="radio-choices-container" id="so-choices">
+              <button type="button" class="radio-choice-btn" onclick="chooseSocial(1)">
+                A. "Understood Superintendent, the emergency keystone bypass code is KEYSTONE-GOLD-992. Please hurry!"
+              </button>
+              <button type="button" class="radio-choice-btn" onclick="chooseSocial(2)">
+                B. "Protocol requires all emergency overrides to be verified. Please state your badge ID and call back on official frequency 144.200 MHz."
+              </button>
+              <button type="button" class="radio-choice-btn" onclick="chooseSocial(3)">
+                C. "I don't know who you are, I'm shutting down the radio."
+              </button>
+            </div>
+            <div id="so-result-msg" style="display:none; font-family:var(--font-mono); font-size:0.86rem; padding:10px; border-radius:6px; margin-top:8px;"></div>
+          </div>
+
+          <div class="flag-banner-box" id="so-flagbox">
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;hum4n_f1r3w4ll_st00d_f1rm&#125;</span>
+            </div>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
   </main>
 
   <script>
@@ -2130,9 +2719,43 @@
       updateChallengesUI();
     }
 
+    function isRoomUnlocked(id, completed) {
+      if (!completed) completed = getCompletedChallenges();
+      if (['binexp', 'sqli', 'xss'].includes(id)) return true;
+      if (id === 'wifi') return completed.includes('xss');
+      if (id === 'crypto') return completed.includes('xss');
+      if (id === 'cmdinj') return completed.includes('wifi');
+      if (id === 'idor') return completed.includes('crypto');
+      if (id === 'traversal') return completed.includes('cmdinj');
+      if (id === 'social') return completed.includes('idor') && completed.includes('traversal');
+      return false;
+    }
+
+    function handleRoomClick(id) {
+      const completed = getCompletedChallenges();
+      if (isRoomUnlocked(id, completed)) {
+        goScreen('room-' + id);
+      } else {
+        playBeep(250, 0.1);
+        const lockNote = document.getElementById('lock-note-' + id);
+        if (lockNote) {
+          lockNote.style.transition = 'transform 0.15s ease, color 0.2s ease';
+          lockNote.style.color = '#ef4444';
+          lockNote.style.transform = 'translateX(6px)';
+          setTimeout(() => {
+            lockNote.style.transform = 'translateX(-6px)';
+            setTimeout(() => {
+              lockNote.style.transform = 'none';
+              lockNote.style.color = '';
+            }, 150);
+          }, 150);
+        }
+      }
+    }
+
     function updateChallengesUI() {
       const completed = getCompletedChallenges();
-      const totalChallenges = 3;
+      const totalChallenges = 9;
       const count = completed.length;
 
       // Update Expedition Progress Bar
@@ -2140,7 +2763,7 @@
       const progressBar = document.getElementById('expeditionProgressBar');
       if (progressText) {
         progressText.textContent = count === totalChallenges 
-          ? '✦ All 3 Challenges Completed!' 
+          ? '✦ All 9 Challenges Completed!' 
           : `${count} of ${totalChallenges} Challenges Completed`;
       }
       if (progressBar) {
@@ -2161,18 +2784,24 @@
       }
 
       // Update Room Cards, Badges, and Footers
-      const challengeIds = ['binexp', 'sqli', 'xss'];
+      const challengeIds = ['binexp', 'sqli', 'xss', 'wifi', 'crypto', 'cmdinj', 'idor', 'traversal', 'social'];
       challengeIds.forEach((id) => {
         const isDone = completed.includes(id);
+        const unlocked = isRoomUnlocked(id, completed);
         const card = document.getElementById('card-room-' + id);
         const badge = document.getElementById('badge-room-' + id);
         const footer = document.getElementById('footer-room-' + id);
         const stageBadge = document.getElementById('stage-badge-' + id);
+        const lockNote = document.getElementById('lock-note-' + id);
 
         if (card) {
           if (isDone) {
+            card.classList.remove('locked');
             card.classList.add('completed');
+          } else if (unlocked) {
+            card.classList.remove('locked', 'completed');
           } else {
+            card.classList.add('locked');
             card.classList.remove('completed');
           }
         }
@@ -2181,10 +2810,17 @@
           if (isDone) {
             badge.className = 'room-status-badge completed';
             badge.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Completed`;
-          } else {
+          } else if (unlocked) {
             badge.className = 'room-status-badge';
             badge.textContent = 'Canopy Open';
+          } else {
+            badge.className = 'room-status-badge';
+            badge.textContent = 'Cave Locked';
           }
+        }
+
+        if (lockNote) {
+          lockNote.style.display = unlocked ? 'none' : 'block';
         }
 
         if (footer) {
@@ -2211,6 +2847,12 @@
         else if (id === 'room-binexp') crumbEl.textContent = 'Scene 1: Treehouse Workshop';
         else if (id === 'room-sqli') crumbEl.textContent = 'Scene 2: Lake Grotto';
         else if (id === 'room-xss') crumbEl.textContent = 'Scene 3: Ranger Board';
+        else if (id === 'room-wifi') crumbEl.textContent = 'Scene 4: Whispering Pines Wi-Fi';
+        else if (id === 'room-crypto') crumbEl.textContent = 'Scene 5: The Runestone Memo';
+        else if (id === 'room-cmdinj') crumbEl.textContent = 'Scene 6: The Hollow Willow Form';
+        else if (id === 'room-idor') crumbEl.textContent = 'Scene 7: The River Ferry Ledger';
+        else if (id === 'room-traversal') crumbEl.textContent = 'Scene 8: The Mossy Ravine Bridge';
+        else if (id === 'room-social') crumbEl.textContent = 'Scene 9: The Signal Fire Lookout';
       }
       updateChallengesUI();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2544,6 +3186,414 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
       }
     }
     resetXss();
+
+    /* =========================================================================
+       SCENE 4: NETWORK WI-FI SNIFFING
+       ========================================================================= */
+    let wf = { inspected: false };
+
+    function wfLine(text, cls) {
+      const d = document.createElement('div');
+      d.className = 'term-line ' + (cls || 'out');
+      d.textContent = text;
+      const body = document.getElementById('wf-body');
+      if (body) {
+        body.appendChild(d);
+        d.scrollIntoView({ block: 'end' });
+      }
+    }
+
+    function resetWifi() {
+      wf = { inspected: false };
+      const body = document.getElementById('wf-body');
+      if (body) body.innerHTML = '';
+      const flagbox = document.getElementById('wf-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      wfLine('wlan0mon: passive tap online on channel 6.', 'echo');
+      setDialogue('wf-dialogue', 'An open access point is transmitting unencrypted packets across the canopy trail. <span class="hint">Inspect the captured traffic log: sniff or cat capture.pcap</span>');
+    }
+
+    function hintWifi() {
+      playBeep(850, 0.08);
+      const input = document.getElementById('wf-input');
+      if (!input) return;
+      if (!wf.inspected) {
+        input.value = 'cat capture.pcap';
+      } else {
+        input.value = 'auth admin p1n3s_w1f1_s3cr3t';
+      }
+      flashField(input);
+    }
+
+    function runWifi(raw) {
+      const cmd = raw.trim();
+      if (!cmd) return;
+      playBeep(500, 0.04);
+      wfLine('student@wifi-tap:~$ ' + cmd, 'echo');
+      const c = cmd.toLowerCase().replace(/\s+/g, ' ').trim();
+
+      if (c === 'help') {
+        wfLine('available commands: sniff, cat capture.pcap, auth <user> <pass>, clear, help', 'out');
+        return;
+      }
+      if (c === 'clear') {
+        const body = document.getElementById('wf-body');
+        if (body) body.innerHTML = '';
+        return;
+      }
+      if (c === 'sniff' || c === 'cat capture.pcap' || c === 'cat capture' || c.includes('tcpdump')) {
+        wf.inspected = true;
+        wfLine('[PACKET 001] 192.168.1.104 -> 192.168.1.1 DNS Query: acmewidgets.co', 'out');
+        wfLine('[PACKET 002] 192.168.1.104 -> 192.168.1.1 HTTP GET /portal HTTP/1.1', 'out');
+        wfLine('[PACKET 003] 192.168.1.104 -> 192.168.1.1 HTTP POST /login HTTP/1.1', 'out');
+        wfLine('             Content-Type: application/x-www-form-urlencoded', 'out');
+        wfLine('             Payload: user=admin&pass=p1n3s_w1f1_s3cr3t', 'warn');
+        setDialogue('wf-dialogue', 'Cleartext credentials spotted in Packet 003! <span class="hint">Authenticate using: auth admin p1n3s_w1f1_s3cr3t</span>');
+        return;
+      }
+      if (c.startsWith('auth')) {
+        if (c.includes('admin') && c.includes('p1n3s_w1f1_s3cr3t')) {
+          playFlagSuccess();
+          wfLine('[AUTH OK] Canopy router session authenticated as admin.', 'out');
+          wfLine('FLAG{cl34rt3xt_cr3ds_0n_th3_w1r3}', 'flag');
+          document.getElementById('wf-flagbox').classList.add('show');
+          setDialogue('wf-dialogue', '✦ Network challenge complete! Unencrypted packets surrendered admin credentials without cracking.');
+          markChallengeCompleted('wifi');
+          return;
+        } else {
+          wfLine('auth: incorrect username or password. Check the sniffed packet log.', 'warn');
+          return;
+        }
+      }
+      wfLine(cmd + ': command not found. Try "sniff" or "help"', 'warn');
+    }
+
+    const wfInput = document.getElementById('wf-input');
+    if (wfInput) {
+      wfInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          runWifi(e.target.value);
+          e.target.value = '';
+        }
+      });
+    }
+
+    /* =========================================================================
+       SCENE 5: CRYPTOGRAPHY CIPHER
+       ========================================================================= */
+    const CRYPTO_CIPHERTEXT = 'SYNT{p4rf4e_ebg13_punpx_fhpprff}';
+
+    function caesarShift(str, shift) {
+      return str.replace(/[a-zA-Z]/g, (c) => {
+        const base = c <= 'Z' ? 65 : 97;
+        return String.fromCharCode(((c.charCodeAt(0) - base + shift) % 26) + base);
+      });
+    }
+
+    function onCryptoSliderChange(val) {
+      const shift = parseInt(val, 10);
+      const shiftLabel = document.getElementById('cr-shift-label');
+      if (shiftLabel) shiftLabel.textContent = 'Shift: ' + shift;
+
+      const decrypted = caesarShift(CRYPTO_CIPHERTEXT, (26 - shift) % 26);
+      const out = document.getElementById('cr-output');
+      if (out) out.textContent = decrypted;
+
+      if (shift === 13) {
+        playFlagSuccess();
+        const flagbox = document.getElementById('cr-flagbox');
+        if (flagbox) flagbox.classList.add('show');
+        setDialogue('cr-dialogue', '✦ Decryption complete! ROT13 rotation decoded the runestone text to reveal the flag.');
+        markChallengeCompleted('crypto');
+      }
+    }
+
+    function hintCrypto() {
+      playBeep(850, 0.08);
+      const slider = document.getElementById('cr-slider');
+      if (slider) {
+        slider.value = 13;
+        onCryptoSliderChange(13);
+      }
+    }
+
+    function resetCrypto() {
+      const slider = document.getElementById('cr-slider');
+      if (slider) slider.value = 0;
+      const shiftLabel = document.getElementById('cr-shift-label');
+      if (shiftLabel) shiftLabel.textContent = 'Shift: 0';
+      const out = document.getElementById('cr-output');
+      if (out) out.textContent = CRYPTO_CIPHERTEXT;
+      const flagbox = document.getElementById('cr-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      setDialogue('cr-dialogue', 'An encrypted courier note was left in the hollow oak. <span class="hint">Adjust the Shift slider to 13 (ROT13) to reveal the message.</span>');
+    }
+
+    /* =========================================================================
+       SCENE 6: COMMAND INJECTION
+       ========================================================================= */
+    function resetCmdInj() {
+      const body = document.getElementById('ci-body');
+      if (body) body.innerHTML = '<div class="term-line echo">System diagnostic ready. Enter an IP or hostname to verify connection.</div>';
+      const input = document.getElementById('ci-host-input');
+      if (input) input.value = '127.0.0.1';
+      const flagbox = document.getElementById('ci-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      setDialogue('ci-dialogue', 'This outpost server diagnostic tool pings target hosts without validating input. <span class="hint">Inject a shell delimiter: 127.0.0.1; cat flag.txt</span>');
+    }
+
+    function hintCmdInj() {
+      playBeep(850, 0.08);
+      const input = document.getElementById('ci-host-input');
+      if (input) {
+        input.value = '127.0.0.1; cat flag.txt';
+        flashField(input);
+      }
+    }
+
+    function runCmdInj() {
+      const input = document.getElementById('ci-host-input');
+      const val = (input?.value || '').trim();
+      if (!val) return;
+      playBeep(550, 0.05);
+
+      const body = document.getElementById('ci-body');
+      if (!body) return;
+
+      const p1 = document.createElement('div');
+      p1.className = 'term-line echo';
+      p1.textContent = '$ ping -c 1 ' + val;
+      body.appendChild(p1);
+
+      const isInjection = val.includes(';') || val.includes('&&') || val.includes('|') || val.includes('`');
+
+      setTimeout(() => {
+        const p2 = document.createElement('div');
+        p2.className = 'term-line out';
+        p2.textContent = '64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.042 ms';
+        body.appendChild(p2);
+
+        if (isInjection) {
+          setTimeout(() => {
+            const p3 = document.createElement('div');
+            p3.className = 'term-line warn';
+            p3.textContent = '[INJECTED COMMAND EXECUTED AS root]';
+            body.appendChild(p3);
+
+            const p4 = document.createElement('div');
+            p4.className = 'term-line flag';
+            p4.textContent = 'FLAG{sh3ll_3x3c_fr0m_f0rm_1nj3ct}';
+            body.appendChild(p4);
+            p4.scrollIntoView({ block: 'end' });
+
+            playFlagSuccess();
+            const flagbox = document.getElementById('ci-flagbox');
+            if (flagbox) flagbox.classList.add('show');
+            setDialogue('ci-dialogue', '✦ Command injection successful! Semicolon chained your unauthorized command into the backend shell.');
+            markChallengeCompleted('cmdinj');
+          }, 300);
+        } else {
+          const p3 = document.createElement('div');
+          p3.className = 'term-line out';
+          p3.textContent = '--- ping statistics: 1 packets transmitted, 1 received, 0% packet loss ---';
+          body.appendChild(p3);
+          p3.scrollIntoView({ block: 'end' });
+        }
+      }, 250);
+    }
+
+    const ciInput = document.getElementById('ci-host-input');
+    if (ciInput) {
+      ciInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') runCmdInj();
+      });
+    }
+
+    /* =========================================================================
+       SCENE 7: IDOR LEDGER
+       ========================================================================= */
+    function resetIdor() {
+      const input = document.getElementById('id-addr-input');
+      if (input) input.value = '1042';
+      const flagbox = document.getElementById('id-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      loadIdorTicket('1042');
+      setDialogue('id-dialogue', 'You\'re viewing your normal passenger ticket <code>#1042</code>. Notice how the URL references the ticket ID directly: <code>?id=1042</code>. <span class="hint">Change the ticket ID to 1001 to inspect the confidential Harbor Master record.</span>');
+    }
+
+    function hintIdor() {
+      playBeep(850, 0.08);
+      const input = document.getElementById('id-addr-input');
+      if (input) {
+        input.value = '1001';
+        flashField(input);
+        loadIdorTicket('1001');
+      }
+    }
+
+    function loadIdorTicket(val) {
+      const id = String(val).trim();
+      const page = document.getElementById('id-page');
+      if (!page) return;
+      playBeep(650, 0.05);
+
+      if (id === '1001') {
+        page.innerHTML = `
+          <div style="padding:16px;">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+              <h3 style="margin:0; color:#0f172a;">Harbor Ferry Manifest #1001</h3>
+              <span style="background:#ef4444; color:#ffffff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px;">CONFIDENTIAL · MASTER HARBOR</span>
+            </div>
+            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Passenger:</strong> Harbor Master Vance &amp; Expedition Escort</p>
+            <p style="font-size:0.9rem; color:#334155;"><strong>Route:</strong> Cavern Gate Terminal -&gt; Restricted Vault Island</p>
+            <p style="font-size:0.9rem; color:#334155;"><strong>Clearance Key:</strong> <code style="background:#fee2e2; color:#b91c1c; padding:2px 6px; border-radius:4px;">FLAG&#123;1d0r_p4ss3ng3r_l3dg3r_l34k&#125;</code></p>
+          </div>
+        `;
+        playFlagSuccess();
+        const flagbox = document.getElementById('id-flagbox');
+        if (flagbox) flagbox.classList.add('show');
+        setDialogue('id-dialogue', '✦ IDOR breached! Modifying the object identifier leaked the Harbor Master\'s private transport record.');
+        markChallengeCompleted('idor');
+      } else if (id === '1042') {
+        page.innerHTML = `
+          <div style="padding:16px;">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
+              <h3 style="margin:0; color:#0f172a;">Harbor Ferry Ticket #1042</h3>
+              <span style="background:#10b981; color:#ffffff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px;">STANDARD PASSENGER</span>
+            </div>
+            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Passenger:</strong> Scout Trainee #42</p>
+            <p style="font-size:0.9rem; color:#334155;"><strong>Fare:</strong> 4 Silver Shells (Paid)</p>
+            <p style="font-size:0.9rem; color:#64748b; font-style:italic;">No elevated privileges associated with this standard passenger ticket.</p>
+          </div>
+        `;
+      } else {
+        page.innerHTML = `
+          <div style="padding:16px;">
+            <h3 style="margin:0; color:#0f172a;">Harbor Ferry Ticket #${id}</h3>
+            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Passenger:</strong> Guest Traveler</p>
+            <p style="font-size:0.9rem; color:#334155;"><strong>Status:</strong> Archived Record</p>
+          </div>
+        `;
+      }
+    }
+
+    /* =========================================================================
+       SCENE 8: PATH TRAVERSAL
+       ========================================================================= */
+    function resetTraversal() {
+      const input = document.getElementById('tr-addr-input');
+      if (input) input.value = 'bridge_logs.txt';
+      const flagbox = document.getElementById('tr-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      loadTraversalFile('bridge_logs.txt');
+      setDialogue('tr-dialogue', 'This maintenance portal loads files directly from the filesystem using the <code>file</code> parameter. <span class="hint">Use ../ to escape the folder and read system files: ../../../../etc/passwd</span>');
+    }
+
+    function hintTraversal() {
+      playBeep(850, 0.08);
+      const input = document.getElementById('tr-addr-input');
+      if (input) {
+        input.value = '../../../../etc/passwd';
+        flashField(input);
+        loadTraversalFile('../../../../etc/passwd');
+      }
+    }
+
+    function loadTraversalFile(file) {
+      const f = String(file).trim();
+      const page = document.getElementById('tr-page');
+      if (!page) return;
+      playBeep(650, 0.05);
+
+      if (f.includes('../') || f.includes('..\\')) {
+        page.innerHTML = `
+          <div style="padding:16px; font-family:var(--font-mono); font-size:0.86rem; background:#0b1120; color:#cbd5e1; border-radius:6px;">
+            <div style="color:#ef4444; font-weight:700; margin-bottom:8px;">[SYSTEM FILE DISCLOSED: /etc/passwd]</div>
+            <div>root:x:0:0:root:/root:/bin/bash</div>
+            <div>daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</div>
+            <div>cavern_keeper:x:1000:1000:Keeper:/home/keeper:/bin/sh</div>
+            <div style="color:#10b981; font-weight:700; margin-top:8px;">FLAG&#123;d0t_d0t_sl4sh_tr4v3rs4l&#125;</div>
+          </div>
+        `;
+        playFlagSuccess();
+        const flagbox = document.getElementById('tr-flagbox');
+        if (flagbox) flagbox.classList.add('show');
+        setDialogue('tr-dialogue', '✦ Path traversal unlocked! Directory escape characters broke out of the web root into the system passwd database.');
+        markChallengeCompleted('traversal');
+      } else {
+        page.innerHTML = `
+          <div style="padding:16px; font-family:var(--font-mono); font-size:0.86rem; background:#f8fafc; color:#334155; border-radius:6px;">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:6px;">Viewing: ${f}</div>
+            <div>2026-09-18 08:00 - Suspension cables oiled and inspected.</div>
+            <div>2026-09-19 14:22 - Ravine water levels nominal. Warning: Do not expose raw filesystem endpoints.</div>
+          </div>
+        `;
+      }
+    }
+
+    /* =========================================================================
+       SCENE 9: SOCIAL ENGINEERING DEFENSE
+       ========================================================================= */
+    function resetSocial() {
+      const choices = document.getElementById('so-choices');
+      if (choices) choices.style.display = 'flex';
+      const resMsg = document.getElementById('so-result-msg');
+      if (resMsg) resMsg.style.display = 'none';
+      const flagbox = document.getElementById('so-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      const transcript = document.getElementById('so-transcript');
+      if (transcript) {
+        transcript.textContent = '[CALLER]: "Lookout post, this is Superintendent Sterling from Regional HQ! We have a critical power breach at the underground cavern gate right now! I need you to read me the emergency keystone bypass code immediately or the whole sector goes dark!"';
+      }
+      setDialogue('so-dialogue', 'An urgent incoming radio broadcast is demanding emergency access credentials. <span class="hint">Notice the artificial urgency and lack of identity verification. Challenge their protocol!</span>');
+    }
+
+    function hintSocial() {
+      playBeep(850, 0.08);
+      setDialogue('so-dialogue', 'Never provide passwords or bypass codes over an unauthenticated transmission, regardless of claims of authority. Choose option B to challenge identity!');
+    }
+
+    function chooseSocial(option) {
+      const choices = document.getElementById('so-choices');
+      const resMsg = document.getElementById('so-result-msg');
+      if (!choices || !resMsg) return;
+
+      if (option === 2) {
+        playFlagSuccess();
+        choices.style.display = 'none';
+        resMsg.style.display = 'block';
+        resMsg.style.background = 'rgba(16, 185, 129, 0.15)';
+        resMsg.style.color = '#34d399';
+        resMsg.style.border = '1px solid #10b981';
+        resMsg.innerHTML = '<strong>[DISPATCH SECURED]:</strong> Caller hesitates, claims connection interference, and abruptly severs transmission. Social engineering attempt thwarted by human protocol compliance!';
+        const flagbox = document.getElementById('so-flagbox');
+        if (flagbox) flagbox.classList.add('show');
+        setDialogue('so-dialogue', '✦ Defense validated! Your adherence to identity verification repelled the imposter.');
+        markChallengeCompleted('social');
+      } else {
+        playBeep(350, 0.15);
+        resMsg.style.display = 'block';
+        resMsg.style.background = 'rgba(239, 68, 68, 0.15)';
+        resMsg.style.color = '#f87171';
+        resMsg.style.border = '1px solid #ef4444';
+        if (option === 1) {
+          resMsg.innerHTML = '<strong>[SECURITY BREACH]:</strong> You yielded the emergency bypass code! An attacker used authority bias and urgency to trick you into a catastrophic leak. Click "Reset scene" and try again.';
+        } else {
+          resMsg.innerHTML = '<strong>[INCOMPLETE DEFENSE]:</strong> Abruptly hanging up without logging or verifying leaves the outpost vulnerable. Challenge their badge and channel properly. Click "Reset scene" and try again.';
+        }
+      }
+    }
+
+    // Initializations for all rooms
+    resetBinexp();
+    sqHome();
+    resetXss();
+    resetWifi();
+    resetCrypto();
+    resetCmdInj();
+    resetIdor();
+    resetTraversal();
+    resetSocial();
     updateChallengesUI();
 
     // Forest Portal Veil Transition (Slow, Gentle Dissolve)
