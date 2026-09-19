@@ -132,6 +132,188 @@ html, body {
 }
 
 /* ==========================================================================
+   PORTAL VIDEO TRANSITION VIEW
+   ========================================================================== */
+#portalTransitionSection {
+  background: #000000;
+  overflow: hidden;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+}
+
+#portalVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==========================================================================
+   ATMOSPHERIC CLOUDS PARTING (Page 3 Emergence From The Clouds)
+   ========================================================================== */
+.clouds-parting-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.clouds-parting-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cloud-bank {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}
+
+/* Left Billowing Cloud Bank */
+.cloud-bank-left {
+  top: -15%;
+  left: -25%;
+  width: 85vw;
+  height: 130vh;
+  background: radial-gradient(circle at 45% 50%, rgba(13, 23, 56, 0.98) 0%, rgba(20, 36, 85, 0.9) 35%, rgba(9, 14, 32, 0.85) 65%, transparent 85%);
+  filter: blur(48px);
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  transition: transform 2.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 2.2s ease;
+}
+
+/* Right Billowing Cloud Bank */
+.cloud-bank-right {
+  top: -15%;
+  right: -25%;
+  width: 85vw;
+  height: 130vh;
+  background: radial-gradient(circle at 55% 50%, rgba(13, 23, 56, 0.98) 0%, rgba(20, 36, 85, 0.9) 35%, rgba(9, 14, 32, 0.85) 65%, transparent 85%);
+  filter: blur(48px);
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  transition: transform 2.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 2.2s ease;
+}
+
+/* Top Rolling Cloud Shelf */
+.cloud-bank-top {
+  top: -30%;
+  left: 5%;
+  width: 90vw;
+  height: 75vh;
+  background: radial-gradient(ellipse at 50% 35%, rgba(25, 42, 95, 0.95) 0%, rgba(11, 19, 44, 0.85) 50%, transparent 80%);
+  filter: blur(42px);
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  transition: transform 2.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 2.0s ease;
+}
+
+/* Bottom Mist Bank */
+.cloud-bank-bottom {
+  bottom: -30%;
+  left: 5%;
+  width: 90vw;
+  height: 75vh;
+  background: radial-gradient(ellipse at 50% 65%, rgba(11, 19, 44, 0.98) 0%, rgba(7, 11, 26, 0.9) 50%, transparent 80%);
+  filter: blur(42px);
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+  transition: transform 2.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 2.0s ease;
+}
+
+/* Golden Celestial Center Glow */
+.cloud-bank-center-glow {
+  top: 15%;
+  left: 15%;
+  width: 70vw;
+  height: 70vh;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 215, 120, 0.5) 0%, rgba(217, 104, 0, 0.28) 35%, rgba(59, 130, 246, 0.15) 60%, transparent 80%);
+  filter: blur(55px);
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.8s ease;
+}
+
+/* Ambient Mist Veil */
+.cloud-mist-veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(14, 23, 56, 0.75) 0%, rgba(8, 14, 34, 0.92) 85%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 1;
+  transition: opacity 1.9s ease, transform 2.5s ease;
+}
+
+/* Active Parting Movement */
+.clouds-parting-overlay.parting .cloud-bank-left {
+  transform: translate3d(-75vw, -30px, 0) scale(1.2) rotate(-5deg);
+  opacity: 0;
+}
+
+.clouds-parting-overlay.parting .cloud-bank-right {
+  transform: translate3d(75vw, -30px, 0) scale(1.2) rotate(5deg);
+  opacity: 0;
+}
+
+.clouds-parting-overlay.parting .cloud-bank-top {
+  transform: translate3d(0, -60vh, 0) scale(1.15);
+  opacity: 0;
+}
+
+.clouds-parting-overlay.parting .cloud-bank-bottom {
+  transform: translate3d(0, 60vh, 0) scale(1.15);
+  opacity: 0;
+}
+
+.clouds-parting-overlay.parting .cloud-bank-center-glow {
+  transform: scale(2.2);
+  opacity: 0;
+}
+
+.clouds-parting-overlay.parting .cloud-mist-veil {
+  opacity: 0;
+  transform: scale(1.15);
+}
+
+/* Page 3 Elements Emerging from Clouds Animation */
+#pageDashboard.emerge-from-clouds .emberkeep-nav,
+#pageDashboard.emerge-from-clouds .dashboard-center-stage {
+  animation: emergeFromClouds 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes emergeFromClouds {
+  0% {
+    opacity: 0;
+    filter: blur(22px) brightness(1.4);
+    transform: scale(0.9) translateY(24px);
+  }
+  40% {
+    opacity: 0.75;
+    filter: blur(10px) brightness(1.18);
+    transform: scale(0.96) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px) brightness(1);
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ==========================================================================
    AUTH DIALOGUE CARDS (Page 1 Google Login & Page 2 Access Code)
    ========================================================================== */
 .auth-dialog-wrapper {

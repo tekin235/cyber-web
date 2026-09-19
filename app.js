@@ -332,7 +332,8 @@ class SanctumApp {
       gateIndicator: document.getElementById('gateIndicator'),
       gateStatusDot: document.getElementById('gateStatusDot'),
       gateTitleBadge: document.getElementById('gateTitleBadge'),
-      keystoneSigil: document.getElementById('keystoneSigil')
+      keystoneSigil: document.getElementById('keystoneSigil'),
+      cloudsOverlay: document.getElementById('cloudsOverlay')
     };
 
     this.init();
@@ -529,11 +530,22 @@ class SanctumApp {
   }
 
   // ===========================================================================
-  // CINEMATIC WARP ORCHESTRATION
+  // CINEMATIC WARP ORCHESTRATION & CLOUD EMERGENCE
   // ===========================================================================
   triggerPortalWarp() {
     APP_STATE.isTransitioning = true;
     sfx.playWarpWhoosh();
+
+    // Prepare transition screen and reset previous states
+    if (this.dom.transitionWarpFlash) {
+      this.dom.transitionWarpFlash.classList.remove('flash-active');
+    }
+    if (this.dom.pageDashboard) {
+      this.dom.pageDashboard.classList.remove('emerge-from-clouds');
+    }
+    if (this.dom.cloudsOverlay) {
+      this.dom.cloudsOverlay.classList.remove('active', 'parting');
+    }
 
     // Show video transition screen
     this.showScreen('portalTransitionSection');
@@ -542,20 +554,27 @@ class SanctumApp {
       this.dom.portalVideo.currentTime = 0;
       const playPromise = this.dom.portalVideo.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay fallback if blocked by browser policy
+        playPromise.catch((err) => {
+          console.warn('Video autoplay blocked or failed, continuing:', err);
+          // Fallback only if video genuinely fails to play
           setTimeout(() => {
             this.completePortalWarp();
-          }, 1800);
+          }, 3500);
         });
       }
 
-      // Safety timeout in case video stalls or fails to trigger 'ended'
+      // Allow the video to play out FULLY until 'ended'.
+      // We only keep a generous safety watchdog in case playback is suspended by OS:
+      clearTimeout(this.warpFallbackTimer);
+      const safeDuration = this.dom.portalVideo.duration 
+        ? (this.dom.portalVideo.duration + 4) * 1000 
+        : 45000;
       this.warpFallbackTimer = setTimeout(() => {
         if (APP_STATE.isTransitioning) {
+          console.warn('Video watchdog timeout reached, completing transition.');
           this.completePortalWarp();
         }
-      }, 2600);
+      }, safeDuration);
     } else {
       setTimeout(() => {
         this.completePortalWarp();
@@ -568,17 +587,48 @@ class SanctumApp {
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
+    // Peak flash
     if (this.dom.transitionWarpFlash) {
       this.dom.transitionWarpFlash.classList.add('flash-active');
     }
 
+    // Transition smoothly into Page 3 through the cloud parting animation
     setTimeout(() => {
-      // Transition to Page 3 (Dashboard)
       this.showScreen('pageDashboard');
 
-      if (this.dom.transitionWarpFlash) {
-        this.dom.transitionWarpFlash.classList.remove('flash-active');
+      // Trigger Cloud Parting & Emergence Animation
+      if (this.dom.pageDashboard) {
+        this.dom.pageDashboard.classList.add('emerge-from-clouds');
       }
+
+      if (this.dom.cloudsOverlay) {
+        this.dom.cloudsOverlay.classList.remove('parting');
+        this.dom.cloudsOverlay.classList.add('active');
+        void this.dom.cloudsOverlay.offsetWidth; // Force reflow to guarantee CSS transition
+
+        requestAnimationFrame(() => {
+          if (this.dom.cloudsOverlay) {
+            this.dom.cloudsOverlay.classList.add('parting');
+          }
+        });
+      }
+
+      // Dissolve the white flash directly into the celestial clouds
+      setTimeout(() => {
+        if (this.dom.transitionWarpFlash) {
+          this.dom.transitionWarpFlash.classList.remove('flash-active');
+        }
+      }, 250);
+
+      // Clean up cloud overlay after the emergence animation completes
+      setTimeout(() => {
+        if (this.dom.cloudsOverlay) {
+          this.dom.cloudsOverlay.classList.remove('active', 'parting');
+        }
+        if (this.dom.pageDashboard) {
+          this.dom.pageDashboard.classList.remove('emerge-from-clouds');
+        }
+      }, 2800);
     }, 280);
   }
 
