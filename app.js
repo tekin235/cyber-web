@@ -736,10 +736,8 @@ class SanctumApp {
   handleIntroductionClick() {
     sfx.playClick();
 
-    // Mark that user has clicked Introduction so gate unlocks upon return
     try {
       sessionStorage.setItem('justReturnedFromIntro', 'true');
-      localStorage.setItem('sanctumGateUnlocked', 'true');
     } catch (e) {}
 
     // Active radiant animation on the Introduction button
@@ -850,30 +848,50 @@ class SanctumApp {
     }
   }
 
+  hasCompletedAllChallenges() {
+    const REQUIRED = ['binexp', 'sqli', 'xss', 'wifi', 'crypto', 'cmdinj', 'idor', 'traversal', 'social'];
+    try {
+      const raw = localStorage.getItem('sanctum_completed_challenges');
+      const completed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(completed) && REQUIRED.every(id => completed.includes(id));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  getCompletedCount() {
+    try {
+      const raw = localStorage.getItem('sanctum_completed_challenges');
+      const completed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(completed) ? completed.length : 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
   // ===========================================================================
   // CHECK RETURN FROM INTRODUCTION MODULE (Delayed dramatic unlock on return)
   // ===========================================================================
   checkReturnFromIntro() {
     try {
       const justReturned = sessionStorage.getItem('justReturnedFromIntro') === 'true';
-      const isUnlocked = localStorage.getItem('sanctumGateUnlocked') === 'true';
+      sessionStorage.removeItem('justReturnedFromIntro');
 
-      if (justReturned) {
-        // One-time consumption of return flag
-        sessionStorage.removeItem('justReturnedFromIntro');
+      const allDone = this.hasCompletedAllChallenges();
 
-        // Ensure gate starts locked so user witnesses the dramatic unsealing sequence
-        this.lockGateDOM();
-
-        // Dramatic delay so user lands on dashboard, settles, and sees the gate unseal
-        setTimeout(() => {
+      if (allDone) {
+        localStorage.setItem('sanctumGateUnlocked', 'true');
+        if (justReturned) {
+          this.lockGateDOM();
+          setTimeout(() => {
+            this.unlockGateDOM();
+            sfx.playGateOpen();
+          }, 550);
+        } else {
           this.unlockGateDOM();
-          sfx.playGateOpen();
-        }, 550);
-      } else if (isUnlocked) {
-        // Persisted state from earlier completion
-        this.unlockGateDOM();
+        }
       } else {
+        localStorage.removeItem('sanctumGateUnlocked');
         this.lockGateDOM();
       }
     } catch (e) {

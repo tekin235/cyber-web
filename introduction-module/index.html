@@ -3638,7 +3638,12 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
       if (e) e.preventDefault();
       try {
         sessionStorage.setItem('justReturnedFromIntro', 'true');
-        localStorage.setItem('sanctumGateUnlocked', 'true');
+        const completed = getCompletedChallenges();
+        if (completed.length >= 9) {
+          localStorage.setItem('sanctumGateUnlocked', 'true');
+        } else {
+          localStorage.removeItem('sanctumGateUnlocked');
+        }
       } catch (err) {}
       const veil = document.getElementById('forestPortalVeil');
       if (veil) {

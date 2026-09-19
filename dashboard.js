@@ -525,13 +525,39 @@ class DashboardApp {
   // ===========================================================================
   // INTRODUCTION BUTTON HANDLER (Redirects to Introduction; Gate unlocks on return)
   // ===========================================================================
+  // Helper to verify all 9 challenges are completed
+  hasCompletedAllChallenges() {
+    const REQUIRED_CHALLENGES = [
+      'binexp', 'sqli', 'xss', 'wifi', 'crypto', 'cmdinj', 'idor', 'traversal', 'social'
+    ];
+    try {
+      const raw = localStorage.getItem('sanctum_completed_challenges');
+      const completed = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(completed)) return false;
+      return REQUIRED_CHALLENGES.every(id => completed.includes(id));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  getCompletedCount() {
+    try {
+      const raw = localStorage.getItem('sanctum_completed_challenges');
+      const completed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(completed) ? completed.length : 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  // ===========================================================================
+  // INTRODUCTION BUTTON HANDLER (Redirects to Introduction)
+  // ===========================================================================
   handleIntroductionClick() {
     sfx.playClick();
 
-    // Mark that user has clicked Introduction so gate unlocks upon return
     try {
       sessionStorage.setItem('justReturnedFromIntro', 'true');
-      localStorage.setItem('sanctumGateUnlocked', 'true');
     } catch (e) {}
 
     // Active radiant animation on the Introduction button
@@ -556,10 +582,10 @@ class DashboardApp {
   }
 
   // ===========================================================================
-  // DUNGEON GATE INTERACTION HANDLER
+  // DUNGEON GATE INTERACTION HANDLER (Only unlocked iff all 9 completed)
   // ===========================================================================
   handleGateClick() {
-    if (!DASHBOARD_STATE.isGateUnlocked) {
+    if (!this.hasCompletedAllChallenges()) {
       // Gate is locked: rattle door, play rattle sound, and provide visual feedback
       sfx.playRattle();
 
@@ -572,8 +598,11 @@ class DashboardApp {
         }, 500);
       }
 
+      const count = this.getCompletedCount();
       if (this.dom.introNotice) {
-        this.dom.introNotice.textContent = '🔒 The dungeon gate is sealed! Click Introduction above to unlock it.';
+        this.dom.introNotice.textContent = count > 0
+          ? `🔒 The dungeon gate remains sealed! Complete all 9 challenges in the Introduction module (${count} of 9 completed).`
+          : '🔒 The dungeon gate is sealed! Complete all 9 challenges in the Introduction module to unlock it.';
         this.dom.introNotice.classList.remove('unlocked');
       }
     } else {
@@ -615,7 +644,7 @@ class DashboardApp {
     }
 
     if (this.dom.introNotice) {
-      this.dom.introNotice.textContent = '✦ Gate seal dispelled! The doorway is open.';
+      this.dom.introNotice.textContent = '✦ All 9 challenges conquered! Gate seal dispelled — doorway is open.';
       this.dom.introNotice.classList.add('unlocked');
     }
   }
@@ -635,35 +664,38 @@ class DashboardApp {
     }
 
     if (this.dom.introNotice) {
-      this.dom.introNotice.textContent = 'Click Introduction to break the seal and unlock the dungeon gate.';
+      const count = this.getCompletedCount();
+      this.dom.introNotice.textContent = count > 0
+        ? `Complete all 9 challenges in the Introduction module to unlock the dungeon gate (${count} of 9 completed).`
+        : 'Complete all 9 challenges in the Introduction module to unlock the dungeon gate.';
       this.dom.introNotice.classList.remove('unlocked');
     }
   }
 
   // ===========================================================================
-  // CHECK RETURN FROM INTRODUCTION MODULE (Delayed dramatic unlock on return)
+  // CHECK RETURN FROM INTRODUCTION MODULE (Only unlocks iff all 9 challenges done)
   // ===========================================================================
   checkReturnFromIntro() {
     try {
       const justReturned = sessionStorage.getItem('justReturnedFromIntro') === 'true';
-      const isUnlocked = localStorage.getItem('sanctumGateUnlocked') === 'true';
+      sessionStorage.removeItem('justReturnedFromIntro');
 
-      if (justReturned) {
-        // One-time consumption of return flag
-        sessionStorage.removeItem('justReturnedFromIntro');
+      const allDone = this.hasCompletedAllChallenges();
 
-        // Ensure gate starts locked so user witnesses the dramatic unsealing sequence
-        this.lockGateDOM();
-
-        // Dramatic delay so user lands on dashboard, settles, and sees the gate unseal
-        setTimeout(() => {
+      if (allDone) {
+        localStorage.setItem('sanctumGateUnlocked', 'true');
+        if (justReturned) {
+          // Dramatic delay so user lands on dashboard, settles, and sees the gate unseal
+          this.lockGateDOM();
+          setTimeout(() => {
+            this.unlockGateDOM();
+            sfx.playGateOpen();
+          }, 550);
+        } else {
           this.unlockGateDOM();
-          sfx.playGateOpen();
-        }, 550);
-      } else if (isUnlocked) {
-        // Persisted state from earlier completion
-        this.unlockGateDOM();
+        }
       } else {
+        localStorage.removeItem('sanctumGateUnlocked');
         this.lockGateDOM();
       }
     } catch (e) {
