@@ -383,20 +383,27 @@ class SanctumApp {
     this.portalParticles = new ParticleCanvas('portalSparksCanvas', 'portal');
     this.cavernParticles = new ParticleCanvas('cavernParticlesCanvas', 'cavern');
 
-    // Restore unlocked gate state if returning from introduction module
-    try {
-      if (localStorage.getItem('sanctumGateUnlocked') === 'true') {
-        this.unlockGateDOM();
-      }
-    } catch (e) {
-      console.warn('localStorage read error:', e);
-    }
-
     // Bind event listeners
     this.bindEvents();
 
     // Check hash for direct routing
     this.handleRouteHash();
+
+    // Check if user returned from Introduction Module to trigger the unlock
+    this.checkReturnFromIntro();
+
+    // Listen to hashchange in case user navigates within the same session
+    window.addEventListener('hashchange', () => {
+      this.handleRouteHash();
+      this.checkReturnFromIntro();
+    });
+
+    // Listen to pageshow in case user navigated back via browser history (bfcache)
+    window.addEventListener('pageshow', () => {
+      if (APP_STATE.currentScreen === 'pageDashboard' || window.location.hash.includes('dashboard')) {
+        this.checkReturnFromIntro();
+      }
+    });
   }
 
   /**
@@ -648,6 +655,9 @@ class SanctumApp {
       // Transition to Page 3 (Dashboard)
       this.showScreen('pageDashboard');
 
+      // Check return from introduction or persistent gate state
+      this.checkReturnFromIntro();
+
       // Trigger choreographed Page 3 entrance animations after the flash
       if (this.dom.pageDashboard) {
         this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
@@ -717,6 +727,7 @@ class SanctumApp {
     APP_STATE.accessCode = '';
 
     try {
+      sessionStorage.removeItem('justReturnedFromIntro');
       localStorage.removeItem('sanctumGateUnlocked');
     } catch (e) {}
 
@@ -737,29 +748,28 @@ class SanctumApp {
   }
 
   // ===========================================================================
-  // INTRODUCTION BUTTON HANDLER (Unlocks Gate & Redirects to Introduction Module)
+  // INTRODUCTION BUTTON HANDLER (Redirects to Introduction; Gate unlocks on return)
   // ===========================================================================
   handleIntroductionClick() {
     sfx.playClick();
 
-    // 1. Unseal and unlock the gate
-    this.unlockGateDOM();
+    // Mark that user has clicked Introduction so gate unlocks upon return
     try {
+      sessionStorage.setItem('justReturnedFromIntro', 'true');
       localStorage.setItem('sanctumGateUnlocked', 'true');
     } catch (e) {}
-    sfx.playGateOpen();
 
-    // 2. Active radiant animation on the Introduction button
+    // Active radiant animation on the Introduction button
     if (this.dom.btnIntroduction) {
       this.dom.btnIntroduction.classList.add('launching');
     }
 
-    // 3. Extensible hook for future page navigation or backend communication
+    // Extensible hook for future page navigation or backend communication
     if (typeof window.onIntroductionClick === 'function') {
       window.onIntroductionClick();
     }
 
-    // 4. Smooth cinematic redirection to the Introduction Module with warp flash
+    // Smooth cinematic redirection to the Introduction Module with warp flash
     setTimeout(() => {
       if (this.dom.transitionWarpFlash) {
         this.dom.transitionWarpFlash.classList.add('flash-active');
@@ -854,6 +864,37 @@ class SanctumApp {
     if (this.dom.introNotice) {
       this.dom.introNotice.textContent = 'Click Introduction to break the seal and unlock the dungeon gate.';
       this.dom.introNotice.classList.remove('unlocked');
+    }
+  }
+
+  // ===========================================================================
+  // CHECK RETURN FROM INTRODUCTION MODULE (Delayed dramatic unlock on return)
+  // ===========================================================================
+  checkReturnFromIntro() {
+    try {
+      const justReturned = sessionStorage.getItem('justReturnedFromIntro') === 'true';
+      const isUnlocked = localStorage.getItem('sanctumGateUnlocked') === 'true';
+
+      if (justReturned) {
+        // One-time consumption of return flag
+        sessionStorage.removeItem('justReturnedFromIntro');
+
+        // Ensure gate starts locked so user witnesses the dramatic unsealing sequence
+        this.lockGateDOM();
+
+        // Dramatic delay so user lands on dashboard, settles, and sees the gate unseal
+        setTimeout(() => {
+          this.unlockGateDOM();
+          sfx.playGateOpen();
+        }, 550);
+      } else if (isUnlocked) {
+        // Persisted state from earlier completion
+        this.unlockGateDOM();
+      } else {
+        this.lockGateDOM();
+      }
+    } catch (e) {
+      console.warn('Error checking return from intro:', e);
     }
   }
 
