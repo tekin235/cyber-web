@@ -1,76 +1,24 @@
 /**
- * EMBERKEEP & PORTAL SANCTUM APPLICATION CONTROLLER
- * Orchestrates sign-in validation, video warp transitions, dungeon interactions, and canvas FX.
+ * CYBER SANCTUM — APPLICATION CONTROLLER
+ * Minimalist 3-Page Flow:
+ *  1. Google Sign-In Dialogue
+ *  2. Sanctum Access Code Dialogue (with Cinematic Portal Warp)
+ *  3. Dashboard with Profile (Logout popup), SFX toggle, Introduction button, and Single Dungeon Gate.
  */
 
 // =============================================================================
-// 1. STATE & DUNGEON DATA
+// 1. APPLICATION STATE
 // =============================================================================
 const APP_STATE = {
-  currentScreen: 'signin', // 'signin' | 'hero'
-  isTransitioning: false,
+  currentScreen: 'pageLogin', // 'pageLogin' | 'pageAccessCode' | 'portalTransitionSection' | 'pageDashboard'
   soundEnabled: true,
-  flagsFound: 0,
-  dungeonsCleared: 0,
-  activeDungeonId: null,
-  solvedDungeons: new Set()
-};
-
-const DUNGEONS = {
-  1: {
-    id: 1,
-    badge: 'DUNGEON I',
-    name: 'Chamber of Whispering Runes',
-    lore: 'Beneath the ancient archway lies the Chamber of Whispering Runes. Ancient symbols pulse with arcane light, holding secrets of the forgotten portal.',
-    tag: 'CIPHER / CODE',
-    points: '+250 EXP',
-    prompt: 'Submit the cipher flag or decipher the runic password to claim the seal.',
-    flag: 'EMBER{RUNES_WHISPER_PORTAL}'
-  },
-  2: {
-    id: 2,
-    badge: 'DUNGEON II',
-    name: 'The Cryptic Vaults',
-    lore: 'Reinforced iron gates bar access to the ancient vault. Only those who carry the golden flame may unlock its archives.',
-    tag: 'SYSTEMS / KEY',
-    points: '+300 EXP',
-    prompt: 'Input the master credential flag for the vault doors to swing open.',
-    flag: 'EMBER{VAULT_KEY_UNSEALED}'
-  },
-  3: {
-    id: 3,
-    badge: 'DUNGEON III',
-    name: 'Labyrinth of Glacial Echoes',
-    lore: '“The ice remembers each crack.” Cold mist swirls across winding paths where one misstep fractures the frosty floor.',
-    tag: 'LOGIC / PATH',
-    points: '+400 EXP',
-    prompt: 'Tread the correct sequence flag without cracking the mystic ice.',
-    flag: 'EMBER{GLACIAL_ICE_CRACKS}'
-  },
-  4: {
-    id: 4,
-    badge: 'DUNGEON IV',
-    name: 'The Forgotten Hearth',
-    lore: 'A long-extinguished bonfire rests at the cave center. Spark the eternal embers to awaken the guardian spirits.',
-    tag: 'FIRE / RITUAL',
-    points: '+450 EXP',
-    prompt: 'Provide the invocation flag to rekindle the Hearth of Prime Flames.',
-    flag: 'EMBER{FLAME_BURNS_ETERNAL}'
-  },
-  5: {
-    id: 5,
-    badge: 'DUNGEON V',
-    name: 'Sanctum of Prime Flames',
-    lore: 'The apex sanctuary where the supreme portal energy converges. Master of the five gates shall claim ultimate dominion.',
-    tag: 'CHAMPION / CORE',
-    points: '+600 EXP',
-    prompt: 'Offer the master sovereign flag to clear the final sanctuary.',
-    flag: 'EMBER{ARCH_GATE_ASCENDED}'
-  }
+  isGateUnlocked: false,
+  isTransitioning: false,
+  accessCode: ''
 };
 
 // =============================================================================
-// 2. WEB AUDIO SYNTHESIZER (Portal Whooshes, Clicks, Chimes)
+// 2. WEB AUDIO SYNTHESIZER (Clicks, Warps, Chimes, Rattles)
 // =============================================================================
 class SoundFX {
   constructor() {
@@ -93,7 +41,7 @@ class SoundFX {
     if (!APP_STATE.soundEnabled) return;
     this.init();
     if (!this.ctx) return;
-    
+
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'sine';
@@ -114,7 +62,7 @@ class SoundFX {
     this.init();
     if (!this.ctx) return;
 
-    const bufferSize = this.ctx.sampleRate * 2.5;
+    const bufferSize = this.ctx.sampleRate * 2.2;
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
@@ -126,35 +74,35 @@ class SoundFX {
 
     const filter = this.ctx.createBiquadFilter();
     filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(150, this.ctx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(3200, this.ctx.currentTime + 2.0);
+    filter.frequency.setValueAtTime(160, this.ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(2800, this.ctx.currentTime + 1.8);
     filter.Q.setValueAtTime(4, this.ctx.currentTime);
 
     const gain = this.ctx.createGain();
     gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.4, this.ctx.currentTime + 1.6);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2.4);
+    gain.gain.exponentialRampToValueAtTime(0.35, this.ctx.currentTime + 1.4);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2.2);
 
     noise.connect(filter);
     filter.connect(gain);
     gain.connect(this.ctx.destination);
 
     noise.start();
-    noise.stop(this.ctx.currentTime + 2.5);
+    noise.stop(this.ctx.currentTime + 2.2);
 
-    // Deep sub bass surge
+    // Deep sub-bass swell
     const bass = this.ctx.createOscillator();
     const bassGain = this.ctx.createGain();
     bass.type = 'triangle';
-    bass.frequency.setValueAtTime(60, this.ctx.currentTime);
-    bass.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 1.8);
-    bassGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-    bassGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2.2);
+    bass.frequency.setValueAtTime(55, this.ctx.currentTime);
+    bass.frequency.exponentialRampToValueAtTime(160, this.ctx.currentTime + 1.6);
+    bassGain.gain.setValueAtTime(0.28, this.ctx.currentTime);
+    bassGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2.0);
 
     bass.connect(bassGain);
     bassGain.connect(this.ctx.destination);
     bass.start();
-    bass.stop(this.ctx.currentTime + 2.2);
+    bass.stop(this.ctx.currentTime + 2.0);
   }
 
   playVictoryChime() {
@@ -166,19 +114,66 @@ class SoundFX {
     notes.forEach((freq, idx) => {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      const startTime = this.ctx.currentTime + idx * 0.08;
+      const startTime = this.ctx.currentTime + idx * 0.07;
 
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, startTime);
 
-      gain.gain.setValueAtTime(0.2, startTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.6);
+      gain.gain.setValueAtTime(0.18, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.55);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start(startTime);
-      osc.stop(startTime + 0.6);
+      osc.stop(startTime + 0.55);
     });
+  }
+
+  playRattle() {
+    if (!APP_STATE.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+
+    // Metallic locked gate clank
+    const times = [0, 0.06, 0.13, 0.2];
+    times.forEach((t) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(180 + Math.random() * 80, this.ctx.currentTime + t);
+      gain.gain.setValueAtTime(0.1, this.ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + t + 0.05);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(this.ctx.currentTime + t);
+      osc.stop(this.ctx.currentTime + t + 0.05);
+    });
+  }
+
+  playGateOpen() {
+    if (!APP_STATE.soundEnabled) return;
+    this.init();
+    if (!this.ctx) return;
+
+    // Low stone grinding sound followed by celestial chime
+    const stone = this.ctx.createOscillator();
+    const stoneGain = this.ctx.createGain();
+    stone.type = 'sawtooth';
+    stone.frequency.setValueAtTime(80, this.ctx.currentTime);
+    stone.frequency.exponentialRampToValueAtTime(130, this.ctx.currentTime + 0.5);
+
+    stoneGain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+    stoneGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.6);
+
+    stone.connect(stoneGain);
+    stoneGain.connect(this.ctx.destination);
+    stone.start();
+    stone.stop(this.ctx.currentTime + 0.6);
+
+    setTimeout(() => {
+      this.playVictoryChime();
+    }, 150);
   }
 }
 
@@ -192,7 +187,7 @@ class ParticleCanvas {
     this.canvas = document.getElementById(canvasId);
     if (!this.canvas) return;
     this.ctx = this.canvas.getContext('2d');
-    this.mode = mode; // 'portal' or 'cavern'
+    this.mode = mode; // 'portal' | 'cavern'
     this.particles = [];
     this.animationFrame = null;
     this.resize();
@@ -209,7 +204,7 @@ class ParticleCanvas {
   }
 
   initParticles() {
-    const count = this.mode === 'portal' ? 65 : 45;
+    const count = this.mode === 'portal' ? 60 : 45;
     this.particles = [];
     for (let i = 0; i < count; i++) {
       this.particles.push(this.createParticle());
@@ -231,10 +226,10 @@ class ParticleCanvas {
         radialSpeed: (Math.random() - 0.5) * 0.4,
         size: 1.2 + Math.random() * 2.5,
         alpha: 0.3 + Math.random() * 0.7,
-        hue: 35 + Math.random() * 25 // Golden/orange hues
+        hue: 35 + Math.random() * 25 // Warm amber/gold
       };
     } else {
-      // Golden embers and warm candle sparks floating upwards
+      // Golden embers floating in dashboard cavern
       return {
         x: Math.random() * w,
         y: Math.random() * h,
@@ -253,7 +248,7 @@ class ParticleCanvas {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     if (this.mode === 'portal') {
-      this.particles.forEach(p => {
+      this.particles.forEach((p) => {
         p.angle += p.speed;
         p.radius += p.radialSpeed;
         if (p.radius < 30 || p.radius > 320) p.radialSpeed *= -1;
@@ -269,8 +264,7 @@ class ParticleCanvas {
         this.ctx.fill();
       });
     } else {
-      // Golden cathedral ember simulation
-      this.particles.forEach(p => {
+      this.particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
         p.alpha += Math.sin(Date.now() * p.flickerSpeed) * 0.02;
@@ -297,75 +291,48 @@ class ParticleCanvas {
 }
 
 // =============================================================================
-// 4. PORTAL WARP TRANSITION & DASHBOARD CONTROLLER
+// 4. MAIN CONTROLLER
 // =============================================================================
-class PortalApp {
+class SanctumApp {
   constructor() {
     this.dom = {
-      signinSection: document.getElementById('signinSection'),
-      heroSection: document.getElementById('heroDashboardSection'),
+      // Screens
+      screens: document.querySelectorAll('.screen-view'),
+      pageLogin: document.getElementById('pageLogin'),
+      pageAccessCode: document.getElementById('pageAccessCode'),
+      portalTransitionSection: document.getElementById('portalTransitionSection'),
+      pageDashboard: document.getElementById('pageDashboard'),
+
+      // Page 1 Elements
+      btnGoogleLogin: document.getElementById('btnGoogleLogin'),
+
+      // Page 2 Elements
+      accessCodeCard: document.getElementById('accessCodeCard'),
+      accessCodeForm: document.getElementById('accessCodeForm'),
+      accessCodeInput: document.getElementById('accessCodeInput'),
+      btnSubmitCode: document.getElementById('btnSubmitCode'),
+      codeStatusMsg: document.getElementById('codeStatusMsg'),
+
+      // Transition Elements
       portalVideo: document.getElementById('portalVideo'),
-      portalBackdrop: document.getElementById('portalBackdrop'),
-      warpFlash: document.getElementById('warpFlash'),
-      signinCardContainer: document.getElementById('signinCardContainer'),
-      passcodeInput: document.getElementById('passcodeInput'),
-      btnNext: document.getElementById('btnNext'),
-      btnGoogle: document.getElementById('btnGoogle'),
-      statusMessage: document.getElementById('statusMessage'),
-      soundToggleBtn: document.getElementById('soundToggleBtn'),
-      soundIconOn: document.getElementById('soundIconOn'),
-      soundIconOff: document.getElementById('soundIconOff'),
-      soundLabel: document.querySelector('.sound-label'),
-      btnReturnPortal: document.getElementById('btnReturnPortal'),
-      // Nav buttons
-      navLogoBtn: document.getElementById('navLogoBtn'),
-      btnNavModules: document.getElementById('btnNavModules'),
-      btnNavDungeons: document.getElementById('btnNavDungeons'),
-      btnNavProgress: document.getElementById('btnNavProgress'),
+      transitionWarpFlash: document.getElementById('transitionWarpFlash'),
+
+      // Page 3 Elements
       navSoundToggleBtn: document.getElementById('navSoundToggleBtn'),
-      navSfxOn: document.querySelector('.nav-sfx-btn .sfx-icon-on'),
-      navSfxOff: document.querySelector('.nav-sfx-btn .sfx-icon-off'),
-      navSfxLabel: document.querySelector('.nav-sfx-label'),
+      sfxIconOn: document.querySelector('.sfx-icon-on'),
+      sfxIconOff: document.querySelector('.sfx-icon-off'),
+      navSfxLabel: document.getElementById('navSfxLabel'),
       avatarBtn: document.getElementById('avatarBtn'),
-      dungeonMap: document.getElementById('dungeonMap'),
-      // Introduction Button & Modal
+      profileDropdown: document.getElementById('profileDropdown'),
+      btnLogout: document.getElementById('btnLogout'),
       btnIntroduction: document.getElementById('btnIntroduction'),
-      introModal: document.getElementById('introModal'),
-      introModalCloseBtn: document.getElementById('introModalCloseBtn'),
-      btnBeginExpedition: document.getElementById('btnBeginExpedition'),
-      // Stats
-      flagCount: document.getElementById('flagCount'),
-      dungeonCount: document.getElementById('dungeonCount'),
-      // Modules Modal
-      modulesModal: document.getElementById('modulesModal'),
-      modulesModalCloseBtn: document.getElementById('modulesModalCloseBtn'),
-      modulesCloseBottomBtn: document.getElementById('modulesCloseBottomBtn'),
-      // Progress Modal
-      progressModal: document.getElementById('progressModal'),
-      progressModalCloseBtn: document.getElementById('progressModalCloseBtn'),
-      progressCloseBottomBtn: document.getElementById('progressCloseBottomBtn'),
-      progDungeonsCleared: document.getElementById('progDungeonsCleared'),
-      progFlagsFound: document.getElementById('progFlagsFound'),
-      expBarFill: document.getElementById('expBarFill'),
-      expValue: document.getElementById('expValue'),
-      // Profile Modal
-      profileModal: document.getElementById('profileModal'),
-      profileModalCloseBtn: document.getElementById('profileModalCloseBtn'),
-      profileSaveBtn: document.getElementById('profileSaveBtn'),
-      profileSoundToggle: document.getElementById('profileSoundToggle'),
-      titleSelect: document.getElementById('titleSelect'),
-      // Dungeon Modal
-      dungeonModal: document.getElementById('dungeonModal'),
-      modalCloseBtn: document.getElementById('modalCloseBtn'),
-      modalCloseBottomBtn: document.getElementById('modalCloseBottomBtn'),
-      modalBadge: document.getElementById('modalBadge'),
-      modalTitle: document.getElementById('modalTitle'),
-      modalLore: document.getElementById('modalLore'),
-      modalPrompt: document.getElementById('modalPrompt'),
-      flagInput: document.getElementById('flagInput'),
-      btnSubmitFlag: document.getElementById('btnSubmitFlag'),
-      btnQuickSolve: document.getElementById('btnQuickSolve'),
-      flagFeedback: document.getElementById('flagFeedback')
+      introNotice: document.getElementById('introNotice'),
+      mainGateBtn: document.getElementById('mainGateBtn'),
+      gateLockSeal: document.getElementById('gateLockSeal'),
+      gateIndicator: document.getElementById('gateIndicator'),
+      gateStatusDot: document.getElementById('gateStatusDot'),
+      gateTitleBadge: document.getElementById('gateTitleBadge'),
+      keystoneSigil: document.getElementById('keystoneSigil')
     };
 
     this.init();
@@ -376,611 +343,429 @@ class PortalApp {
     this.portalParticles = new ParticleCanvas('portalSparksCanvas', 'portal');
     this.cavernParticles = new ParticleCanvas('cavernParticlesCanvas', 'cavern');
 
+    // Bind event listeners
     this.bindEvents();
 
-    // Direct dashboard navigation via hash or query param
-    if (window.location.hash.includes('dashboard') || window.location.hash.includes('hero') || window.location.hash.includes('overview') || window.location.search.includes('dashboard')) {
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-    }
-    if (window.location.hash.includes('intro')) {
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-      setTimeout(() => this.openIntroModal(), 150);
-    }
-    if (window.location.hash.includes('modules')) {
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-      setTimeout(() => this.openModulesModal(), 150);
-    }
-    if (window.location.hash.includes('progress')) {
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-      setTimeout(() => this.openProgressModal(), 150);
-    }
-    if (window.location.hash.includes('profile')) {
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-      setTimeout(() => this.openProfileModal(), 150);
-    }
-    if (window.location.hash.includes('dungeon')) {
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-      setTimeout(() => this.openDungeonModal(1), 150);
-    }
-    if (window.location.hash.includes('test_solve')) {
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-      APP_STATE.activeDungeonId = 1;
-      this.dom.flagInput.value = 'EMBER{RUNES_WHISPER_PORTAL}';
-      this.submitCurrentFlag();
+    // Check hash for direct routing
+    this.handleRouteHash();
+  }
+
+  /**
+   * Switch active screen smoothly
+   * @param {string} screenId
+   */
+  showScreen(screenId) {
+    this.dom.screens.forEach((screen) => {
+      screen.classList.remove('active');
+    });
+
+    const target = document.getElementById(screenId);
+    if (target) {
+      target.classList.add('active');
+      APP_STATE.currentScreen = screenId;
+
+      // Ensure canvas is properly sized on screen switch
+      if (this.portalParticles) this.portalParticles.resize();
+      if (this.cavernParticles) this.cavernParticles.resize();
     }
   }
 
   bindEvents() {
-    // Sound toggle
-    this.dom.soundToggleBtn.addEventListener('click', () => this.toggleSound());
-
-    // Next button click
-    this.dom.btnNext.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.handleSignInTrigger();
-    });
-
-    // Form submit on Enter key
-    this.dom.passcodeInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
+    // =========================================================================
+    // PAGE 1: GOOGLE LOGIN
+    // =========================================================================
+    if (this.dom.btnGoogleLogin) {
+      this.dom.btnGoogleLogin.addEventListener('click', (e) => {
         e.preventDefault();
-        this.handleSignInTrigger();
+        sfx.playClick();
+
+        // Smooth transition to Page 2 (Access Code)
+        this.showScreen('pageAccessCode');
+        if (this.dom.accessCodeInput) {
+          setTimeout(() => {
+            this.dom.accessCodeInput.focus();
+          }, 200);
+        }
+      });
+    }
+
+    // =========================================================================
+    // PAGE 2: ACCESS CODE SUBMISSION
+    // =========================================================================
+    const handleCodeSubmit = (e) => {
+      if (e) e.preventDefault();
+      if (APP_STATE.isTransitioning) return;
+
+      const codeVal = this.dom.accessCodeInput ? this.dom.accessCodeInput.value.trim() : '';
+
+      if (!codeVal) {
+        // Validation failure: shake card and display warning
+        sfx.playRattle();
+        if (this.dom.accessCodeCard) {
+          this.dom.accessCodeCard.classList.remove('shake');
+          void this.dom.accessCodeCard.offsetWidth; // Trigger reflow
+          this.dom.accessCodeCard.classList.add('shake');
+        }
+        if (this.dom.codeStatusMsg) {
+          this.dom.codeStatusMsg.textContent = '✦ Please enter an access code to proceed.';
+          this.dom.codeStatusMsg.className = 'card-status-message error';
+        }
+        if (this.dom.accessCodeInput) {
+          this.dom.accessCodeInput.focus();
+        }
+        return;
       }
-    });
 
-    // Google Sign-In button click
-    this.dom.btnGoogle.addEventListener('click', () => {
-      this.dom.passcodeInput.value = 'GOOGLE_AUTH_SESSION';
-      this.handleSignInTrigger(true);
-    });
+      // Valid access code accepted
+      sfx.playClick();
+      APP_STATE.accessCode = codeVal;
 
-    // Video transition events
+      if (this.dom.codeStatusMsg) {
+        this.dom.codeStatusMsg.textContent = '✦ Clearance accepted. Opening sanctum portal...';
+        this.dom.codeStatusMsg.className = 'card-status-message success';
+      }
+
+      // Initiate Cinematic Portal Warp Transition
+      this.triggerPortalWarp();
+    };
+
+    if (this.dom.btnSubmitCode) {
+      this.dom.btnSubmitCode.addEventListener('click', handleCodeSubmit);
+    }
+    if (this.dom.accessCodeInput) {
+      this.dom.accessCodeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          handleCodeSubmit(e);
+        }
+      });
+    }
+
+    // =========================================================================
+    // CINEMATIC TRANSITION VIDEO EVENTS
+    // =========================================================================
     if (this.dom.portalVideo) {
       this.dom.portalVideo.addEventListener('ended', () => {
-        this.completeWarpToHero();
+        this.completePortalWarp();
       });
 
-      // Time update fallback if video ends or reaches peak
       this.dom.portalVideo.addEventListener('timeupdate', () => {
-        const remaining = this.dom.portalVideo.duration - this.dom.portalVideo.currentTime;
-        if (remaining <= 0.4 && APP_STATE.isTransitioning) {
-          this.dom.warpFlash.classList.add('flash-active');
+        const video = this.dom.portalVideo;
+        const remaining = video.duration - video.currentTime;
+        if (remaining <= 0.45 && APP_STATE.isTransitioning && this.dom.transitionWarpFlash) {
+          this.dom.transitionWarpFlash.classList.add('flash-active');
         }
       });
     }
 
-    // Return to Portal Chamber
-    if (this.dom.btnReturnPortal) {
-      this.dom.btnReturnPortal.addEventListener('click', () => {
-        this.returnToPortal();
-      });
-    }
-
-    // Introduction Button and Modal Controls
-    if (this.dom.btnIntroduction) {
-      this.dom.btnIntroduction.addEventListener('click', (e) => {
-        this.createRipple(e, this.dom.btnIntroduction);
-        sfx.playClick();
-        this.openIntroModal();
-      });
-    }
-
-    if (this.dom.introModalCloseBtn) {
-      this.dom.introModalCloseBtn.addEventListener('click', () => {
-        sfx.playClick();
-        this.closeIntroModal();
-      });
-    }
-
-    if (this.dom.btnBeginExpedition) {
-      this.dom.btnBeginExpedition.addEventListener('click', () => {
-        sfx.playClick();
-        this.closeIntroModal();
-      });
-    }
-
-    if (this.dom.introModal) {
-      this.dom.introModal.addEventListener('click', (e) => {
-        if (e.target === this.dom.introModal) {
-          sfx.playClick();
-          this.closeIntroModal();
-        }
-      });
-    }
-
-    // Global keyboard listener (Escape to close any open modal)
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        if (this.dom.introModal && this.dom.introModal.classList.contains('open')) {
-          this.closeIntroModal();
-        } else if (this.dom.dungeonModal && this.dom.dungeonModal.classList.contains('open')) {
-          this.closeDungeonModal();
-        } else if (this.dom.modulesModal && this.dom.modulesModal.classList.contains('open')) {
-          this.closeModulesModal();
-        } else if (this.dom.progressModal && this.dom.progressModal.classList.contains('open')) {
-          this.closeProgressModal();
-        } else if (this.dom.profileModal && this.dom.profileModal.classList.contains('open')) {
-          this.closeProfileModal();
-        }
-      }
-    });
-
-    // Nav Bar Navigation Tabs
-    if (this.dom.btnNavModules) {
-      this.dom.btnNavModules.addEventListener('click', () => {
-        sfx.playClick();
-        this.setActiveNavTab('modules');
-        this.openModulesModal();
-      });
-    }
-
-    if (this.dom.btnNavDungeons) {
-      this.dom.btnNavDungeons.addEventListener('click', () => {
-        sfx.playClick();
-        this.setActiveNavTab('dungeons');
-        if (this.dom.dungeonMap) {
-          this.dom.dungeonMap.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-    }
-
-    if (this.dom.btnNavProgress) {
-      this.dom.btnNavProgress.addEventListener('click', () => {
-        sfx.playClick();
-        this.setActiveNavTab('progress');
-        this.openProgressModal();
-      });
-    }
-
-    // Nav SFX Toggle Button
+    // =========================================================================
+    // PAGE 3: SFX TOGGLE
+    // =========================================================================
     if (this.dom.navSoundToggleBtn) {
       this.dom.navSoundToggleBtn.addEventListener('click', () => {
-        this.toggleSound();
-      });
-    }
-
-    // Avatar Button -> Open Profile Modal
-    if (this.dom.avatarBtn) {
-      this.dom.avatarBtn.addEventListener('click', () => {
-        sfx.playClick();
-        this.openProfileModal();
-      });
-    }
-
-    // Bottom Quest Summary Card -> Open Progress Modal
-    const questCard = document.querySelector('.quest-summary-card');
-    if (questCard) {
-      questCard.style.cursor = 'pointer';
-      questCard.addEventListener('click', () => {
-        sfx.playClick();
-        this.openProgressModal();
-      });
-    }
-
-    // Modules Modal Controls
-    if (this.dom.modulesModalCloseBtn) {
-      this.dom.modulesModalCloseBtn.addEventListener('click', () => this.closeModulesModal());
-    }
-    if (this.dom.modulesCloseBottomBtn) {
-      this.dom.modulesCloseBottomBtn.addEventListener('click', () => this.closeModulesModal());
-    }
-    if (this.dom.modulesModal) {
-      this.dom.modulesModal.addEventListener('click', (e) => {
-        if (e.target === this.dom.modulesModal) this.closeModulesModal();
-      });
-    }
-
-    // Progress Modal Controls
-    if (this.dom.progressModalCloseBtn) {
-      this.dom.progressModalCloseBtn.addEventListener('click', () => this.closeProgressModal());
-    }
-    if (this.dom.progressCloseBottomBtn) {
-      this.dom.progressCloseBottomBtn.addEventListener('click', () => this.closeProgressModal());
-    }
-    if (this.dom.progressModal) {
-      this.dom.progressModal.addEventListener('click', (e) => {
-        if (e.target === this.dom.progressModal) this.closeProgressModal();
-      });
-    }
-
-    // Profile Modal Controls
-    if (this.dom.profileModalCloseBtn) {
-      this.dom.profileModalCloseBtn.addEventListener('click', () => this.closeProfileModal());
-    }
-    if (this.dom.profileSaveBtn) {
-      this.dom.profileSaveBtn.addEventListener('click', () => {
-        sfx.playClick();
-        if (this.dom.titleSelect) {
-          const newTitle = this.dom.titleSelect.value;
-          const heroRank = document.querySelector('.progress-hero-rank');
-          if (heroRank) heroRank.textContent = `${newTitle} • Term IV Cohort`;
+        APP_STATE.soundEnabled = !APP_STATE.soundEnabled;
+        if (APP_STATE.soundEnabled) {
+          sfx.playClick();
         }
-        this.closeProfileModal();
-      });
-    }
-    if (this.dom.profileSoundToggle) {
-      this.dom.profileSoundToggle.addEventListener('click', () => {
-        this.toggleSound();
-      });
-    }
-    if (this.dom.profileModal) {
-      this.dom.profileModal.addEventListener('click', (e) => {
-        if (e.target === this.dom.profileModal) this.closeProfileModal();
+        this.updateSfxUI();
       });
     }
 
-    // Cave / Chamber clicks (both card and button)
-    document.querySelectorAll('.cave-node').forEach(node => {
-      const dungeonId = parseInt(node.dataset.dungeonId, 10);
-      node.addEventListener('click', () => {
+    // =========================================================================
+    // PAGE 3: PROFILE BUTTON & LOGOUT POPUP
+    // =========================================================================
+    if (this.dom.avatarBtn && this.dom.profileDropdown) {
+      this.dom.avatarBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         sfx.playClick();
-        this.openDungeonModal(dungeonId);
+        const isOpen = this.dom.profileDropdown.classList.contains('open');
+        if (isOpen) {
+          this.closeProfileDropdown();
+        } else {
+          this.openProfileDropdown();
+        }
       });
-    });
 
-    // Modal controls
-    this.dom.modalCloseBtn.addEventListener('click', () => this.closeDungeonModal());
-    this.dom.modalCloseBottomBtn.addEventListener('click', () => this.closeDungeonModal());
-    this.dom.dungeonModal.addEventListener('click', (e) => {
-      if (e.target === this.dom.dungeonModal) this.closeDungeonModal();
-    });
+      // Close dropdown on outside click
+      document.addEventListener('click', (e) => {
+        if (!this.dom.profileDropdown.contains(e.target) && !this.dom.avatarBtn.contains(e.target)) {
+          this.closeProfileDropdown();
+        }
+      });
 
-    // Submit Flag in Modal
-    this.dom.btnSubmitFlag.addEventListener('click', () => this.submitCurrentFlag());
-    this.dom.flagInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        this.submitCurrentFlag();
-      }
-    });
-
-    // Quick Solve / Demo button
-    this.dom.btnQuickSolve.addEventListener('click', () => {
-      const active = DUNGEONS[APP_STATE.activeDungeonId];
-      if (active) {
-        this.dom.flagInput.value = active.flag;
-        this.submitCurrentFlag();
-      }
-    });
-  }
-
-  setActiveNavTab(tab) {
-    document.querySelectorAll('.emberkeep-nav .nav-item').forEach(item => {
-      const btn = item.querySelector('.nav-link-btn');
-      if (btn && btn.dataset.tab === tab) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    });
-  }
-
-  toggleSound() {
-    APP_STATE.soundEnabled = !APP_STATE.soundEnabled;
-    const isEnabled = APP_STATE.soundEnabled;
-
-    // 1. Signin fixed sound toggle
-    if (this.dom.soundIconOn && this.dom.soundIconOff) {
-      if (isEnabled) {
-        this.dom.soundIconOn.classList.remove('hidden');
-        this.dom.soundIconOff.classList.add('hidden');
-      } else {
-        this.dom.soundIconOn.classList.add('hidden');
-        this.dom.soundIconOff.classList.remove('hidden');
-      }
-    }
-    if (this.dom.soundLabel) {
-      this.dom.soundLabel.textContent = isEnabled ? 'SFX: ON' : 'SFX: OFF';
+      // Close on Escape key
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.closeProfileDropdown();
+        }
+      });
     }
 
-    // 2. Navbar sound toggle
-    if (this.dom.navSfxOn && this.dom.navSfxOff) {
-      if (isEnabled) {
-        this.dom.navSfxOn.classList.remove('hidden');
-        this.dom.navSfxOff.classList.add('hidden');
-      } else {
-        this.dom.navSfxOn.classList.add('hidden');
-        this.dom.navSfxOff.classList.remove('hidden');
-      }
-    }
-    if (this.dom.navSfxLabel) {
-      this.dom.navSfxLabel.textContent = isEnabled ? 'SFX: ON' : 'SFX: OFF';
+    // LOGOUT ACTION
+    if (this.dom.btnLogout) {
+      this.dom.btnLogout.addEventListener('click', () => {
+        sfx.playClick();
+        this.closeProfileDropdown();
+        this.handleLogout();
+      });
     }
 
-    // 3. Profile modal audio toggle pill
-    if (this.dom.profileSoundToggle) {
-      this.dom.profileSoundToggle.textContent = isEnabled ? 'SFX: ON' : 'SFX: OFF';
-      if (isEnabled) {
-        this.dom.profileSoundToggle.classList.remove('muted');
-      } else {
-        this.dom.profileSoundToggle.classList.add('muted');
-      }
+    // =========================================================================
+    // PAGE 3: INTRODUCTION BUTTON (Unlocks the Single Dungeon Gate)
+    // =========================================================================
+    if (this.dom.btnIntroduction) {
+      this.dom.btnIntroduction.addEventListener('click', () => {
+        this.handleIntroductionClick();
+      });
     }
 
-    if (isEnabled) {
-      sfx.playClick();
+    // =========================================================================
+    // PAGE 3: SINGLE MEDIEVAL DUNGEON GATE INTERACTION
+    // =========================================================================
+    if (this.dom.mainGateBtn) {
+      this.dom.mainGateBtn.addEventListener('click', () => {
+        this.handleGateClick();
+      });
     }
   }
 
-  // Trigger Sign-in and execute Video Warp Transition
-  handleSignInTrigger(isGoogle = false) {
-    if (APP_STATE.isTransitioning) return;
+  // ===========================================================================
+  // CINEMATIC WARP ORCHESTRATION
+  // ===========================================================================
+  triggerPortalWarp() {
     APP_STATE.isTransitioning = true;
-
-    sfx.playClick();
     sfx.playWarpWhoosh();
 
-    const code = this.dom.passcodeInput.value.trim();
-    this.showStatus(isGoogle ? '✦ Authenticating via Google...' : (code ? `✦ Verifying code "${code}"...` : '✦ Activating Ancient Gate...'), 'success');
+    // Show video transition screen
+    this.showScreen('portalTransitionSection');
 
-    // 1. Dissolve the glassmorphism card
-    setTimeout(() => {
-      this.dom.signinCardContainer.classList.add('dissolve-out');
-      this.dom.signinSection.classList.add('video-playing');
-
-      // 2. Play the portal zoom video
-      const video = this.dom.portalVideo;
-      if (video) {
-        video.currentTime = 0;
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(err => {
-            console.warn('Video autoplay fallback:', err);
-            // If autoplay policy blocks or fails, fallback to timed warp
-            setTimeout(() => this.completeWarpToHero(), 2800);
-          });
-        }
-      } else {
-        setTimeout(() => this.completeWarpToHero(), 2000);
-      }
-    }, 400);
-  }
-
-  // Finish warp sequence and reveal Emberkeep Hero Dashboard
-  completeWarpToHero() {
-    this.dom.warpFlash.classList.add('flash-active');
-
-    setTimeout(() => {
-      // Switch active sections
-      this.dom.signinSection.classList.remove('active');
-      this.dom.heroSection.classList.add('active');
-      APP_STATE.currentScreen = 'hero';
-      APP_STATE.isTransitioning = false;
-
-      // Reset sign-in card state for potential return
-      this.dom.signinCardContainer.classList.remove('dissolve-out');
-      this.dom.signinSection.classList.remove('video-playing');
-      this.showStatus('', '');
-
-      // Fade out white/gold warp flash
-      setTimeout(() => {
-        this.dom.warpFlash.classList.remove('flash-active');
-      }, 600);
-    }, 450);
-  }
-
-  // Return back to Portal Sign-In chamber
-  returnToPortal() {
-    if (APP_STATE.isTransitioning) return;
-    sfx.playClick();
-    sfx.playWarpWhoosh();
-
-    this.dom.warpFlash.classList.add('flash-active');
-
-    setTimeout(() => {
-      this.dom.heroSection.classList.remove('active');
-      this.dom.signinSection.classList.add('active');
-      APP_STATE.currentScreen = 'signin';
-
-      const video = this.dom.portalVideo;
-      if (video) {
-        video.pause();
-        video.currentTime = 0;
+    if (this.dom.portalVideo) {
+      this.dom.portalVideo.currentTime = 0;
+      const playPromise = this.dom.portalVideo.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay fallback if blocked by browser policy
+          setTimeout(() => {
+            this.completePortalWarp();
+          }, 1800);
+        });
       }
 
-      setTimeout(() => {
-        this.dom.warpFlash.classList.remove('flash-active');
-      }, 500);
-    }, 400);
-  }
-
-  showStatus(msg, type = 'info') {
-    this.dom.statusMessage.textContent = msg;
-    this.dom.statusMessage.className = `card-status-message ${type}`;
-  }
-
-  // ===========================================================================
-  // INTRODUCTION MODAL & RIPPLE FX
-  // ===========================================================================
-  openIntroModal() {
-    if (!this.dom.introModal) return;
-    this.dom.introModal.classList.add('open');
-    this.dom.introModal.setAttribute('aria-hidden', 'false');
-  }
-
-  closeIntroModal() {
-    if (!this.dom.introModal) return;
-    sfx.playClick();
-    this.dom.introModal.classList.remove('open');
-    this.dom.introModal.setAttribute('aria-hidden', 'true');
-  }
-
-  createRipple(e, targetBtn) {
-    if (!targetBtn || !e) return;
-    const circle = document.createElement('span');
-    const diameter = Math.max(targetBtn.clientWidth, targetBtn.clientHeight);
-    const radius = diameter / 2;
-    const rect = targetBtn.getBoundingClientRect();
-
-    circle.style.width = circle.style.height = `${diameter}px`;
-    circle.style.left = `${e.clientX - rect.left - radius}px`;
-    circle.style.top = `${e.clientY - rect.top - radius}px`;
-    circle.style.position = 'absolute';
-    circle.style.borderRadius = '50%';
-    circle.style.background = 'radial-gradient(circle, rgba(255, 226, 138, 0.6), transparent 70%)';
-    circle.style.transform = 'scale(0)';
-    circle.style.animation = 'rippleFx 0.6s ease-out';
-    circle.style.pointerEvents = 'none';
-
-    targetBtn.appendChild(circle);
-    setTimeout(() => circle.remove(), 600);
-  }
-
-  // ===========================================================================
-  // DUNGEON MODAL & SOLVING
-  // ===========================================================================
-  openDungeonModal(dungeonId) {
-    const dungeon = DUNGEONS[dungeonId];
-    if (!dungeon) return;
-
-    APP_STATE.activeDungeonId = dungeonId;
-    this.dom.modalBadge.textContent = dungeon.badge;
-    this.dom.modalTitle.textContent = dungeon.name;
-    this.dom.modalLore.textContent = dungeon.lore;
-    this.dom.modalPrompt.textContent = dungeon.prompt;
-    this.dom.flagInput.value = '';
-    this.dom.flagFeedback.textContent = '';
-    this.dom.flagFeedback.className = 'flag-feedback';
-
-    if (APP_STATE.solvedDungeons.has(dungeonId)) {
-      this.dom.flagFeedback.textContent = '✓ This dungeon has already been cleared!';
-      this.dom.flagFeedback.className = 'flag-feedback success';
-    }
-
-    this.dom.dungeonModal.classList.add('open');
-    this.dom.dungeonModal.setAttribute('aria-hidden', 'false');
-    setTimeout(() => this.dom.flagInput.focus(), 150);
-  }
-
-  closeDungeonModal() {
-    sfx.playClick();
-    this.dom.dungeonModal.classList.remove('open');
-    this.dom.dungeonModal.setAttribute('aria-hidden', 'true');
-    APP_STATE.activeDungeonId = null;
-  }
-
-  // ===========================================================================
-  // MODULES, PROGRESS & PROFILE MODALS
-  // ===========================================================================
-  openModulesModal() {
-    if (!this.dom.modulesModal) return;
-    this.dom.modulesModal.classList.add('open');
-    this.dom.modulesModal.setAttribute('aria-hidden', 'false');
-  }
-
-  closeModulesModal() {
-    if (!this.dom.modulesModal) return;
-    sfx.playClick();
-    this.dom.modulesModal.classList.remove('open');
-    this.dom.modulesModal.setAttribute('aria-hidden', 'true');
-    this.setActiveNavTab('dungeons');
-  }
-
-  openProgressModal() {
-    if (!this.dom.progressModal) return;
-    this.dom.progressModal.classList.add('open');
-    this.dom.progressModal.setAttribute('aria-hidden', 'false');
-  }
-
-  closeProgressModal() {
-    if (!this.dom.progressModal) return;
-    sfx.playClick();
-    this.dom.progressModal.classList.remove('open');
-    this.dom.progressModal.setAttribute('aria-hidden', 'true');
-    this.setActiveNavTab('dungeons');
-  }
-
-  openProfileModal() {
-    if (!this.dom.profileModal) return;
-    this.dom.profileModal.classList.add('open');
-    this.dom.profileModal.setAttribute('aria-hidden', 'false');
-  }
-
-  closeProfileModal() {
-    if (!this.dom.profileModal) return;
-    sfx.playClick();
-    this.dom.profileModal.classList.remove('open');
-    this.dom.profileModal.setAttribute('aria-hidden', 'true');
-  }
-
-  launchModuleDemo(moduleTitle) {
-    sfx.playClick();
-    alert(`⚡ Launching ${moduleTitle} interactive simulation sandbox...`);
-  }
-
-  submitCurrentFlag() {
-    const dungeonId = APP_STATE.activeDungeonId;
-    const dungeon = DUNGEONS[dungeonId];
-    if (!dungeon) return;
-
-    const inputVal = this.dom.flagInput.value.trim();
-    if (!inputVal) {
-      this.dom.flagFeedback.textContent = 'Please enter a flag or passkey.';
-      this.dom.flagFeedback.className = 'flag-feedback error';
-      return;
-    }
-
-    if (inputVal === dungeon.flag || inputVal.toLowerCase() === 'solved') {
-      sfx.playVictoryChime();
-      this.dom.flagFeedback.textContent = '✦ Gate Unlocked! Flag validated successfully.';
-      this.dom.flagFeedback.className = 'flag-feedback success';
-
-      if (!APP_STATE.solvedDungeons.has(dungeonId)) {
-        APP_STATE.solvedDungeons.add(dungeonId);
-        APP_STATE.flagsFound += 1;
-        APP_STATE.dungeonsCleared = Math.min(APP_STATE.solvedDungeons.size, 4);
-
-        // Update Dashboard Summary Stats
-        if (this.dom.flagCount) this.dom.flagCount.textContent = APP_STATE.flagsFound;
-        if (this.dom.dungeonCount) this.dom.dungeonCount.textContent = `${APP_STATE.dungeonsCleared}/4`;
-
-        // Update Progress Modal Live Stats
-        if (this.dom.progFlagsFound) this.dom.progFlagsFound.textContent = APP_STATE.flagsFound;
-        if (this.dom.progDungeonsCleared) this.dom.progDungeonsCleared.textContent = `${APP_STATE.dungeonsCleared}/4`;
-
-        // EXP progression
-        const exp = APP_STATE.flagsFound * 400;
-        if (this.dom.expValue) this.dom.expValue.textContent = exp;
-        if (this.dom.expBarFill) {
-          const pct = Math.min(100, Math.round((exp / 2000) * 100));
-          this.dom.expBarFill.style.width = `${pct}%`;
+      // Safety timeout in case video stalls or fails to trigger 'ended'
+      this.warpFallbackTimer = setTimeout(() => {
+        if (APP_STATE.isTransitioning) {
+          this.completePortalWarp();
         }
-
-        // Unlock Sigil badge card
-        const badgeEl = document.getElementById(`badgeChamber${dungeonId}`);
-        if (badgeEl) {
-          badgeEl.classList.add('unlocked');
-          const stateEl = badgeEl.querySelector('.badge-state');
-          if (stateEl) stateEl.textContent = 'Unlocked';
-        }
-
-        const caveEl = document.getElementById(`cave${dungeonId}`);
-        if (caveEl) caveEl.classList.add('cleared');
-      }
-
-      setTimeout(() => this.closeDungeonModal(), 1200);
+      }, 2600);
     } else {
-      this.dom.flagFeedback.textContent = '✗ Invalid flag cipher. Check the runes and retry!';
-      this.dom.flagFeedback.className = 'flag-feedback error';
+      setTimeout(() => {
+        this.completePortalWarp();
+      }, 1500);
+    }
+  }
+
+  completePortalWarp() {
+    if (!APP_STATE.isTransitioning && APP_STATE.currentScreen === 'pageDashboard') return;
+    APP_STATE.isTransitioning = false;
+    clearTimeout(this.warpFallbackTimer);
+
+    if (this.dom.transitionWarpFlash) {
+      this.dom.transitionWarpFlash.classList.add('flash-active');
+    }
+
+    setTimeout(() => {
+      // Transition to Page 3 (Dashboard)
+      this.showScreen('pageDashboard');
+
+      if (this.dom.transitionWarpFlash) {
+        this.dom.transitionWarpFlash.classList.remove('flash-active');
+      }
+    }, 280);
+  }
+
+  // ===========================================================================
+  // SFX UI UPDATE
+  // ===========================================================================
+  updateSfxUI() {
+    if (this.dom.sfxIconOn && this.dom.sfxIconOff) {
+      if (APP_STATE.soundEnabled) {
+        this.dom.sfxIconOn.classList.remove('hidden');
+        this.dom.sfxIconOff.classList.add('hidden');
+        if (this.dom.navSfxLabel) this.dom.navSfxLabel.textContent = 'SFX: ON';
+      } else {
+        this.dom.sfxIconOn.classList.add('hidden');
+        this.dom.sfxIconOff.classList.remove('hidden');
+        if (this.dom.navSfxLabel) this.dom.navSfxLabel.textContent = 'SFX: OFF';
+      }
+    }
+  }
+
+  // ===========================================================================
+  // PROFILE DROPDOWN MANAGEMENT
+  // ===========================================================================
+  openProfileDropdown() {
+    if (this.dom.profileDropdown && this.dom.avatarBtn) {
+      this.dom.profileDropdown.classList.add('open');
+      this.dom.avatarBtn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  closeProfileDropdown() {
+    if (this.dom.profileDropdown && this.dom.avatarBtn) {
+      this.dom.profileDropdown.classList.remove('open');
+      this.dom.avatarBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  // ===========================================================================
+  // LOGOUT (Reset & Return to Page 1)
+  // ===========================================================================
+  handleLogout() {
+    // Reset state
+    APP_STATE.isGateUnlocked = false;
+    APP_STATE.accessCode = '';
+
+    // Reset access code input and message
+    if (this.dom.accessCodeInput) {
+      this.dom.accessCodeInput.value = '';
+    }
+    if (this.dom.codeStatusMsg) {
+      this.dom.codeStatusMsg.textContent = '';
+      this.dom.codeStatusMsg.className = 'card-status-message';
+    }
+
+    // Reset dungeon gate to locked state
+    this.lockGateDOM();
+
+    // Smooth transition back to Page 1 (Login)
+    this.showScreen('pageLogin');
+  }
+
+  // ===========================================================================
+  // INTRODUCTION BUTTON HANDLER
+  // ===========================================================================
+  handleIntroductionClick() {
+    sfx.playClick();
+
+    if (!APP_STATE.isGateUnlocked) {
+      // Unseal and unlock the dungeon gate
+      this.unlockGateDOM();
+      sfx.playGateOpen();
+    }
+
+    // Extensible hook for future page navigation or backend communication
+    if (typeof window.onIntroductionClick === 'function') {
+      window.onIntroductionClick();
+    }
+  }
+
+  // ===========================================================================
+  // DUNGEON GATE INTERACTION HANDLER
+  // ===========================================================================
+  handleGateClick() {
+    if (!APP_STATE.isGateUnlocked) {
+      // Gate is locked: rattle door, play rattle sound, and provide visual feedback
+      sfx.playRattle();
+
+      if (this.dom.mainGateBtn) {
+        this.dom.mainGateBtn.classList.remove('rattle');
+        void this.dom.mainGateBtn.offsetWidth; // Reflow to replay animation
+        this.dom.mainGateBtn.classList.add('rattle');
+        setTimeout(() => {
+          if (this.dom.mainGateBtn) this.dom.mainGateBtn.classList.remove('rattle');
+        }, 500);
+      }
+
+      if (this.dom.introNotice) {
+        this.dom.introNotice.textContent = '🔒 The dungeon gate is sealed! Click Introduction above to unlock it.';
+        this.dom.introNotice.classList.remove('unlocked');
+      }
+    } else {
+      // Gate is unlocked: ready to enter!
+      sfx.playClick();
+
+      // Trigger visual pulse on door
+      if (this.dom.mainGateBtn) {
+        this.dom.mainGateBtn.classList.add('gate-unlock-burst');
+        setTimeout(() => {
+          if (this.dom.mainGateBtn) this.dom.mainGateBtn.classList.remove('gate-unlock-burst');
+        }, 800);
+      }
+
+      // Extensible hook for future backend / expedition page
+      if (typeof window.onGateEnter === 'function') {
+        window.onGateEnter();
+      }
+    }
+  }
+
+  // ===========================================================================
+  // GATE DOM STATE CONTROLS (Locked vs Unlocked)
+  // ===========================================================================
+  unlockGateDOM() {
+    APP_STATE.isGateUnlocked = true;
+
+    if (this.dom.mainGateBtn) {
+      this.dom.mainGateBtn.classList.remove('locked');
+      this.dom.mainGateBtn.classList.add('unlocked');
+      this.dom.mainGateBtn.classList.add('gate-unlock-burst');
+      this.dom.mainGateBtn.setAttribute('aria-label', 'Medieval Dungeon Gate (Unlocked)');
+
+      setTimeout(() => {
+        if (this.dom.mainGateBtn) this.dom.mainGateBtn.classList.remove('gate-unlock-burst');
+      }, 900);
+    }
+
+    if (this.dom.gateTitleBadge) {
+      this.dom.gateTitleBadge.textContent = 'UNLOCKED';
+    }
+
+    if (this.dom.introNotice) {
+      this.dom.introNotice.textContent = '✦ Gate seal dispelled! The doorway is open.';
+      this.dom.introNotice.classList.add('unlocked');
+    }
+  }
+
+  lockGateDOM() {
+    APP_STATE.isGateUnlocked = false;
+
+    if (this.dom.mainGateBtn) {
+      this.dom.mainGateBtn.classList.remove('unlocked');
+      this.dom.mainGateBtn.classList.remove('gate-unlock-burst');
+      this.dom.mainGateBtn.classList.add('locked');
+      this.dom.mainGateBtn.setAttribute('aria-label', 'Medieval Dungeon Gate (Locked)');
+    }
+
+    if (this.dom.gateTitleBadge) {
+      this.dom.gateTitleBadge.textContent = 'LOCKED';
+    }
+
+    if (this.dom.introNotice) {
+      this.dom.introNotice.textContent = 'Click Introduction to break the seal and unlock the dungeon gate.';
+      this.dom.introNotice.classList.remove('unlocked');
+    }
+  }
+
+  // ===========================================================================
+  // HASH / QUERY PARAMETER ROUTING (For direct access and debugging)
+  // ===========================================================================
+  handleRouteHash() {
+    const hash = window.location.hash.toLowerCase();
+    const query = window.location.search.toLowerCase();
+
+    if (hash.includes('login')) {
+      this.showScreen('pageLogin');
+    } else if (hash.includes('code') || hash.includes('access')) {
+      this.showScreen('pageAccessCode');
+    } else if (hash.includes('dashboard') || query.includes('dashboard')) {
+      this.showScreen('pageDashboard');
+      if (hash.includes('unlocked') || query.includes('unlocked')) {
+        this.unlockGateDOM();
+      }
     }
   }
 }
 
-// Instantiate on DOM load
-window.addEventListener('DOMContentLoaded', () => {
-  window.app = new PortalApp();
+// Global initialization on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  window.sanctumApp = new SanctumApp();
 });
