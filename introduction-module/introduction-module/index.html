@@ -1783,7 +1783,10 @@
               <span>🌿</span>
               <span>Woodland Expedition Progress</span>
             </div>
-            <span class="progress-counter" id="expeditionProgressText">0 of 3 Challenges Completed</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <button type="button" class="btn-action ghost small" style="padding:3px 10px; font-size:0.75rem; border:1px solid rgba(239,68,68,0.35); color:#f87171; border-radius:6px;" onclick="resetAllChallenges()" title="Reset all challenges and start fresh">↺ Reset Progress</button>
+              <span class="progress-counter" id="expeditionProgressText">0 of 9 Challenges Completed</span>
+            </div>
           </div>
           <div class="progress-track">
             <div class="progress-fill-bar" id="expeditionProgressBar" style="width: 0%;"></div>
@@ -2717,6 +2720,29 @@
         }
       } catch (e) {}
       updateChallengesUI();
+    }
+
+    try {
+      if (window.location.search.includes('reset') || window.location.hash.includes('reset')) {
+        localStorage.removeItem(COMPLETED_CHALLENGES_KEY);
+      }
+    } catch (e) {}
+
+    function resetAllChallenges() {
+      try {
+        localStorage.removeItem(COMPLETED_CHALLENGES_KEY);
+      } catch (e) {}
+      resetBinexp();
+      sqHome();
+      resetXss();
+      resetWifi();
+      resetCrypto();
+      resetCmdInj();
+      resetIdor();
+      resetTraversal();
+      resetSocial();
+      updateChallengesUI();
+      playBeep(450, 0.08);
     }
 
     function isRoomUnlocked(id, completed) {
