@@ -115,20 +115,36 @@ html, body {
 }
 
 .warp-flash {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, #ffffff 0%, #ffde8a 35%, #ff9800 70%, transparent 100%);
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  /* Celestial ivory-gold bloom seamlessly diffusing into deep cosmic void */
+  background: radial-gradient(circle at 50% 50%, rgba(255, 250, 235, 0.96) 0%, rgba(255, 220, 130, 0.8) 32%, rgba(180, 115, 25, 0.4) 65%, rgba(6, 12, 32, 0.85) 90%, #030612 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   opacity: 0;
-  z-index: 100;
+  visibility: hidden;
+  z-index: 9999;
   pointer-events: none;
-  transition: opacity 0.5s ease-out;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.65s ease-out, visibility 0.65s;
 }
 
 .warp-flash.flash-active {
   opacity: 1;
+  visibility: visible;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Variant: Mystical Emerald Veil for Forest/Grove Navigation */
+.warp-flash.forest-transition {
+  background: radial-gradient(circle at 50% 50%, rgba(110, 231, 183, 0.88) 0%, rgba(16, 185, 129, 0.65) 30%, rgba(6, 40, 26, 0.85) 70%, #030a06 100%);
+}
+
+/* Variant: Deep Sanctum Void Fade for Logout */
+.warp-flash.void-transition {
+  background: radial-gradient(circle at 50% 50%, rgba(14, 22, 48, 0.92) 0%, rgba(6, 10, 24, 0.95) 60%, #02040a 100%);
 }
 
 /* ==========================================================================

@@ -309,11 +309,23 @@ class DashboardApp {
       }
     }
 
-    // 3. Dissolve arrival warp flash smoothly
-    if (this.dom.dashboardWarpFlash) {
-      setTimeout(() => {
+    // 3. Smooth celestial arrival bloom (ONLY when arriving fresh from Page 2 portal warp)
+    const arrivingFromPortal = sessionStorage.getItem('portalWarpArrival') === 'true';
+    if (arrivingFromPortal) {
+      sessionStorage.removeItem('portalWarpArrival');
+      if (this.dom.dashboardWarpFlash) {
+        this.dom.dashboardWarpFlash.classList.add('flash-active');
+        void this.dom.dashboardWarpFlash.offsetWidth; // Force reflow
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            this.dom.dashboardWarpFlash.classList.remove('flash-active');
+          }, 60);
+        });
+      }
+    } else {
+      if (this.dom.dashboardWarpFlash) {
         this.dom.dashboardWarpFlash.classList.remove('flash-active');
-      }, 140);
+      }
     }
 
     // 4. Update SFX UI state
@@ -492,14 +504,15 @@ class DashboardApp {
     // Lock gate in UI
     this.lockGateDOM();
 
-    // Flash and redirect to Page 1 Login
+    // Smooth deep sanctum void fade to Page 1 Login
     if (this.dom.dashboardWarpFlash) {
-      this.dom.dashboardWarpFlash.classList.add('flash-active');
+      this.dom.dashboardWarpFlash.classList.remove('forest-transition');
+      this.dom.dashboardWarpFlash.classList.add('void-transition', 'flash-active');
     }
 
     setTimeout(() => {
       window.location.replace('index.html#login');
-    }, 250);
+    }, 380);
   }
 
   // ===========================================================================
@@ -523,15 +536,16 @@ class DashboardApp {
       window.onIntroductionClick();
     }
 
-    // Smooth cinematic warp flash and redirection to the Introduction Module
+    // Smooth mystical emerald grove transition to the Introduction Module
     setTimeout(() => {
       if (this.dom.dashboardWarpFlash) {
-        this.dom.dashboardWarpFlash.classList.add('flash-active');
+        this.dom.dashboardWarpFlash.classList.remove('void-transition');
+        this.dom.dashboardWarpFlash.classList.add('forest-transition', 'flash-active');
       }
       setTimeout(() => {
         window.location.href = 'introduction-module/index.html';
-      }, 350);
-    }, 450);
+      }, 420);
+    }, 350);
   }
 
   // ===========================================================================

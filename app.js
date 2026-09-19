@@ -505,21 +505,19 @@ class SanctumApp {
     // =========================================================================
     if (this.dom.portalVideo) {
       this.dom.portalVideo.addEventListener('ended', () => {
-        // Video finished naturally: trigger flash peak and complete warp
+        // Video finished naturally: trigger celestial bloom and complete warp
         if (this.dom.transitionWarpFlash) {
           this.dom.transitionWarpFlash.classList.add('flash-active');
         }
-        setTimeout(() => {
-          this.completePortalWarp();
-        }, 120);
+        this.completePortalWarp();
       });
 
       this.dom.portalVideo.addEventListener('timeupdate', () => {
         const video = this.dom.portalVideo;
         if (!video.duration || isNaN(video.duration)) return;
         const remaining = video.duration - video.currentTime;
-        // Build up warp flash in final 0.4 seconds of video
-        if (remaining <= 0.4 && APP_STATE.isTransitioning && this.dom.transitionWarpFlash) {
+        // Build up celestial bloom in final 0.45s of video
+        if (remaining <= 0.45 && APP_STATE.isTransitioning && this.dom.transitionWarpFlash) {
           this.dom.transitionWarpFlash.classList.add('flash-active');
         }
       });
@@ -650,15 +648,20 @@ class SanctumApp {
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
-    // Peak white-gold radiance flash
+    // Peak celestial radiance bloom
     if (this.dom.transitionWarpFlash) {
       this.dom.transitionWarpFlash.classList.add('flash-active');
     }
 
+    // Set flag so Page 3 knows this is a genuine portal warp arrival
+    try {
+      sessionStorage.setItem('portalWarpArrival', 'true');
+    } catch (e) {}
+
     // Seamlessly redirect to standalone Page 3 (dashboard.html)
     setTimeout(() => {
       window.location.href = 'dashboard.html';
-    }, 280);
+    }, 380);
   }
 
   // ===========================================================================
