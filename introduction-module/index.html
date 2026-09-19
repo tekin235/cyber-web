@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cybersecurity Classes — Introduction Module</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="introduction-module/introduction.css" />
+  <style>
+    :root {
+      --font-display: 'Cinzel', serif;
+      --font-ui: 'Inter', sans-serif;
+      --font-accent: 'Outfit', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      --color-gold: #ffb833;
+      --color-gold-glow: rgba(255, 184, 51, 0.4);
+      --color-gold-bright: #ffe28a;
+      --color-dark-bg: #070b19;
+      --color-ember-blue: #0b132b;
+      --color-panel: #0e152e;
+      --color-panel-2: #141f42;
+      --color-border: rgba(255, 215, 120, 0.2);
+      --color-border-glow: rgba(255, 184, 51, 0.4);
+      --color-emerald: #10b981;
+      --color-emerald-glow: rgba(16, 185, 129, 0.45);
+      --color-red: #ef4444;
+
+      --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background-color: var(--color-dark-bg);
+      color: #e2e8f0;
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Sanctum Starfield */
+    .sanctum-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(circle at 50% 20%, rgba(30, 58, 138, 0.18) 0%, rgba(11, 19, 43, 0.6) 60%, #070b19 100%),
+                  radial-gradient(1.5px 1.5px at 15% 25%, #fff, transparent),
+                  radial-gradient(1.5px 1.5px at 75% 15%, #ffd27a, transparent),
+                  radial-gradient(1.5px 1.5px at 85% 70%, #fff, transparent),
+                  radial-gradient(1.5px 1.5px at 25% 80%, #ffd27a, transparent);
+      background-size: 100% 100%, 450px 450px, 550px 550px, 400px 400px, 500px 500px;
+    }
+
+    /* Top Navigation Bar */
+    .sanctum-topbar {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 36px;
+      border-bottom: 1px solid var(--color-border);
+      background: rgba(7, 11, 25, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .topbar-sigil {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #2a3a6a 0%, #101938 100%);
+      border: 1px solid rgba(255, 215, 120, 0.45);
+      box-shadow: 0 0 14px rgba(255, 184, 51, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gold);
+      font-size: 1rem;
+    }
+
+    .topbar-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.05em;
+    }
+
+    .topbar-crumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      color: #94a3b8;
+      margin-left: 10px;
+      padding-left: 14px;
+      border-left: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .topbar-crumbs a {
+      color: var(--color-gold);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .topbar-crumbs a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .topbar-crumbs span {
+      color: #f1f5f9;
+      font-weight: 500;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-return-dashboard {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(14, 22, 46, 0.85);
+      border: 1.5px solid var(--color-border);
+      color: #f8fafc;
+      padding: 9px 18px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      transition: all 0.25s var(--ease-cinematic);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-return-dashboard:hover {
+      background: rgba(255, 184, 51, 0.15);
+      border-color: var(--color-gold);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 184, 51, 0.3);
+    }
+
+    .btn-return-dashboard svg {
+      transition: transform 0.2s ease;
+    }
+
+    .btn-return-dashboard:hover svg {
+      transform: translateX(-3px);
+    }
+
+    /* Page View Containers */
+    .module-content-wrapper {
+      position: relative;
+      z-index: 10;
+      min-height: calc(100vh - 75px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen-view {
+      display: none;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.4s var(--ease-cinematic), transform 0.4s var(--ease-cinematic);
+    }
+
+    .screen-view.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      animation: viewSlideIn 0.5s var(--ease-cinematic) forwards;
+    }
+
+    @keyframes viewSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Screen 1: Dashboard Landing */
+    .case-dash {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 60px 32px 90px;
+    }
+
+    .case-tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      color: var(--color-gold);
+      background: rgba(255, 184, 51, 0.08);
+      border: 1px solid rgba(255, 215, 120, 0.35);
+      padding: 5px 14px;
+      border-radius: 9999px;
+      margin-bottom: 22px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .case-dash h1 {
+      font-family: var(--font-display);
+      font-size: 2.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+    }
+
+    .case-dash p.lead-text {
+      color: #94a3b8;
+      font-size: 1.02rem;
+      max-width: 660px;
+      line-height: 1.65;
+      margin-bottom: 40px;
+    }
+
+    .hero-case-card {
+      position: relative;
+      overflow: hidden;
+      border: 1.5px solid var(--color-border);
+      background: linear-gradient(135deg, rgba(14, 22, 46, 0.85) 0%, rgba(10, 16, 36, 0.95) 100%);
+      border-radius: 18px;
+      padding: 38px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 184, 51, 0.08);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .hero-case-card:hover {
+      border-color: rgba(255, 215, 120, 0.45);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 184, 51, 0.15);
+    }
+
+    .hero-case-card::after {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      bottom: 0;
+      width: 60%;
+      background: linear-gradient(90deg, transparent, rgba(255, 184, 51, 0.08), transparent);
+      animation: scanSweep 4.5s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scanSweep {
+      to { left: 150%; }
+    }
+
+    .hero-case-text h2 {
+      font-family: var(--font-display);
+      margin: 0 0 10px;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .hero-case-text p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .btn-start-case {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-weight: 700;
+      font-size: 0.96rem;
+      padding: 14px 28px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #ffc04d 0%, #e8a33d 100%);
+      color: #161005;
+      box-shadow: 0 8px 24px rgba(232, 163, 61, 0.35);
+      transition: all 0.25s var(--ease-cinematic);
+      white-space: nowrap;
+    }
+
+    .btn-start-case:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(232, 163, 61, 0.5);
+    }
+
+    /* Screen 2: Room Grid Module */
+    .module-grid-wrapper {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 44px 32px 90px;
+    }
+
+    .module-grid-wrapper h1 {
+      font-family: var(--font-display);
+      font-size: 1.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .module-grid-wrapper p.lead-text {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin-bottom: 34px;
+      max-width: 680px;
+      line-height: 1.6;
+    }
+
+    .rooms-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .rooms-container { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 580px) {
+      .rooms-container { grid-template-columns: 1fr; }
+    }
+
+    .room-card {
+      position: relative;
+      border: 1px solid var(--color-border);
+      background: linear-gradient(145deg, rgba(14, 22, 46, 0.75) 0%, rgba(10, 16, 36, 0.9) 100%);
+      border-radius: 14px;
+      padding: 22px;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: all 0.28s var(--ease-cinematic);
+      overflow: hidden;
+    }
+
+    .room-card:hover:not(.locked) {
+      border-color: var(--color-gold);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 184, 51, 0.2);
+    }
+
+    .room-card.locked {
+      cursor: default;
+      opacity: 0.52;
+      border-color: rgba(255, 255, 255, 0.08);
+      background: rgba(10, 14, 28, 0.6);
+    }
+
+    .room-card.locked:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .room-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .room-sigil-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: rgba(255, 184, 51, 0.1);
+      border: 1px solid rgba(255, 215, 120, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-gold);
+      font-size: 1rem;
+    }
+
+    .room-card.locked .room-sigil-box {
+      color: #64748b;
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .room-status-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--color-emerald);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--color-emerald-glow);
+      border-radius: 9999px;
+      padding: 3px 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .room-card.locked .room-status-badge {
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .room-card h3 {
+      font-family: var(--font-display);
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .room-card p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: #94a3b8;
+      line-height: 1.55;
+    }
+
+    /* Screen 3, 4, 5: Interactive Room Layouts */
+    .room-interactive-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      min-height: calc(100vh - 75px);
+    }
+
+    @media (max-width: 900px) {
+      .room-interactive-layout { grid-template-columns: 1fr; }
+    }
+
+    .room-brief-panel {
+      border-right: 1px solid var(--color-border);
+      padding: 30px 24px;
+      background: rgba(10, 16, 36, 0.85);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      backdrop-filter: blur(12px);
+    }
+
+    @media (max-width: 900px) {
+      .room-brief-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+      }
+    }
+
+    .room-brief-panel h2 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .room-sub-caption {
+      color: #94a3b8;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .dialogue-bubble {
+      background: rgba(14, 22, 46, 0.9);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #f1f5f9;
+      transition: border-color 0.25s ease;
+    }
+
+    .dialogue-bubble.pulse {
+      border-color: var(--color-gold);
+      box-shadow: 0 0 16px rgba(255, 184, 51, 0.25);
+    }
+
+    .dialogue-bubble .hint {
+      display: block;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(255, 215, 120, 0.25);
+      color: var(--color-gold-bright);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+    }
+
+    .mech-box {
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      background: rgba(16, 185, 129, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+      transition: border-color 0.25s ease;
+    }
+
+    .mech-box.pulse {
+      border-color: var(--color-emerald);
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
+    }
+
+    .mech-box .label {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--color-emerald);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .room-stage-panel {
+      padding: 30px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      background: rgba(7, 11, 25, 0.6);
+    }
+
+    .stage-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stage-header-row h1 {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .stage-actions-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Terminal Component */
+    .sanctum-terminal {
+      background: #06080e;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      min-height: 380px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .term-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: #0b0f19;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .term-titlebar span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #334155;
+    }
+
+    .term-titlebar span:nth-child(1) { background: #ef4444; }
+    .term-titlebar span:nth-child(2) { background: #f59e0b; }
+    .term-titlebar span:nth-child(3) { background: #10b981; }
+
+    .term-scroll-body {
+      flex: 1;
+      padding: 16px 18px;
+      overflow-y: auto;
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+
+    .term-line {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 3px;
+    }
+
+    .term-line.echo { color: #94a3b8; }
+    .term-line.out { color: #f1f5f9; }
+    .term-line.warn { color: #f87171; }
+    .term-line.flag { color: #34d399; font-weight: 700; font-size: 0.95rem; }
+
+    .term-input-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      background: #0a0d15;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .term-prompt-label {
+      color: var(--color-gold);
+      font-weight: 600;
+    }
+
+    .term-input-field {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+    }
+
+    .term-input-field.filled {
+      box-shadow: 0 0 0 2px var(--color-gold);
+    }
+
+    /* Fake Browser Component */
+    .sanctum-browser {
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #1e293b;
+      min-height: 380px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .browser-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      background: #e2e8f0;
+      border-bottom: 1px solid #cbd5e1;
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .browser-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #94a3b8;
+    }
+
+    .browser-dots span:nth-child(1) { background: #ef4444; }
+    .browser-dots span:nth-child(2) { background: #f59e0b; }
+    .browser-dots span:nth-child(3) { background: #10b981; }
+
+    .browser-addr-field {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #475569;
+    }
+
+    .browser-content-page {
+      flex: 1;
+      padding: 24px 28px;
+      overflow-y: auto;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      background: #f8fafc;
+    }
+
+    .browser-content-page a.plink {
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    .browser-content-page pre {
+      background: #e2e8f0;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      margin: 10px 0;
+    }
+
+    .login-box-widget {
+      max-width: 320px;
+      margin: 24px auto 0;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 22px;
+      background: #ffffff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .login-box-widget label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #64748b;
+      margin: 10px 0 4px;
+      text-transform: uppercase;
+    }
+
+    .login-box-widget input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      font-family: var(--font-mono);
+      transition: box-shadow 0.2s;
+    }
+
+    .login-box-widget input.filled {
+      box-shadow: 0 0 0 2px var(--color-gold);
+    }
+
+    .login-box-widget button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: background 0.2s;
+    }
+
+    .login-box-widget button:hover {
+      background: #1e293b;
+    }
+
+    .login-box-widget .err-text {
+      color: #dc2626;
+      font-size: 0.8rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* Guestbook Widget */
+    .guestbook-comment {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: #ffffff;
+    }
+
+    .guestbook-comment b {
+      display: block;
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .guestbook-form textarea {
+      width: 100%;
+      min-height: 72px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .guestbook-form textarea.filled {
+      box-shadow: 0 0 0 2px var(--color-gold);
+    }
+
+    .guestbook-form button {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.86rem;
+    }
+
+    .admin-review-log {
+      background: #06080e;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-top: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .admin-review-log .cap { color: #34d399; font-weight: 600; }
+
+    /* Flag Notification Banner */
+    .flag-banner-box {
+      display: none;
+      border: 1.5px solid var(--color-emerald);
+      background: rgba(16, 185, 129, 0.12);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #34d399;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+    }
+
+    .flag-banner-box.show {
+      display: flex;
+      animation: flagPop 0.5s var(--ease-spring);
+    }
+
+    @keyframes flagPop {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Buttons */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 10px 18px;
+      border-radius: 8px;
+      background: var(--color-gold);
+      color: #161005;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(255, 184, 51, 0.35);
+    }
+
+    .btn-action.ghost {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f1f5f9;
+    }
+
+    .btn-action.ghost:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: none;
+    }
+
+    .btn-action.teal {
+      background: var(--color-emerald);
+      color: #062419;
+    }
+
+    .btn-action.teal-outline {
+      background: transparent;
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #34d399;
+    }
+
+    .btn-action.teal-outline:hover {
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .btn-action.small {
+      padding: 7px 13px;
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Sanctum Background -->
+  <div class="sanctum-bg"></div>
+
+  <!-- Top Navigation Bar -->
+  <nav class="sanctum-topbar">
+    <div class="topbar-left">
+      <div class="topbar-sigil">✦</div>
+      <div class="topbar-title">Cybersecurity Classes</div>
+      <div class="topbar-crumbs">
+        <a onclick="goScreen('dashboard')">Dashboard</a>
+        <span>/</span>
+        <span id="navCrumbScene">Case 0417</span>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <a href="../index.html#dashboard" class="btn-return-dashboard" id="btnBackToSanctum">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Back to Sanctum</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main View Container -->
+  <main class="module-content-wrapper">
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 1: CASE FILE DASHBOARD LANDING                                  -->
+    <!-- ===================================================================== -->
+    <section class="screen-view active" id="screen-dashboard">
+      <div class="case-dash">
+        <div class="case-tag-badge">Case File 0417 — Acme Widgets Ltd.</div>
+        <h1>Someone leaked a competitor's dev server. You found the drive.</h1>
+        <p class="lead-text">
+          Before you're sorted into an expedition house, you've got one evening with what was on the leaked drive: 
+          a stripped-down build tool, a public site nobody finished securing properly, and a guestbook the devs forgot to disable. 
+          Go see what's actually on that drive.
+        </p>
+
+        <div class="hero-case-card">
+          <div class="hero-case-text">
+            <h2>Open the drive</h2>
+            <p>Three short interactive scenes, no setup required. Each one introduces a real-world technique you'll master throughout the course.</p>
+          </div>
+          <button class="btn-start-case" onclick="goScreen('module')">
+            <span>Start the case</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 2: NINE-ROOM CHALLENGE GRID                                     -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-module">
+      <div class="module-grid-wrapper">
+        <h1>What's on the drive</h1>
+        <p class="lead-text">
+          Three scenes are open right now. You can jump between them at any time — nothing needs to be finished in one sitting. 
+          The remaining locked dungeons unlock as classes progress over the semester.
+        </p>
+
+        <div class="rooms-container">
+          <!-- Room 1: Open -->
+          <div class="room-card" onclick="goScreen('room-binexp')">
+            <div class="room-card-header">
+              <div class="room-sigil-box">▦</div>
+              <span class="room-status-badge">Open</span>
+            </div>
+            <h3>The build tool</h3>
+            <p>A binary called <code>vault</code> sits in the leaked files. It's hiding more than it's showing.</p>
+          </div>
+
+          <!-- Room 2: Open -->
+          <div class="room-card" onclick="goScreen('room-sqli')">
+            <div class="room-card-header">
+              <div class="room-sigil-box">◈</div>
+              <span class="room-status-badge">Open</span>
+            </div>
+            <h3>The page that shouldn't exist</h3>
+            <p>Acme's own site tells crawlers to stay away from something. Naturally, you don't.</p>
+          </div>
+
+          <!-- Room 3: Open -->
+          <div class="room-card" onclick="goScreen('room-xss')">
+            <div class="room-card-header">
+              <div class="room-sigil-box">✎</div>
+              <span class="room-status-badge">Open</span>
+            </div>
+            <h3>The guestbook</h3>
+            <p>Somewhere, an admin still reads every comment posted here. Make that a problem for them.</p>
+          </div>
+
+          <!-- Locked Teaser Rooms -->
+          <div class="room-card locked">
+            <div class="room-card-header">
+              <div class="room-sigil-box">⇄</div>
+              <span class="room-status-badge">Locked</span>
+            </div>
+            <h3>The coffee shop wifi</h3>
+            <p>Opens with network fundamentals. Watch credentials cross the wire in plain text.</p>
+          </div>
+
+          <div class="room-card locked">
+            <div class="room-card-header">
+              <div class="room-sigil-box">✷</div>
+              <span class="room-status-badge">Locked</span>
+            </div>
+            <h3>The encoded memo</h3>
+            <p>Opens with cryptography session. A secret message that was "encrypted" — barely.</p>
+          </div>
+
+          <div class="room-card locked">
+            <div class="room-card-header">
+              <div class="room-sigil-box">⌁</div>
+              <span class="room-status-badge">Locked</span>
+            </div>
+            <h3>The support form</h3>
+            <p>Opens with terminal/privilege escalation. A form field that gets passed straight to a shell.</p>
+          </div>
+
+          <div class="room-card locked">
+            <div class="room-card-header">
+              <div class="room-sigil-box">▤</div>
+              <span class="room-status-badge">Locked</span>
+            </div>
+            <h3>Somebody else's invoice</h3>
+            <p>Opens with web application security. Change one number in a URL, see a stranger's data.</p>
+          </div>
+
+          <div class="room-card locked">
+            <div class="room-card-header">
+              <div class="room-sigil-box">⛁</div>
+              <span class="room-status-badge">Locked</span>
+            </div>
+            <h3>The "../../" folder</h3>
+            <p>Opens with path traversal. A file picker that never checks where you're pointing it.</p>
+          </div>
+
+          <div class="room-card locked">
+            <div class="room-card-header">
+              <div class="room-sigil-box">☏</div>
+              <span class="room-status-badge">Locked</span>
+            </div>
+            <h3>The phone call</h3>
+            <p>Opens with social engineering. No exploit code — just a very convincing voice.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 3: INTERACTIVE ROOM — BINARY EXPLOITATION                       -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-binexp">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 1 — Binary Analysis</div>
+          <h2>The build tool</h2>
+          <div class="room-sub-caption">Simulated Linux Terminal · inspect strings, figure it out as you go</div>
+          
+          <div class="dialogue-bubble" id="be-dialogue">
+            A folder from the leak just landed on this machine. You don't know what's in it yet — 
+            <span class="hint">start by looking: ls</span>
+          </div>
+
+          <div class="mech-box" id="be-mech">
+            <span class="label">How this works</span>
+            Binaries keep readable text embedded inside them — function names, messages, file paths — left over from compiling. 
+            Reading that text is usually the fastest way to learn what a program can do without touching its assembly.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintBinexp()">Need a hint? Fill next command</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <h1>~/leak (Terminal)</h1>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetBinexp()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="sanctum-terminal">
+            <div class="term-titlebar">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="term-scroll-body" id="be-body"></div>
+            <div class="term-input-container">
+              <span class="term-prompt-label">student@leak:~$</span>
+              <input type="text" id="be-input" class="term-input-field" placeholder="type a command…" autocomplete="off" spellcheck="false" />
+            </div>
+          </div>
+
+          <div class="flag-banner-box" id="be-flagbox">
+            <span>FLAG&#123;h1dd3n_func_f0und&#125;</span>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 4: INTERACTIVE ROOM — SQL INJECTION                            -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-sqli">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 2 — Web Exploitation</div>
+          <h2>The page that shouldn't exist</h2>
+          <div class="room-sub-caption">Fake browser · click and inspect as you would on a live target</div>
+
+          <div class="dialogue-bubble" id="sq-dialogue">
+            This is Acme's public site. Before poking around by hand, check what it's telling search engines <i>not</i> to index — every site has this file. 
+            <span class="hint">Visit /robots.txt</span>
+          </div>
+
+          <div class="mech-box" id="sq-mech">
+            <span class="label">How this works</span>
+            <code>robots.txt</code> is a plain text file websites publish to tell automated crawlers which pages to skip. 
+            It's a polite request, not a lock. Developers sometimes list sensitive paths there by mistake, pointing right at what they meant to hide.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintSqli()">Need a hint? Show next step</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <h1>acmewidgets.co (Browser)</h1>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetSqli()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="sanctum-browser">
+            <div class="browser-toolbar">
+              <div class="browser-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="browser-addr-field" id="sq-addr">acmewidgets.co/</div>
+            </div>
+            <div class="browser-content-page" id="sq-page"></div>
+          </div>
+
+          <div class="flag-banner-box" id="sq-flagbox">
+            <span>FLAG&#123;r0b0ts_txt_g1ves_1t_away&#125;</span>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SCREEN 5: INTERACTIVE ROOM — CROSS-SITE SCRIPTING (XSS)               -->
+    <!-- ===================================================================== -->
+    <section class="screen-view" id="screen-room-xss">
+      <div class="room-interactive-layout">
+        <aside class="room-brief-panel">
+          <div class="case-tag-badge">Scene 3 — Client-Side Attacks</div>
+          <h2>The guestbook</h2>
+          <div class="room-sub-caption">Fake browser · post a comment, see what happens when it's rendered</div>
+
+          <div class="dialogue-bubble" id="xs-dialogue">
+            Acme's site admin manually reviews every new guestbook comment — you can see that in an old changelog post. Whatever you post here, <i>they will open it</i>. 
+            <span class="hint">Try posting something and see what the page does with it.</span>
+          </div>
+
+          <div class="mech-box" id="xs-mech">
+            <span class="label">How this works</span>
+            Cross-site scripting (XSS) happens when a site takes user input and renders it directly without sanitizing. 
+            If the browser can't distinguish content from executable script, a comment box becomes a weapon to execute code in another user's session.
+          </div>
+
+          <button type="button" class="btn-action teal-outline small" onclick="hintXss()">Need a hint? Fill payload</button>
+        </aside>
+
+        <section class="room-stage-panel">
+          <div class="stage-header-row">
+            <h1>acmewidgets.co/guestbook (Browser)</h1>
+            <div class="stage-actions-group">
+              <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
+              <button type="button" class="btn-action ghost small" onclick="resetXss()">Reset scene</button>
+            </div>
+          </div>
+
+          <div class="sanctum-browser">
+            <div class="browser-toolbar">
+              <div class="browser-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="browser-addr-field">acmewidgets.co/guestbook</div>
+            </div>
+            <div class="browser-content-page" id="xs-page"></div>
+          </div>
+
+          <div class="flag-banner-box" id="xs-flagbox">
+            <span>FLAG&#123;a_c0mm3nt_b0x_1s_c0d3_t00&#125;</span>
+            <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Simple Web Audio Clicks & Chimes
+    const audioCtx = window.AudioContext ? new AudioContext() : null;
+    function playBeep(freq = 600, duration = 0.06) {
+      if (!audioCtx) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playFlagSuccess() {
+      if (!audioCtx) return;
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+        setTimeout(() => playBeep(freq, 0.3), i * 80);
+      });
+    }
+
+    // Screen Routing
+    function goScreen(id) {
+      playBeep(700, 0.05);
+      document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById('screen-' + id);
+      if (target) target.classList.add('active');
+
+      const crumbEl = document.getElementById('navCrumbScene');
+      if (crumbEl) {
+        if (id === 'dashboard') crumbEl.textContent = 'Case 0417';
+        else if (id === 'module') crumbEl.textContent = 'Challenges Grid';
+        else if (id === 'room-binexp') crumbEl.textContent = 'Scene 1: Build Tool';
+        else if (id === 'room-sqli') crumbEl.textContent = 'Scene 2: SQL Injection';
+        else if (id === 'room-xss') crumbEl.textContent = 'Scene 3: Guestbook';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setDialogue(elId, html) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.innerHTML = html;
+      el.classList.remove('pulse');
+      void el.offsetWidth;
+      el.classList.add('pulse');
+    }
+
+    function flashField(el) {
+      if (!el) return;
+      el.classList.remove('filled');
+      void el.offsetWidth;
+      el.classList.add('filled');
+      el.focus();
+      setTimeout(() => el.classList.remove('filled'), 1200);
+    }
+
+    /* =========================================================================
+       SCENE 1: BINARY EXPLOITATION
+       ========================================================================= */
+    let be = { ranVault: false, foundSecret: false, unlocked: false, flagShown: false };
+
+    function beLine(text, cls) {
+      const d = document.createElement('div');
+      d.className = 'term-line ' + (cls || 'out');
+      d.textContent = text;
+      const body = document.getElementById('be-body');
+      if (body) {
+        body.appendChild(d);
+        d.scrollIntoView({ block: 'end' });
+      }
+    }
+
+    function beSetMech(html) {
+      const el = document.getElementById('be-mech');
+      if (!el) return;
+      el.innerHTML = '<span class="label">How this works</span>' + html;
+      el.classList.remove('pulse');
+      void el.offsetWidth;
+      el.classList.add('pulse');
+    }
+
+    function resetBinexp() {
+      be = { ranVault: false, foundSecret: false, unlocked: false, flagShown: false };
+      const body = document.getElementById('be-body');
+      if (body) body.innerHTML = '';
+      const flagbox = document.getElementById('be-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      setDialogue('be-dialogue', 'A folder from the leak just landed on this machine. You don\'t know what\'s in it yet — <span class="hint">start by looking: ls</span>');
+      beSetMech('Binaries keep readable text embedded inside them — function names, messages, file paths — left over from compiling. Reading that text is usually the fastest way to learn what a program can do without touching its assembly.');
+      beLine('leak/ mounted.', 'echo');
+    }
+
+    function hintBinexp() {
+      playBeep(850, 0.08);
+      const input = document.getElementById('be-input');
+      let cmd = 'ls';
+      if (be.ranVault && !be.foundSecret) cmd = 'strings vault | grep -i secret';
+      else if (be.foundSecret && !be.unlocked) cmd = './vault --unlock';
+      else if (be.unlocked && !be.flagShown) cmd = 'reveal';
+      else if (!be.ranVault) cmd = './vault';
+      if (input) {
+        input.value = cmd;
+        flashField(input);
+      }
+    }
+
+    function runBinexp(raw) {
+      const cmd = raw.trim();
+      if (!cmd) return;
+      playBeep(500, 0.04);
+      beLine('student@leak:~$ ' + cmd, 'echo');
+      const c = cmd.toLowerCase().replace(/\s+/g, ' ').trim();
+
+      if (c === 'ls' || c === 'ls -la' || c === 'ls -l' || c === 'dir') {
+        beLine('README.txt   vault*', 'out');
+        setDialogue('be-dialogue', be.ranVault
+          ? 'Same two files. You\'ve already run <code>vault</code> — try looking inside it instead: <span class="hint">strings vault</span>'
+          : 'Two files here: a readme, and <code>vault</code> — that <code>*</code> means it\'s executable. <span class="hint">Run it: ./vault</span>');
+        return;
+      }
+      if (c === 'pwd') { beLine('/home/student/leak', 'out'); return; }
+      if (c === 'whoami') { beLine('student', 'out'); return; }
+      if (c === 'clear') { document.getElementById('be-body').innerHTML = ''; return; }
+      if (c === 'help') { beLine('available: ls, pwd, whoami, cat <file>, strings <file>, clear — the rest is up to you.', 'out'); return; }
+
+      if (c === 'cat readme.txt' || c === 'cat readme') {
+        beLine('Property of Acme Widgets Ltd. Internal build — do not redistribute.', 'out');
+        beLine('(built by the intern, please don\'t judge us — M.)', 'out');
+        return;
+      }
+      if (c === 'cat vault') {
+        beLine('cat: vault: appears to be a binary file — try `strings vault` instead of `cat`.', 'warn');
+        return;
+      }
+
+      if (c === './vault' || c === 'sh vault' || c === 'bash vault') {
+        if (c !== './vault') {
+          beLine(cmd + ': not quite how you run a local binary — try ./vault', 'warn');
+          setDialogue('be-dialogue', 'Close — but a local binary needs to be run with <span class="hint">./vault</span>, not wrapped in a shell.');
+          return;
+        }
+        beLine('Acme Vault v1.0 — license check passed. Nothing else happens.', 'out');
+        be.ranVault = true;
+        setDialogue('be-dialogue', 'Runs clean, does basically nothing — which is itself a little suspicious. Let\'s see what\'s actually compiled into it: <span class="hint">strings vault</span>');
+        beSetMech('<code>strings</code> scans an executable and prints every readable run of text it finds inside — it works on any binary and needs no source code.');
+        return;
+      }
+
+      if (c === 'vault' || c === '/vault' || c === 'run vault') {
+        beLine('vault: command not found', 'warn');
+        setDialogue('be-dialogue', 'Local files need a relative path in front of them: <span class="hint">./vault</span>');
+        return;
+      }
+
+      if (c.includes('strings') && c.includes('vault')) {
+        be.foundSecret = true;
+        const grepped = c.includes('grep');
+        if (grepped) {
+          beLine('unlock_secret_mode  — 0x4016a0', 'out');
+          setDialogue('be-dialogue', 'There it is — a hidden debug function that never gets called in normal execution: <span class="hint">./vault --unlock</span>');
+          beSetMech('That function name surviving compilation is exactly the kind of thing security analysts hunt for in binaries: backdoors and hidden debug flags.');
+        } else {
+          beLine('USAGE: vault [file]\nAcme Vault v1.0\nlicense_check_ok\nunlock_secret_mode\n(c) Acme Widgets Ltd.', 'out');
+          setDialogue('be-dialogue', 'Lots of text — one line looks like a secret function name. Filter it: <span class="hint">strings vault | grep -i secret</span>');
+        }
+        return;
+      }
+
+      if (c.includes('vault') && (c.includes('unlock') || c.includes('secret'))) {
+        if (!be.foundSecret) {
+          beLine('vault: unrecognized flag', 'warn');
+          setDialogue('be-dialogue', 'Inspect the binary first before guessing flags: <span class="hint">strings vault | grep -i secret</span>');
+          return;
+        }
+        be.unlocked = true;
+        beLine('[unlock_secret_mode] condition met.', 'out');
+        beLine('type: reveal', 'out');
+        setDialogue('be-dialogue', 'The secret branch fired! <span class="hint">reveal</span>');
+        return;
+      }
+
+      if (c === 'reveal') {
+        if (!be.unlocked) {
+          beLine('reveal: nothing is listening for that yet.', 'warn');
+          return;
+        }
+        if (be.flagShown) return;
+        be.flagShown = true;
+        beLine('FLAG{h1dd3n_func_f0und}', 'flag');
+        playFlagSuccess();
+        setDialogue('be-dialogue', '✦ Flag unlocked! Functionality hidden in plain sight, discovered by binary inspection.');
+        document.getElementById('be-flagbox').classList.add('show');
+        return;
+      }
+
+      beLine(cmd + ': command not found', 'warn');
+    }
+
+    const beInput = document.getElementById('be-input');
+    if (beInput) {
+      beInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          runBinexp(e.target.value);
+          e.target.value = '';
+        }
+      });
+    }
+    resetBinexp();
+
+    /* =========================================================================
+       SCENE 2: SQL INJECTION
+       ========================================================================= */
+    let sq = { stage: 'home' };
+
+    function sqSetMech(html) {
+      const el = document.getElementById('sq-mech');
+      if (!el) return;
+      el.innerHTML = '<span class="label">How this works</span>' + html;
+      el.classList.remove('pulse');
+      void el.offsetWidth;
+      el.classList.add('pulse');
+    }
+
+    function sqPage(html, addr) {
+      document.getElementById('sq-page').innerHTML = html;
+      document.getElementById('sq-addr').textContent = addr;
+    }
+
+    function sqHome() {
+      sq.stage = 'home';
+      setDialogue('sq-dialogue', 'This is Acme\'s public site. Before poking around by hand, check what it\'s telling search engines <i>not</i> to index. <span class="hint">Visit /robots.txt</span>');
+      sqSetMech('robots.txt is a plain text file websites publish to tell automated crawlers which pages to skip. It\'s a request, not a lock — anyone can read it.');
+      sqPage(`<h2 style="margin-top:0">Acme Widgets</h2><p>We make industrial widgets. Contact us for a quote.</p>
+        <p style="margin-top:14px"><a class="plink" onclick="sqRobots()">robots.txt</a></p>`, 'acmewidgets.co/');
+    }
+
+    function sqRobots() {
+      sq.stage = 'robots';
+      playBeep(650, 0.05);
+      setDialogue('sq-dialogue', 'That\'s an oddly specific thing to hide for a company that "just sells widgets." <span class="hint">Go look: /portal-8f2c</span>');
+      sqSetMech('A "Disallow" entry is a request aimed at bots — it has zero actual security. Anyone who opens the file sees exactly what the devs tried to hide.');
+      sqPage(`<pre>User-agent: *
+Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick="sqAdmin()">/portal-8f2c</a></p>`, 'acmewidgets.co/robots.txt');
+    }
+
+    function sqAdmin() {
+      sq.stage = 'admin';
+      playBeep(700, 0.05);
+      setDialogue('sq-dialogue', 'An admin login with no link to it anywhere on the public site! This form drops input directly into a database query. <span class="hint">Username: \' OR \'1\'=\'1 — any password</span>');
+      sqSetMech('A typical login query checks <code>SELECT * FROM users WHERE user=\'&lt;input&gt;\' AND pass=\'...\'</code>. Putting a quote mark breaks out of the string, and <code>\' OR \'1\'=\'1</code> makes the condition always true.');
+      sqPage(`<div class="login-box-widget">
+        <h3 style="margin:0; font-size:1.1rem; color:#0f172a">Admin Portal</h3>
+        <label>Username</label>
+        <input id="sq-user" placeholder="admin" autocomplete="off" />
+        <label>Password</label>
+        <input id="sq-pass" type="password" placeholder="••••••••" />
+        <button type="button" onclick="sqSubmit()">Log in</button>
+        <div class="err-text" id="sq-err">Invalid credentials — query didn't break.</div>
+      </div>`, 'acmewidgets.co/portal-8f2c/login');
+    }
+
+    function hintSqli() {
+      playBeep(850, 0.08);
+      if (sq.stage === 'home') { sqRobots(); return; }
+      if (sq.stage === 'robots') { sqAdmin(); return; }
+      if (sq.stage === 'admin') {
+        const u = document.getElementById('sq-user');
+        if (u) {
+          u.value = "' OR '1'='1";
+          flashField(u);
+        }
+      }
+    }
+
+    function sqSubmit() {
+      const u = (document.getElementById('sq-user')?.value || '').trim();
+      if (u.includes("' OR '1'='1") || u.includes("' or '1'='1") || u.includes("' or 1=1") || u.includes("' OR 1=1")) {
+        playFlagSuccess();
+        document.getElementById('sq-flagbox').classList.add('show');
+        setDialogue('sq-dialogue', '✦ SQL injection successful! The query evaluated to TRUE and bypassed password verification.');
+        sqSetMech('By injecting <code>\' OR \'1\'=\'1</code>, you modified the logic of the SQL statement itself. The database returned the first matching user (usually Administrator).');
+        sqPage(`<div style="padding:10px">
+          <h2 style="margin-top:0; color:#0f172a">Acme Internal Dashboard</h2>
+          <p style="color:#10b981; font-weight:600">✓ Logged in as administrator</p>
+          <pre style="margin-top:14px">CONFIDENTIAL METRICS — Q3 LEAKED REPORT</pre>
+        </div>`, 'acmewidgets.co/portal-8f2c/admin');
+      } else {
+        playBeep(350, 0.12);
+        const err = document.getElementById('sq-err');
+        if (err) err.style.display = 'block';
+      }
+    }
+    sqHome();
+
+    /* =========================================================================
+       SCENE 3: CROSS-SITE SCRIPTING (XSS)
+       ========================================================================= */
+    let xs = { count: 0 };
+
+    function xsPage() {
+      const page = document.getElementById('xs-page');
+      if (!page) return;
+      page.innerHTML = `
+        <h2 style="margin-top:0; font-size:1.25rem; color:#0f172a">Public Guestbook</h2>
+        <div id="xs-comments">
+          <div class="guestbook-comment"><b>Alex W. · 2 days ago</b><p>Great website! Love the clean interface.</p></div>
+          <div class="guestbook-comment"><b>Sarah T. · yesterday</b><p>Looking forward to ordering more widgets.</p></div>
+        </div>
+        <div class="guestbook-form" style="margin-top:16px">
+          <textarea id="xs-input" placeholder="Leave a comment…"></textarea>
+          <button type="button" onclick="xsPost()">Post Comment</button>
+        </div>
+        <div class="admin-review-log" id="xs-admin-log" style="display:none">
+          <div>[ADMIN WORKER] Polling new guestbook entries…</div>
+          <div id="xs-admin-msg"></div>
+        </div>
+      `;
+    }
+
+    function resetXss() {
+      xsPage();
+      const flagbox = document.getElementById('xs-flagbox');
+      if (flagbox) flagbox.classList.remove('show');
+      setDialogue('xs-dialogue', 'Acme\'s site admin manually reviews every new guestbook comment. Whatever you post here, <i>they will open it</i>. <span class="hint">Try posting: &lt;script&gt;alert(document.cookie)&lt;/script&gt;</span>');
+    }
+
+    function hintXss() {
+      playBeep(850, 0.08);
+      const input = document.getElementById('xs-input');
+      if (input) {
+        input.value = '<script>alert(document.cookie)<\/script>';
+        flashField(input);
+      }
+    }
+
+    function xsPost() {
+      const input = document.getElementById('xs-input');
+      const text = (input?.value || '').trim();
+      if (!text) return;
+
+      playBeep(650, 0.06);
+      const comments = document.getElementById('xs-comments');
+      const box = document.createElement('div');
+      box.className = 'guestbook-comment';
+      box.innerHTML = `<b>You · just now</b><p>${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`;
+      comments.appendChild(box);
+      input.value = '';
+
+      if (text.includes('<script>') || text.includes('alert') || text.includes('cookie') || text.includes('<img src=x')) {
+        const log = document.getElementById('xs-admin-log');
+        const msg = document.getElementById('xs-admin-msg');
+        if (log && msg) {
+          log.style.display = 'block';
+          msg.innerHTML = '<span class="cap">[ALERT] Script executed in admin viewer! Session token captured: auth_token=9f8e7d6c5b4a</span>';
+        }
+        setTimeout(() => {
+          playFlagSuccess();
+          document.getElementById('xs-flagbox').classList.add('show');
+          setDialogue('xs-dialogue', '✦ XSS triggered! The admin portal rendered your unescaped script tag and executed your code in their session.');
+        }, 600);
+      }
+    }
+    resetXss();
+  </script>
+</body>
+</html>

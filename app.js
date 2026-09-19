@@ -383,6 +383,15 @@ class SanctumApp {
     this.portalParticles = new ParticleCanvas('portalSparksCanvas', 'portal');
     this.cavernParticles = new ParticleCanvas('cavernParticlesCanvas', 'cavern');
 
+    // Restore unlocked gate state if returning from introduction module
+    try {
+      if (localStorage.getItem('sanctumGateUnlocked') === 'true') {
+        this.unlockGateDOM();
+      }
+    } catch (e) {
+      console.warn('localStorage read error:', e);
+    }
+
     // Bind event listeners
     this.bindEvents();
 
@@ -707,6 +716,10 @@ class SanctumApp {
     APP_STATE.isGateUnlocked = false;
     APP_STATE.accessCode = '';
 
+    try {
+      localStorage.removeItem('sanctumGateUnlocked');
+    } catch (e) {}
+
     // Reset access code input and message
     if (this.dom.accessCodeInput) {
       this.dom.accessCodeInput.value = '';
@@ -724,21 +737,37 @@ class SanctumApp {
   }
 
   // ===========================================================================
-  // INTRODUCTION BUTTON HANDLER
+  // INTRODUCTION BUTTON HANDLER (Unlocks Gate & Redirects to Introduction Module)
   // ===========================================================================
   handleIntroductionClick() {
     sfx.playClick();
 
-    if (!APP_STATE.isGateUnlocked) {
-      // Unseal and unlock the dungeon gate
-      this.unlockGateDOM();
-      sfx.playGateOpen();
+    // 1. Unseal and unlock the gate
+    this.unlockGateDOM();
+    try {
+      localStorage.setItem('sanctumGateUnlocked', 'true');
+    } catch (e) {}
+    sfx.playGateOpen();
+
+    // 2. Active radiant animation on the Introduction button
+    if (this.dom.btnIntroduction) {
+      this.dom.btnIntroduction.classList.add('launching');
     }
 
-    // Extensible hook for future page navigation or backend communication
+    // 3. Extensible hook for future page navigation or backend communication
     if (typeof window.onIntroductionClick === 'function') {
       window.onIntroductionClick();
     }
+
+    // 4. Smooth cinematic redirection to the Introduction Module with warp flash
+    setTimeout(() => {
+      if (this.dom.transitionWarpFlash) {
+        this.dom.transitionWarpFlash.classList.add('flash-active');
+      }
+      setTimeout(() => {
+        window.location.href = 'introduction-module/index.html';
+      }, 350);
+    }, 450);
   }
 
   // ===========================================================================
