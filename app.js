@@ -356,6 +356,7 @@ class SanctumApp {
       // Transition Elements
       portalVideo: document.getElementById('portalVideo'),
       transitionWarpFlash: document.getElementById('transitionWarpFlash'),
+      globalWarpFlash: document.getElementById('globalWarpFlash'),
 
       // Page 3 Elements
       navSoundToggleBtn: document.getElementById('navSoundToggleBtn'),
@@ -505,10 +506,9 @@ class SanctumApp {
     // =========================================================================
     if (this.dom.portalVideo) {
       this.dom.portalVideo.addEventListener('ended', () => {
-        // Video finished naturally: trigger celestial bloom and complete warp
-        if (this.dom.transitionWarpFlash) {
-          this.dom.transitionWarpFlash.classList.add('flash-active');
-        }
+        // Video finished naturally: trigger full-screen radiant flash and complete warp
+        if (this.dom.globalWarpFlash) this.dom.globalWarpFlash.classList.add('flash-active');
+        if (this.dom.transitionWarpFlash) this.dom.transitionWarpFlash.classList.add('flash-active');
         this.completePortalWarp();
       });
 
@@ -516,9 +516,10 @@ class SanctumApp {
         const video = this.dom.portalVideo;
         if (!video.duration || isNaN(video.duration)) return;
         const remaining = video.duration - video.currentTime;
-        // Build up celestial bloom in final 0.45s of video
-        if (remaining <= 0.45 && APP_STATE.isTransitioning && this.dom.transitionWarpFlash) {
-          this.dom.transitionWarpFlash.classList.add('flash-active');
+        // Build up full-screen radiant flash in final 0.45s of video
+        if (remaining <= 0.45 && APP_STATE.isTransitioning) {
+          if (this.dom.globalWarpFlash) this.dom.globalWarpFlash.classList.add('flash-active');
+          if (this.dom.transitionWarpFlash) this.dom.transitionWarpFlash.classList.add('flash-active');
         }
       });
     }
@@ -607,6 +608,9 @@ class SanctumApp {
     if (this.dom.portalVideo) {
       this.dom.portalVideo.currentTime = 0;
 
+      if (this.dom.globalWarpFlash) {
+        this.dom.globalWarpFlash.classList.remove('flash-active');
+      }
       if (this.dom.transitionWarpFlash) {
         this.dom.transitionWarpFlash.classList.remove('flash-active');
       }
@@ -648,7 +652,10 @@ class SanctumApp {
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
-    // Peak celestial radiance bloom
+    // Peak full-screen celestial radiance flash
+    if (this.dom.globalWarpFlash) {
+      this.dom.globalWarpFlash.classList.add('flash-active');
+    }
     if (this.dom.transitionWarpFlash) {
       this.dom.transitionWarpFlash.classList.add('flash-active');
     }

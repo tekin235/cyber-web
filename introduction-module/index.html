@@ -1162,27 +1162,30 @@
     }
 
     .btn-action.small {
-    /* Smooth Celestial Forest Portal Veil */
+      padding: 7px 13px;
+      font-size: 0.78rem;
+    }
+
+    /* Full-Screen Whole-Viewport Forest Portal Flash Veil */
     .forest-portal-veil {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(circle at 50% 50%, rgba(110, 231, 183, 0.9) 0%, rgba(16, 185, 129, 0.7) 30%, rgba(6, 40, 26, 0.85) 70%, #030a06 100%);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: radial-gradient(ellipse at center, #ffffff 0%, #f0fdf4 35%, #dcfce7 70%, #bbf7d0 100%);
       opacity: 1;
       visibility: visible;
-      z-index: 9999;
+      z-index: 99999;
       pointer-events: none;
-      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.65s ease-out, visibility 0.65s;
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s;
     }
 
     .forest-portal-veil.dissolved {
       opacity: 0;
       visibility: hidden;
-      backdrop-filter: blur(0px);
-      -webkit-backdrop-filter: blur(0px);
     }
   </style>
 <body>

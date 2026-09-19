@@ -116,35 +116,34 @@ html, body {
 
 .warp-flash {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
   height: 100vh;
-  /* Celestial ivory-gold bloom seamlessly diffusing into deep cosmic void */
-  background: radial-gradient(circle at 50% 50%, rgba(255, 250, 235, 0.96) 0%, rgba(255, 220, 130, 0.8) 32%, rgba(180, 115, 25, 0.4) 65%, rgba(6, 12, 32, 0.85) 90%, #030612 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* Pure radiant white-gold light covering 100% of the entire screen from corner to corner */
+  background: radial-gradient(ellipse at center, #ffffff 0%, #fffef8 35%, #fff9e6 70%, #fff2cb 100%);
   opacity: 0;
   visibility: hidden;
-  z-index: 9999;
+  z-index: 99999;
   pointer-events: none;
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.65s ease-out, visibility 0.65s;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s;
 }
 
 .warp-flash.flash-active {
   opacity: 1;
   visibility: visible;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
 }
 
-/* Variant: Mystical Emerald Veil for Forest/Grove Navigation */
+/* Variant: Full-Screen Forest Grove Flash */
 .warp-flash.forest-transition {
-  background: radial-gradient(circle at 50% 50%, rgba(110, 231, 183, 0.88) 0%, rgba(16, 185, 129, 0.65) 30%, rgba(6, 40, 26, 0.85) 70%, #030a06 100%);
+  background: radial-gradient(ellipse at center, #ffffff 0%, #f0fdf4 35%, #dcfce7 70%, #bbf7d0 100%);
 }
 
-/* Variant: Deep Sanctum Void Fade for Logout */
+/* Variant: Full-Screen Sanctum Void Fade for Logout */
 .warp-flash.void-transition {
-  background: radial-gradient(circle at 50% 50%, rgba(14, 22, 48, 0.92) 0%, rgba(6, 10, 24, 0.95) 60%, #02040a 100%);
+  background: radial-gradient(ellipse at center, #0a1024 0%, #060a1a 50%, #02040c 100%);
 }
 
 /* ==========================================================================
