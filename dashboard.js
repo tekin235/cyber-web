@@ -296,9 +296,13 @@ class DashboardApp {
     // 1. Initialize ambient cavern particles
     this.cavernParticles = new CavernParticleCanvas('cavernParticlesCanvas');
 
-    // 2. Conditional entrance animation
+    // 2. Entrance audio and animation
     const justReturned = sessionStorage.getItem('justReturnedFromIntro') === 'true';
-    if (!justReturned) {
+    const arrivingFromPortal = sessionStorage.getItem('portalWarpArrival') === 'true';
+
+    // If arriving from the celestial portal warp, the celestial flash overlay smoothly dissolves
+    // to reveal the resting chamber. Keeping elements stable eliminates motion jitter & flicker.
+    if (!justReturned && !arrivingFromPortal) {
       if (this.dom.pageDashboard) {
         this.dom.pageDashboard.classList.add('dashboard-enter-anim');
       }
@@ -307,29 +311,29 @@ class DashboardApp {
       if (this.dom.pageDashboard) {
         this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
       }
+      if (arrivingFromPortal) {
+        sfx.playDashboardReveal();
+      }
     }
 
     // 3. Smooth, slow celestial dissolve (ONLY when arriving fresh from Page 2 portal warp)
-    const arrivingFromPortal = sessionStorage.getItem('portalWarpArrival') === 'true';
     if (arrivingFromPortal) {
       sessionStorage.removeItem('portalWarpArrival');
       if (this.dom.dashboardWarpFlash) {
-        // Match Page 2's glow immediately with no transition jump
-        this.dom.dashboardWarpFlash.style.transition = 'none';
         this.dom.dashboardWarpFlash.classList.add('flash-active');
-        void this.dom.dashboardWarpFlash.offsetWidth; // Force reflow
+        document.documentElement.classList.remove('portal-warp-active');
 
-        // Re-enable smooth transition and slowly dissolve away into the cavern
-        this.dom.dashboardWarpFlash.style.transition = '';
+        // Let the initial frame paint stably, then smoothly dissolve away into the cavern
         requestAnimationFrame(() => {
-          setTimeout(() => {
+          requestAnimationFrame(() => {
             if (this.dom.dashboardWarpFlash) {
               this.dom.dashboardWarpFlash.classList.remove('flash-active');
             }
-          }, 80);
+          });
         });
       }
     } else {
+      document.documentElement.classList.remove('portal-warp-active');
       if (this.dom.dashboardWarpFlash) {
         this.dom.dashboardWarpFlash.classList.remove('flash-active');
       }
@@ -353,12 +357,14 @@ class DashboardApp {
       this.checkReturnFromIntro();
     });
 
-    // 9. Clean up entrance animation after ~2.2s
-    setTimeout(() => {
-      if (this.dom.pageDashboard) {
-        this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
-      }
-    }, 2200);
+    // 9. Clean up entrance animation after ~2.2s if it was applied
+    if (!justReturned && !arrivingFromPortal) {
+      setTimeout(() => {
+        if (this.dom.pageDashboard) {
+          this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
+        }
+      }, 2200);
+    }
   }
 
   bindEvents() {
