@@ -12,19 +12,19 @@
     (function() {
       try {
         if (sessionStorage.getItem('sanctumAuth') !== 'true') {
-          window.location.replace('../../index.html#login');
+          window.location.replace('../index.html#login');
         }
       } catch (e) {
-        window.location.replace('../../index.html#login');
+        window.location.replace('../index.html#login');
       }
     })();
     window.addEventListener('pageshow', function() {
       try {
         if (sessionStorage.getItem('sanctumAuth') !== 'true') {
-          window.location.replace('../../index.html#login');
+          window.location.replace('../index.html#login');
         }
       } catch (e) {
-        window.location.replace('../../index.html#login');
+        window.location.replace('../index.html#login');
       }
     });
   </script>
@@ -680,6 +680,166 @@
       font-size: 0.86rem;
       color: #9bb1a4;
       line-height: 1.55;
+    }
+
+    /* Completed Room Card Styling */
+    .room-card.completed {
+      border-color: rgba(52, 211, 153, 0.7);
+      background: linear-gradient(145deg, rgba(14, 46, 30, 0.92) 0%, rgba(6, 24, 15, 0.96) 100%);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 24px rgba(16, 185, 129, 0.28);
+    }
+
+    .room-card.completed:hover {
+      border-color: var(--color-emerald-bright);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 32px rgba(52, 211, 153, 0.45);
+    }
+
+    .room-card.completed .room-sigil-box {
+      background: rgba(52, 211, 153, 0.25);
+      border-color: #34d399;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.45);
+    }
+
+    .room-status-badge.completed {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
+      border: 1px solid #34d399;
+      box-shadow: 0 0 14px rgba(52, 211, 153, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .room-status-badge.completed svg {
+      stroke: #ffffff;
+      stroke-width: 3;
+    }
+
+    .room-card-footer {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(52, 211, 153, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .completion-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #34d399;
+      letter-spacing: 0.02em;
+    }
+
+    /* Expedition Progress Bar on Woodland Trail Screen */
+    .expedition-progress-card {
+      margin-bottom: 24px;
+      padding: 16px 22px;
+      background: rgba(12, 34, 23, 0.85);
+      border: 1.5px solid rgba(52, 211, 153, 0.35);
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .progress-text-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .progress-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #ffffff;
+    }
+
+    .progress-counter {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-emerald-bright);
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      border-radius: 9999px;
+      padding: 3px 12px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(4, 18, 12, 0.85);
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+
+    .progress-fill-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: 9999px;
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+      transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* Stage Header Completed Badge */
+    .stage-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .room-stage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-ui);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(5, 150, 105, 0.95));
+      border: 1px solid #34d399;
+      border-radius: 9999px;
+      padding: 3px 12px;
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
+    }
+
+    /* Flag Banner Details */
+    .flag-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .flag-status-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+    }
+
+    .flag-code {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      color: var(--color-emerald-bright);
     }
 
     /* =========================================================================
@@ -1460,6 +1620,9 @@
               <span style="font-size:1.1rem; color:var(--color-emerald-bright);">✦</span>
             </h2>
             <p>Three interactive woodland scenes, no setup required. Each one introduces real-world security techniques you'll master throughout your expedition.</p>
+            <div id="dashHeroProgress" style="display:none; margin-top: 12px;">
+              <span class="room-status-badge completed" id="dashHeroProgressText">0 of 3 Challenges Completed</span>
+            </div>
           </div>
           <button class="btn-start-case" onclick="goScreen('module')">
             <span>Start the case</span>
@@ -1508,35 +1671,73 @@
           The remaining cavern gates unlock as your training deepens over the semester.
         </p>
 
+        <!-- Expedition Progress Tracker -->
+        <div class="expedition-progress-card">
+          <div class="progress-text-row">
+            <div class="progress-title-wrap">
+              <span>🌿</span>
+              <span>Woodland Expedition Progress</span>
+            </div>
+            <span class="progress-counter" id="expeditionProgressText">0 of 3 Challenges Completed</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill-bar" id="expeditionProgressBar" style="width: 0%;"></div>
+          </div>
+        </div>
+
         <div class="rooms-container">
           <!-- Room 1: Open -->
-          <div class="room-card" onclick="goScreen('room-binexp')">
+          <div class="room-card" id="card-room-binexp" onclick="goScreen('room-binexp')">
             <div class="room-card-header">
               <div class="room-sigil-box">▧</div>
-              <span class="room-status-badge">Canopy Open</span>
+              <span class="room-status-badge" id="badge-room-binexp">Canopy Open</span>
             </div>
             <h3>The build tool</h3>
             <p>A binary called <code>vault</code> sits in the treehouse workshop. It's hiding more than it's showing.</p>
+            <div class="room-card-footer" id="footer-room-binexp" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
           <!-- Room 2: Open -->
-          <div class="room-card" onclick="goScreen('room-sqli')">
+          <div class="room-card" id="card-room-sqli" onclick="goScreen('room-sqli')">
             <div class="room-card-header">
               <div class="room-sigil-box">≋</div>
-              <span class="room-status-badge">Canopy Open</span>
+              <span class="room-status-badge" id="badge-room-sqli">Canopy Open</span>
             </div>
             <h3>The page that shouldn't exist</h3>
             <p>Acme's lake portal tells crawlers to stay away from something. Naturally, you don't.</p>
+            <div class="room-card-footer" id="footer-room-sqli" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
           <!-- Room 3: Open -->
-          <div class="room-card" onclick="goScreen('room-xss')">
+          <div class="room-card" id="card-room-xss" onclick="goScreen('room-xss')">
             <div class="room-card-header">
               <div class="room-sigil-box">🪶</div>
-              <span class="room-status-badge">Canopy Open</span>
+              <span class="room-status-badge" id="badge-room-xss">Canopy Open</span>
             </div>
             <h3>The guestbook</h3>
             <p>Somewhere, an admin reads every comment posted on the ranger board. Make that a problem for them.</p>
+            <div class="room-card-footer" id="footer-room-xss" style="display: none;">
+              <span class="completion-pill">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed · Flag Captured
+              </span>
+            </div>
           </div>
 
           <!-- Locked Teaser Rooms -->
@@ -1623,7 +1824,15 @@
 
         <section class="room-stage-panel">
           <div class="stage-header-row">
-            <h1>~/leak (Canopy Terminal)</h1>
+            <div class="stage-title-group">
+              <h1>~/leak (Canopy Terminal)</h1>
+              <span class="room-stage-badge" id="stage-badge-binexp" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
             <div class="stage-actions-group">
               <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
               <button type="button" class="btn-action ghost small" onclick="resetBinexp()">Reset scene</button>
@@ -1642,7 +1851,15 @@
           </div>
 
           <div class="flag-banner-box" id="be-flagbox">
-            <span>FLAG&#123;h1dd3n_func_f0und&#125;</span>
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;h1dd3n_func_f0und&#125;</span>
+            </div>
             <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
           </div>
         </section>
@@ -1675,7 +1892,15 @@
 
         <section class="room-stage-panel">
           <div class="stage-header-row">
-            <h1>acmewidgets.co (Browser)</h1>
+            <div class="stage-title-group">
+              <h1>acmewidgets.co (Browser)</h1>
+              <span class="room-stage-badge" id="stage-badge-sqli" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
             <div class="stage-actions-group">
               <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
               <button type="button" class="btn-action ghost small" onclick="resetSqli()">Reset scene</button>
@@ -1693,7 +1918,15 @@
           </div>
 
           <div class="flag-banner-box" id="sq-flagbox">
-            <span>FLAG&#123;r0b0ts_txt_g1ves_1t_away&#125;</span>
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;r0b0ts_txt_g1ves_1t_away&#125;</span>
+            </div>
             <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
           </div>
         </section>
@@ -1726,7 +1959,15 @@
 
         <section class="room-stage-panel">
           <div class="stage-header-row">
-            <h1>acmewidgets.co/guestbook (Browser)</h1>
+            <div class="stage-title-group">
+              <h1>acmewidgets.co/guestbook (Browser)</h1>
+              <span class="room-stage-badge" id="stage-badge-xss" style="display:none;">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Completed
+              </span>
+            </div>
             <div class="stage-actions-group">
               <button type="button" class="btn-action ghost small" onclick="goScreen('module')">← All challenges</button>
               <button type="button" class="btn-action ghost small" onclick="resetXss()">Reset scene</button>
@@ -1744,7 +1985,15 @@
           </div>
 
           <div class="flag-banner-box" id="xs-flagbox">
-            <span>FLAG&#123;a_c0mm3nt_b0x_1s_c0d3_t00&#125;</span>
+            <div class="flag-details">
+              <div class="flag-status-label">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                CHALLENGE COMPLETED
+              </div>
+              <span class="flag-code">FLAG&#123;a_c0mm3nt_b0x_1s_c0d3_t00&#125;</span>
+            </div>
             <button type="button" class="btn-action teal small" onclick="goScreen('module')">Back to challenges</button>
           </div>
         </section>
@@ -1856,6 +2105,98 @@
       });
     }
 
+    // =========================================================================
+    // CHALLENGE COMPLETION TRACKER & PERSISTENCE
+    // =========================================================================
+    const COMPLETED_CHALLENGES_KEY = 'sanctum_completed_challenges';
+
+    function getCompletedChallenges() {
+      try {
+        const stored = localStorage.getItem(COMPLETED_CHALLENGES_KEY);
+        return stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function markChallengeCompleted(id) {
+      try {
+        const completed = getCompletedChallenges();
+        if (!completed.includes(id)) {
+          completed.push(id);
+          localStorage.setItem(COMPLETED_CHALLENGES_KEY, JSON.stringify(completed));
+        }
+      } catch (e) {}
+      updateChallengesUI();
+    }
+
+    function updateChallengesUI() {
+      const completed = getCompletedChallenges();
+      const totalChallenges = 3;
+      const count = completed.length;
+
+      // Update Expedition Progress Bar
+      const progressText = document.getElementById('expeditionProgressText');
+      const progressBar = document.getElementById('expeditionProgressBar');
+      if (progressText) {
+        progressText.textContent = count === totalChallenges 
+          ? '✦ All 3 Challenges Completed!' 
+          : `${count} of ${totalChallenges} Challenges Completed`;
+      }
+      if (progressBar) {
+        const pct = Math.min(100, Math.round((count / totalChallenges) * 100));
+        progressBar.style.width = pct + '%';
+      }
+
+      // Update Dashboard Hero Progress Tag
+      const dashHeroProgress = document.getElementById('dashHeroProgress');
+      const dashHeroProgressText = document.getElementById('dashHeroProgressText');
+      if (dashHeroProgress && dashHeroProgressText) {
+        if (count > 0) {
+          dashHeroProgress.style.display = 'block';
+          dashHeroProgressText.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> ${count} of ${totalChallenges} Challenges Completed`;
+        } else {
+          dashHeroProgress.style.display = 'none';
+        }
+      }
+
+      // Update Room Cards, Badges, and Footers
+      const challengeIds = ['binexp', 'sqli', 'xss'];
+      challengeIds.forEach((id) => {
+        const isDone = completed.includes(id);
+        const card = document.getElementById('card-room-' + id);
+        const badge = document.getElementById('badge-room-' + id);
+        const footer = document.getElementById('footer-room-' + id);
+        const stageBadge = document.getElementById('stage-badge-' + id);
+
+        if (card) {
+          if (isDone) {
+            card.classList.add('completed');
+          } else {
+            card.classList.remove('completed');
+          }
+        }
+
+        if (badge) {
+          if (isDone) {
+            badge.className = 'room-status-badge completed';
+            badge.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Completed`;
+          } else {
+            badge.className = 'room-status-badge';
+            badge.textContent = 'Canopy Open';
+          }
+        }
+
+        if (footer) {
+          footer.style.display = isDone ? 'flex' : 'none';
+        }
+
+        if (stageBadge) {
+          stageBadge.style.display = isDone ? 'inline-flex' : 'none';
+        }
+      });
+    }
+
     // Screen Routing
     function goScreen(id) {
       playBeep(700, 0.05);
@@ -1871,6 +2212,7 @@
         else if (id === 'room-sqli') crumbEl.textContent = 'Scene 2: Lake Grotto';
         else if (id === 'room-xss') crumbEl.textContent = 'Scene 3: Ranger Board';
       }
+      updateChallengesUI();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -2028,6 +2370,7 @@
         playFlagSuccess();
         setDialogue('be-dialogue', '✦ Flag unlocked! Functionality hidden in plain sight, discovered by binary inspection.');
         document.getElementById('be-flagbox').classList.add('show');
+        markChallengeCompleted('binexp');
         return;
       }
 
@@ -2122,6 +2465,7 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
           <p style="color:#10b981; font-weight:600">✓ Logged in as administrator</p>
           <pre style="margin-top:14px">CONFIDENTIAL METRICS — Q3 LEAKED REPORT</pre>
         </div>`, 'acmewidgets.co/portal-8f2c/admin');
+        markChallengeCompleted('sqli');
       } else {
         playBeep(350, 0.12);
         const err = document.getElementById('sq-err');
@@ -2195,10 +2539,12 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
           playFlagSuccess();
           document.getElementById('xs-flagbox').classList.add('show');
           setDialogue('xs-dialogue', '✦ XSS triggered! The admin portal rendered your unescaped script tag and executed your code in their session.');
+          markChallengeCompleted('xss');
         }, 600);
       }
     }
     resetXss();
+    updateChallengesUI();
 
     // Forest Portal Veil Transition (Slow, Gentle Dissolve)
     window.addEventListener('DOMContentLoaded', () => {
