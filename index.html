@@ -7,7 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preload" as="image" href="clouds_canyon.jpg" />
+  <link rel="stylesheet" href="style.css?v=cloud3" />
 </head>
 <body>
 
@@ -113,11 +114,15 @@
   <!-- Atmospheric 3D Clouds Fly-Through & Chasm Overlay (Fixed Fullscreen) -->
   <div class="clouds-parting-overlay" id="cloudsOverlay" aria-hidden="true">
     <div class="cloud-canyon-perspective">
-      <!-- Left Cumulus Cloud Bank (Feathered 3D Foreground) -->
-      <div class="canyon-bank-left"></div>
+      <!-- Left Cumulus Cloud Bank -->
+      <div class="cloud-canyon-side canyon-bank-left">
+        <img src="clouds_canyon.jpg" class="canyon-img canyon-img-left" alt="Clouds Left" />
+      </div>
 
-      <!-- Right Cumulus Cloud Bank (Feathered 3D Foreground) -->
-      <div class="canyon-bank-right"></div>
+      <!-- Right Cumulus Cloud Bank -->
+      <div class="cloud-canyon-side canyon-bank-right">
+        <img src="clouds_canyon.jpg" class="canyon-img canyon-img-right" alt="Clouds Right" />
+      </div>
 
       <!-- Radiant Center Golden Horizon Portal Flare -->
       <div class="canyon-horizon-portal"></div>

@@ -622,51 +622,46 @@ class SanctumApp {
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
-    // Peak flash
+    // 1. Peak warp flash
     if (this.dom.transitionWarpFlash) {
       this.dom.transitionWarpFlash.classList.add('flash-active');
     }
 
-    // Transition smoothly into Page 3 through the cloud parting animation
+    // 2. Pre-mount clouds overlay so it is ready at 100% opacity behind the flash
+    if (this.dom.cloudsOverlay) {
+      this.dom.cloudsOverlay.classList.remove('parting');
+      this.dom.cloudsOverlay.classList.add('active');
+    }
+
+    // 3. Dissolve white flash into the celestial clouds — revealing them clearly!
     setTimeout(() => {
       this.showScreen('pageDashboard');
       sfx.playCloudDive();
 
-      // Trigger Cloud Parting & Emergence Animation
+      if (this.dom.transitionWarpFlash) {
+        this.dom.transitionWarpFlash.classList.remove('flash-active');
+      }
+    }, 180);
+
+    // 4. Give the user sustained time (~450ms) to clearly admire the clouds before fly-through commences!
+    setTimeout(() => {
+      if (this.dom.cloudsOverlay) {
+        this.dom.cloudsOverlay.classList.add('parting');
+      }
       if (this.dom.pageDashboard) {
         this.dom.pageDashboard.classList.add('emerge-from-clouds');
       }
+    }, 620);
 
+    // 5. Clean up cloud overlay after the emergence animation fully completes
+    setTimeout(() => {
       if (this.dom.cloudsOverlay) {
-        this.dom.cloudsOverlay.classList.remove('parting');
-        this.dom.cloudsOverlay.classList.add('active');
-        void this.dom.cloudsOverlay.offsetWidth; // Force reflow to guarantee CSS rendering
-
-        // Deliberate brief moment where clouds are fully seen before fly-through commences
-        setTimeout(() => {
-          if (this.dom.cloudsOverlay) {
-            this.dom.cloudsOverlay.classList.add('parting');
-          }
-        }, 120);
+        this.dom.cloudsOverlay.classList.remove('active', 'parting');
       }
-
-      // Dissolve the white flash directly into the celestial clouds
-      setTimeout(() => {
-        if (this.dom.transitionWarpFlash) {
-          this.dom.transitionWarpFlash.classList.remove('flash-active');
-        }
-      }, 200);
-
-      // Clean up cloud overlay after the emergence animation completes
-      setTimeout(() => {
-        if (this.dom.cloudsOverlay) {
-          this.dom.cloudsOverlay.classList.remove('active', 'parting');
-        }
-        if (this.dom.pageDashboard) {
-          this.dom.pageDashboard.classList.remove('emerge-from-clouds');
-        }
-      }, 3200);
-    }, 280);
+      if (this.dom.pageDashboard) {
+        this.dom.pageDashboard.classList.remove('emerge-from-clouds');
+      }
+    }, 3800);
   }
 
   // ===========================================================================
