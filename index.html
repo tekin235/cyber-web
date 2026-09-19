@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emberkeep — Portal Gate & Expedition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Press+Start+2P&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient Sound Controls -->
+  <div class="audio-control" id="audioControl" title="Toggle Magical Ambient Audio">
+    <button id="soundToggleBtn" aria-label="Toggle Sound">
+      <svg id="soundIconOn" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+      <svg id="soundIconOff" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+      <span class="sound-label">SFX: ON</span>
+    </button>
+  </div>
+
+  <!-- Screen 1: Sign-In Section (cyber-1.png) -->
+  <section class="screen-view active" id="signinSection">
+    <!-- Video Player for Cinematic Portal Zoom -->
+    <div class="video-container">
+      <video id="portalVideo" playsinline preload="auto" poster="cyber-1.png">
+        <source src="Video Project.mp4" type="video/mp4" />
+      </video>
+      <!-- Fallback / Static Scene Image Overlay for crisp display before animation -->
+      <div class="portal-backdrop" id="portalBackdrop"></div>
+      <canvas id="portalSparksCanvas"></canvas>
+      <div class="portal-vignette"></div>
+      <div class="warp-flash" id="warpFlash"></div>
+    </div>
+
+    <!-- Sign In Glassmorphism Card (Exact replica of cyber-1.png layout) -->
+    <main class="signin-container" id="signinCardContainer">
+      <div class="signin-glass-card" id="signinCard">
+        <div class="card-glow"></div>
+        
+        <header class="signin-header">
+          <h1 class="signin-title">Sign In</h1>
+          <div class="title-underline"></div>
+        </header>
+
+        <form class="signin-form" id="signinForm" onsubmit="return false;">
+          <div class="input-group">
+            <input 
+              type="text" 
+              id="passcodeInput" 
+              class="code-input" 
+              placeholder="Enter your code" 
+              autocomplete="off" 
+              spellcheck="false"
+              aria-label="Access Code"
+            />
+            <div class="input-hint" id="inputHint">Tip: Press Next or type <code>EMBER-2026</code></div>
+          </div>
+
+          <button type="submit" class="btn-next" id="btnNext" aria-label="Next step">
+            <span class="btn-text">Next</span>
+            <div class="btn-glow"></div>
+          </button>
+
+          <button type="button" class="btn-google" id="btnGoogle" aria-label="Continue with Google">
+            <svg class="google-icon" viewBox="0 0 24 24" width="22" height="22">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+            </svg>
+            <span class="google-text">Continue With Google</span>
+          </button>
+        </form>
+
+        <div class="card-status-message" id="statusMessage"></div>
+      </div>
+    </main>
+
+    <!-- Quick Skip / Demo Tooltip -->
+    <div class="portal-footer-hint">
+      <span>⚡ Click <strong>Next</strong> or <strong>Continue With Google</strong> to activate the portal vortex</span>
+    </div>
+  </section>
+
+  <!-- Screen 2: Emberkeep Hero / Dashboard Section (Elevated & Minimalist) -->
+  <section class="screen-view" id="heroDashboardSection">
+    <div class="emberkeep-bg">
+      <div class="stars-layer"></div>
+      <div class="sanctum-ambient-vortex"></div>
+      <canvas id="cavernParticlesCanvas"></canvas>
+    </div>
+
+    <!-- Navigation matching Emberkeep.png -->
+    <nav class="emberkeep-nav">
+      <div class="nav-left">
+        <button class="nav-logo-circle" id="navLogoBtn" aria-label="Emberkeep Sanctum Sigil" title="Sanctum Sigil">
+          <span class="sigil-inner">✦</span>
+        </button>
+        <span class="nav-event-title" id="navEventTitle">Event Name</span>
+      </div>
+
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li class="nav-item"><button class="nav-link-btn" id="btnNavModules" data-tab="modules">Modules</button></li>
+          <li class="nav-item active"><button class="nav-link-btn" id="btnNavDungeons" data-tab="dungeons">Dungeons</button></li>
+          <li class="nav-item"><button class="nav-link-btn" id="btnNavProgress" data-tab="progress">Progress</button></li>
+        </ul>
+
+        <!-- Portal Gate Return Button -->
+        <button class="btn-portal-return" id="btnReturnPortal" title="Return to Portal Chamber">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          <span>Portal Gate</span>
+        </button>
+
+        <!-- SFX Toggle Button cleanly embedded in navbar -->
+        <button class="nav-sfx-btn" id="navSoundToggleBtn" title="Toggle Sound FX" aria-label="Toggle Sound Effects">
+          <svg class="sfx-icon-on" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg class="sfx-icon-off hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+          <span class="nav-sfx-label">SFX: ON</span>
+        </button>
+
+        <!-- Adventurer Profile matching Emberkeep.png -->
+        <button class="nav-avatar-btn" id="avatarBtn" title="Adventurer Dossier" aria-label="Open Adventurer Profile">
+          <img src="user_avatar.png" class="nav-avatar-img" alt="Adventurer" />
+          <div class="user-badge-online"></div>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Emberkeep Content Container -->
+    <main class="emberkeep-content">
+      <!-- Getting Started Section (Top Left) -->
+      <section class="section-getting-started">
+        <h2 class="subheading-italic">Getting started</h2>
+        <p class="desc-text">These stay open the whole term - come back any time.</p>
+      </section>
+
+      <!-- Center: Aesthetic Animated Introduction Button -->
+      <section class="section-introduction">
+        <div class="intro-center-wrap">
+          <button class="btn-introduction" id="btnIntroduction" aria-label="Open Introduction">
+            <span class="btn-intro-aura"></span>
+            <span class="btn-intro-shimmer"></span>
+            <span class="btn-intro-sparkle">✦</span>
+            <span class="btn-intro-text">Introduction</span>
+            <span class="btn-intro-arrow">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </span>
+          </button>
+          <p class="intro-desc">What this place is, and how the sorting works.</p>
+        </div>
+      </section>
+
+      <!-- Authentic Pixel Art Iron Fence & Arch Gate Divider from Emberkeep.png -->
+      <div class="pixel-gate-container" aria-hidden="true">
+        <div class="gate-portal-ambient"></div>
+        <img src="fence_transparent.png" class="pixel-fence-img" alt="Sanctum Iron Gate" />
+      </div>
+
+      <!-- Spatial Cavern Map with 5 Polished Medieval Stone Arch Gates -->
+      <div class="dungeon-map-stage" id="dungeonMap">
+        <!-- Shared SVG Definitions for Ultra-Sharp Scalable Medieval Gates -->
+        <svg class="svg-defs-only" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;">
+          <defs id="sharedGateDefs">
+            <radialGradient id="gfShadow" cx="50%" cy="50%" rx="50%" ry="50%">
+              <stop offset="0%" stop-color="#02040a" stop-opacity="0.95" />
+              <stop offset="65%" stop-color="#02040a" stop-opacity="0.4" />
+              <stop offset="100%" stop-color="#080e22" stop-opacity="0" />
+            </radialGradient>
+
+            <radialGradient id="gfSpill" cx="50%" cy="35%" rx="50%" ry="50%">
+              <stop offset="0%" stop-color="#ffb833" stop-opacity="0.65" />
+              <stop offset="50%" stop-color="#d96800" stop-opacity="0.25" />
+              <stop offset="100%" stop-color="#080e22" stop-opacity="0" />
+            </radialGradient>
+
+            <radialGradient id="gfSpillEmerald" cx="50%" cy="35%" rx="50%" ry="50%">
+              <stop offset="0%" stop-color="#10b981" stop-opacity="0.65" />
+              <stop offset="50%" stop-color="#047857" stop-opacity="0.25" />
+              <stop offset="100%" stop-color="#080e22" stop-opacity="0" />
+            </radialGradient>
+
+            <linearGradient id="stTop" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#d4d9de" />
+              <stop offset="35%" stop-color="#b6bcc2" />
+              <stop offset="80%" stop-color="#8d959c" />
+              <stop offset="100%" stop-color="#70787f" />
+            </linearGradient>
+
+            <linearGradient id="stSide" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#c1c7cc" />
+              <stop offset="45%" stop-color="#939aa1" />
+              <stop offset="100%" stop-color="#646b72" />
+            </linearGradient>
+
+            <linearGradient id="wdPlankA" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#804a1f" />
+              <stop offset="25%" stop-color="#a46931" />
+              <stop offset="75%" stop-color="#b67a3f" />
+              <stop offset="100%" stop-color="#723f18" />
+            </linearGradient>
+
+            <linearGradient id="wdPlankB" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#693710" />
+              <stop offset="25%" stop-color="#965c27" />
+              <stop offset="70%" stop-color="#a86d34" />
+              <stop offset="100%" stop-color="#5f2e0b" />
+            </linearGradient>
+
+            <linearGradient id="irMetal" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#948580" />
+              <stop offset="25%" stop-color="#70625d" />
+              <stop offset="65%" stop-color="#4d403d" />
+              <stop offset="100%" stop-color="#2d2220" />
+            </linearGradient>
+
+            <linearGradient id="irRidge" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#e8dedb" stop-opacity="0.9" />
+              <stop offset="50%" stop-color="#988985" stop-opacity="0.6" />
+              <stop offset="100%" stop-color="#362927" stop-opacity="0.3" />
+            </linearGradient>
+
+            <radialGradient id="portalBurst" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="20%" stop-color="#fff0b8" />
+              <stop offset="50%" stop-color="#ffaa1d" />
+              <stop offset="85%" stop-color="#c44e00" />
+              <stop offset="100%" stop-color="#1e0c02" />
+            </radialGradient>
+
+            <radialGradient id="portalBurstEmerald" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="20%" stop-color="#a7f3d0" />
+              <stop offset="50%" stop-color="#10b981" />
+              <stop offset="85%" stop-color="#047857" />
+              <stop offset="100%" stop-color="#022c1d" />
+            </radialGradient>
+
+            <filter id="shDrop" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.65" />
+            </filter>
+
+            <!-- Master Door Leaf Template -->
+            <g id="doorLeafShape" filter="url(#shDrop)">
+              <path d="M 89 284 L 89 138 C 89 76, 231 76, 231 138 L 231 284 Z" fill="#241308" />
+
+              <!-- Plank 1 -->
+              <path d="M 90 284 L 90 142 C 90 114, 103 96, 113 88 L 113 284 Z" fill="url(#wdPlankA)" stroke="#2b1407" stroke-width="1.2" />
+              <path d="M 101 104 C 99 150, 103 215, 100 284" fill="none" stroke="#44200a" stroke-width="1.2" opacity="0.65" />
+              <path d="M 95 155 C 97 180, 96 215, 95 255" fill="none" stroke="#d48f4b" stroke-width="0.9" opacity="0.5" />
+
+              <!-- Plank 2 -->
+              <path d="M 113 284 L 113 88 C 124 80, 133 76, 140 74 L 140 284 Z" fill="url(#wdPlankB)" stroke="#2b1407" stroke-width="1.2" />
+              <path d="M 126 82 C 124 135, 128 200, 125 284" fill="none" stroke="#44200a" stroke-width="1.4" opacity="0.7" />
+              <path d="M 132 115 C 134 140, 133 165, 131 190" fill="none" stroke="#d48f4b" stroke-width="0.9" opacity="0.55" />
+
+              <!-- Plank 3 -->
+              <path d="M 140 284 L 140 74 C 147 72, 153 72, 160 72 L 160 284 Z" fill="url(#wdPlankA)" stroke="#2b1407" stroke-width="1.2" />
+              <path d="M 151 72 C 149 125, 153 205, 150 284" fill="none" stroke="#44200a" stroke-width="1.4" opacity="0.75" />
+              <path d="M 144 135 C 146 165, 145 205, 143 245" fill="none" stroke="#d48f4b" stroke-width="1" opacity="0.55" />
+
+              <!-- Plank 4 -->
+              <path d="M 160 284 L 160 72 C 167 72, 176 74, 184 76 L 184 284 Z" fill="url(#wdPlankB)" stroke="#2b1407" stroke-width="1.2" />
+              <path d="M 172 75 C 174 130, 170 200, 173 284" fill="none" stroke="#44200a" stroke-width="1.4" opacity="0.7" />
+              <path d="M 178 120 C 180 150, 179 180, 177 210" fill="none" stroke="#d48f4b" stroke-width="0.9" opacity="0.5" />
+
+              <!-- Plank 5 -->
+              <path d="M 184 284 L 184 76 C 195 81, 204 88, 211 96 L 211 284 Z" fill="url(#wdPlankA)" stroke="#2b1407" stroke-width="1.2" />
+              <path d="M 197 88 C 199 140, 195 205, 198 284" fill="none" stroke="#44200a" stroke-width="1.4" opacity="0.7" />
+              <path d="M 203 130 C 204 160, 203 195, 202 230" fill="none" stroke="#d48f4b" stroke-width="0.9" opacity="0.5" />
+
+              <!-- Plank 6 -->
+              <path d="M 211 284 L 211 96 C 221 106, 230 124, 230 142 L 230 284 Z" fill="url(#wdPlankB)" stroke="#2b1407" stroke-width="1.2" />
+              <path d="M 221 112 C 223 160, 220 225, 222 284" fill="none" stroke="#44200a" stroke-width="1.2" opacity="0.65" />
+              <path d="M 226 145 C 225 175, 226 210, 225 245" fill="none" stroke="#d48f4b" stroke-width="0.9" opacity="0.5" />
+
+              <path d="M 90 142 C 90 76, 230 76, 230 142 C 225 100, 95 100, 90 142 Z" fill="#120904" opacity="0.45" />
+
+              <!-- Top Hinge -->
+              <g>
+                <path d="M 83 154 L 110 158 L 110 180 L 83 184 Z" fill="url(#irMetal)" stroke="#1a1412" stroke-width="1.5" />
+                <path d="M 84 155 L 109 159" stroke="url(#irRidge)" stroke-width="1.6" fill="none" />
+                <circle cx="96" cy="169" r="3" fill="#1a1412" /><circle cx="95.5" cy="168.5" r="1.8" fill="#887a75" />
+
+                <path d="M 106 159 L 195 161 L 210 153 L 225 169 L 210 185 L 195 177 L 106 179 Z" fill="url(#irMetal)" stroke="#1a1412" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M 107 169 L 196 169 L 224 169" stroke="url(#irRidge)" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                <path d="M 107 160 L 195 162 L 210 154 L 224 169" stroke="#ded4d1" stroke-width="1.1" fill="none" opacity="0.75" />
+                <path d="M 107 178 L 195 176 L 210 184 L 224 169" stroke="#120d0c" stroke-width="1.4" fill="none" />
+
+                <circle cx="132" cy="169" r="2.8" fill="#1a1412" /><circle cx="131.5" cy="168.5" r="1.7" fill="#887a75" />
+                <circle cx="174" cy="169" r="2.8" fill="#1a1412" /><circle cx="173.5" cy="168.5" r="1.7" fill="#887a75" />
+                <circle cx="208" cy="169" r="2.4" fill="#1a1412" /><circle cx="207.5" cy="168.5" r="1.5" fill="#887a75" />
+              </g>
+
+              <!-- Bottom Hinge -->
+              <g>
+                <path d="M 83 234 L 110 238 L 110 260 L 83 264 Z" fill="url(#irMetal)" stroke="#1a1412" stroke-width="1.5" />
+                <path d="M 84 235 L 109 239" stroke="url(#irRidge)" stroke-width="1.6" fill="none" />
+                <circle cx="96" cy="249" r="3" fill="#1a1412" /><circle cx="95.5" cy="248.5" r="1.8" fill="#887a75" />
+
+                <path d="M 106 239 L 195 241 L 210 233 L 225 249 L 210 265 L 195 257 L 106 259 Z" fill="url(#irMetal)" stroke="#1a1412" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M 107 249 L 196 249 L 224 249" stroke="url(#irRidge)" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                <path d="M 107 240 L 195 242 L 210 234 L 224 249" stroke="#ded4d1" stroke-width="1.1" fill="none" opacity="0.75" />
+                <path d="M 107 258 L 195 256 L 210 264 L 224 249" stroke="#120d0c" stroke-width="1.4" fill="none" />
+
+                <circle cx="132" cy="249" r="2.8" fill="#1a1412" /><circle cx="131.5" cy="248.5" r="1.7" fill="#887a75" />
+                <circle cx="174" cy="249" r="2.8" fill="#1a1412" /><circle cx="173.5" cy="248.5" r="1.7" fill="#887a75" />
+                <circle cx="208" cy="249" r="2.4" fill="#1a1412" /><circle cx="207.5" cy="248.5" r="1.5" fill="#887a75" />
+              </g>
+
+              <!-- Knocker -->
+              <g>
+                <rect x="204" y="196" width="18" height="26" rx="3.5" fill="#251c1a" stroke="#140f0e" stroke-width="1.2" />
+                <rect x="205" y="197" width="16" height="24" rx="2.5" fill="url(#irMetal)" />
+                <path d="M 205 197 L 221 197" stroke="#e0d7d4" stroke-width="1" fill="none" opacity="0.7" />
+                <rect x="208" y="200" width="10" height="7" rx="2" fill="#16100f" />
+                <path d="M 213 205 C 205 205, 203 213, 203 220 C 203 229, 209 233, 213 233 C 217 233, 223 229, 223 220 C 223 213, 221 205, 213 205 Z" fill="none" stroke="#16100f" stroke-width="5.5" />
+                <path d="M 213 205 C 205 205, 203 213, 203 220 C 203 229, 209 233, 213 233 C 217 233, 223 229, 223 220 C 223 213, 221 205, 213 205 Z" fill="none" stroke="url(#irMetal)" stroke-width="3.5" />
+                <path d="M 204 215 C 204 208, 210 207, 213 207" fill="none" stroke="#ded4d1" stroke-width="1.2" opacity="0.85" />
+              </g>
+            </g>
+
+            <!-- Master Stone Arch Template -->
+            <g id="stoneArchShape">
+              <!-- Plinths -->
+              <path d="M 44 286 L 98 286 L 96 254 L 46 254 Z" fill="url(#stSide)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 46 254 L 96 254" stroke="#eef2f5" stroke-width="2.4" fill="none" />
+              <path d="M 46 254 L 44 286" stroke="#eef2f5" stroke-width="2" fill="none" />
+              <path d="M 72 256 L 68 268 L 74 278" stroke="#383d42" stroke-width="1.2" fill="none" opacity="0.7" />
+
+              <path d="M 222 286 L 276 286 L 274 254 L 224 254 Z" fill="url(#stSide)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 224 254 L 274 254" stroke="#eef2f5" stroke-width="2.4" fill="none" />
+              <path d="M 224 254 L 222 286" stroke="#eef2f5" stroke-width="1.8" fill="none" />
+              <path d="M 252 256 L 248 266 L 254 278" stroke="#383d42" stroke-width="1.2" fill="none" opacity="0.7" />
+
+              <!-- Columns Lower -->
+              <path d="M 48 254 L 94 254 L 94 202 L 49 202 Z" fill="url(#stTop)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 49 202 L 94 202" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 49 202 L 48 254" stroke="#f2f5f8" stroke-width="2" fill="none" />
+              <path d="M 64 205 L 68 222 L 62 234" stroke="#444b52" stroke-width="1.3" fill="none" opacity="0.65" />
+
+              <path d="M 226 254 L 272 254 L 271 202 L 226 202 Z" fill="url(#stTop)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 226 202 L 271 202" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 226 202 L 226 254" stroke="#f2f5f8" stroke-width="1.8" fill="none" />
+              <path d="M 252 205 L 248 224 L 253 236" stroke="#444b52" stroke-width="1.3" fill="none" opacity="0.65" />
+
+              <!-- Impost Blocks -->
+              <path d="M 44 202 L 98 202 L 96 170 L 46 170 Z" fill="url(#stSide)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 46 170 L 96 170" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 46 170 L 44 202" stroke="#f2f5f8" stroke-width="2" fill="none" />
+              <path d="M 76 172 L 72 188" stroke="#444b52" stroke-width="1.2" fill="none" opacity="0.65" />
+
+              <path d="M 222 202 L 276 202 L 274 170 L 224 170 Z" fill="url(#stSide)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 224 170 L 274 170" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 224 170 L 222 202" stroke="#f2f5f8" stroke-width="1.8" fill="none" />
+              <path d="M 244 172 L 249 188" stroke="#444b52" stroke-width="1.2" fill="none" opacity="0.65" />
+
+              <!-- Voussoirs 1 -->
+              <path d="M 49 170 L 94 170 L 100 128 L 53 124 Z" fill="url(#stTop)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 53 124 L 100 128" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 53 124 L 49 170" stroke="#f2f5f8" stroke-width="2" fill="none" />
+              <path d="M 75 130 L 71 150" stroke="#444b52" stroke-width="1.2" fill="none" opacity="0.6" />
+
+              <path d="M 226 170 L 271 170 L 267 124 L 220 128 Z" fill="url(#stTop)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 220 128 L 267 124" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 220 128 L 226 170" stroke="#f2f5f8" stroke-width="1.8" fill="none" />
+              <path d="M 245 130 L 249 150" stroke="#444b52" stroke-width="1.2" fill="none" opacity="0.6" />
+
+              <!-- Voussoirs 2 -->
+              <path d="M 48 123 L 102 128 L 126 82 L 81 68 Z" fill="url(#stSide)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 81 68 L 126 82" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 81 68 L 48 123" stroke="#f2f5f8" stroke-width="2.2" fill="none" />
+              <path d="M 82 88 L 96 100" stroke="#444b52" stroke-width="1.3" fill="none" opacity="0.65" />
+
+              <path d="M 272 123 L 218 128 L 194 82 L 239 68 Z" fill="url(#stSide)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 239 68 L 194 82" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 194 82 L 218 128" stroke="#f2f5f8" stroke-width="1.8" fill="none" />
+              <path d="M 238 88 L 224 100" stroke="#444b52" stroke-width="1.3" fill="none" opacity="0.65" />
+
+              <!-- Voussoirs 3 -->
+              <path d="M 79 67 L 128 82 L 146 52 L 115 32 Z" fill="url(#stTop)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 115 32 L 146 52" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 115 32 L 79 67" stroke="#f2f5f8" stroke-width="2.2" fill="none" />
+              <path d="M 110 52 L 122 66" stroke="#444b52" stroke-width="1.2" fill="none" opacity="0.6" />
+
+              <path d="M 241 67 L 192 82 L 174 52 L 205 32 Z" fill="url(#stTop)" stroke="#262a2e" stroke-width="2" stroke-linejoin="round" />
+              <path d="M 205 32 L 174 52" stroke="#f2f5f8" stroke-width="2.4" fill="none" />
+              <path d="M 174 52 L 192 82" stroke="#f2f5f8" stroke-width="1.8" fill="none" />
+              <path d="M 210 52 L 198 66" stroke="#444b52" stroke-width="1.2" fill="none" opacity="0.6" />
+
+              <!-- Keystone -->
+              <path d="M 134 22 L 186 22 L 174 65 L 146 65 Z" fill="url(#stSide)" stroke="#262a2e" stroke-width="2.2" stroke-linejoin="round" />
+              <path d="M 134 22 L 186 22" stroke="#ffffff" stroke-width="2.8" fill="none" />
+              <path d="M 134 22 L 146 65" stroke="#ffffff" stroke-width="2.2" fill="none" />
+              <path d="M 186 22 L 174 65 L 146 65" stroke="#181c1e" stroke-width="2.2" fill="none" />
+              <path d="M 142 28 L 178 28 L 168 56 L 152 56 Z" fill="url(#stTop)" stroke="#383f46" stroke-width="1.2" />
+              <path d="M 160 30 L 158 44 L 162 52" stroke="#24282c" stroke-width="1.4" fill="none" opacity="0.75" />
+            </g>
+          </defs>
+        </svg>
+
+        <!-- Cave Node 1 (Top Center: Chamber I - Whispering Runes) -->
+        <div class="cave-node" id="cave1" data-dungeon-id="1" style="--x: 50%; --y: 19%;">
+          <button class="cave-rock-btn" aria-label="Chamber of Whispering Runes">
+            <svg class="cave-gate-svg" viewBox="0 0 320 320" preserveAspectRatio="xMidYMid meet">
+              <ellipse class="gate-ground-shadow" cx="160" cy="292" rx="146" ry="18" fill="url(#gfShadow)" />
+              <ellipse class="gate-ground-spill" cx="160" cy="293" rx="82" ry="11" fill="url(#gfSpill)" />
+              
+              <!-- Doorway Interior Backing -->
+              <path d="M 88 284 L 88 140 C 88 72, 232 72, 232 140 L 232 284 Z" fill="#0d0a12" />
+              <path class="portal-inner-light" d="M 94 284 L 94 142 C 94 82, 226 82, 226 142 L 226 284 Z" fill="url(#portalBurst)" opacity="0.35" />
+              <ellipse class="portal-ray-core" cx="160" cy="180" rx="32" ry="46" fill="#ffffff" opacity="0" filter="blur(6px)" />
+
+              <!-- Door Leaf (Swings open on hover / cleared) -->
+              <g class="door-leaf">
+                <use href="#doorLeafShape" />
+              </g>
+
+              <!-- Stone Archway -->
+              <use href="#stoneArchShape" />
+              <text class="keystone-sigil" x="160" y="47" font-size="13" fill="#ffb833" text-anchor="middle" font-weight="bold">✦</text>
+            </svg>
+            <div class="cave-indicator">
+              <span class="cave-status-dot"></span>
+              <span class="cave-title-badge">GATE I</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Cave Node 2 (Mid Left: Chamber II - Cryptic Vaults) -->
+        <div class="cave-node" id="cave2" data-dungeon-id="2" style="--x: 30%; --y: 49%;">
+          <button class="cave-rock-btn" aria-label="The Cryptic Vaults">
+            <svg class="cave-gate-svg" viewBox="0 0 320 320" preserveAspectRatio="xMidYMid meet">
+              <ellipse class="gate-ground-shadow" cx="160" cy="292" rx="146" ry="18" fill="url(#gfShadow)" />
+              <ellipse class="gate-ground-spill" cx="160" cy="293" rx="82" ry="11" fill="url(#gfSpill)" />
+              
+              <!-- Doorway Interior Backing -->
+              <path d="M 88 284 L 88 140 C 88 72, 232 72, 232 140 L 232 284 Z" fill="#0d0a12" />
+              <path class="portal-inner-light" d="M 94 284 L 94 142 C 94 82, 226 82, 226 142 L 226 284 Z" fill="url(#portalBurst)" opacity="0.35" />
+              <ellipse class="portal-ray-core" cx="160" cy="180" rx="32" ry="46" fill="#ffffff" opacity="0" filter="blur(6px)" />
+
+              <!-- Door Leaf -->
+              <g class="door-leaf">
+                <use href="#doorLeafShape" />
+              </g>
+
+              <!-- Stone Archway -->
+              <use href="#stoneArchShape" />
+              <text class="keystone-sigil" x="160" y="47" font-size="13" fill="#ffb833" text-anchor="middle" font-weight="bold">❖</text>
+            </svg>
+            <div class="cave-indicator">
+              <span class="cave-status-dot"></span>
+              <span class="cave-title-badge">GATE II</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Cave Node 3 (Mid Right: Chamber III - Glacial Echoes) -->
+        <div class="cave-node" id="cave3" data-dungeon-id="3" style="--x: 70%; --y: 49%;">
+          <button class="cave-rock-btn" aria-label="Labyrinth of Glacial Echoes">
+            <svg class="cave-gate-svg" viewBox="0 0 320 320" preserveAspectRatio="xMidYMid meet">
+              <ellipse class="gate-ground-shadow" cx="160" cy="292" rx="146" ry="18" fill="url(#gfShadow)" />
+              <ellipse class="gate-ground-spill" cx="160" cy="293" rx="82" ry="11" fill="url(#gfSpill)" />
+              
+              <!-- Doorway Interior Backing -->
+              <path d="M 88 284 L 88 140 C 88 72, 232 72, 232 140 L 232 284 Z" fill="#0d0a12" />
+              <path class="portal-inner-light" d="M 94 284 L 94 142 C 94 82, 226 82, 226 142 L 226 284 Z" fill="url(#portalBurst)" opacity="0.35" />
+              <ellipse class="portal-ray-core" cx="160" cy="180" rx="32" ry="46" fill="#ffffff" opacity="0" filter="blur(6px)" />
+
+              <!-- Door Leaf -->
+              <g class="door-leaf">
+                <use href="#doorLeafShape" />
+              </g>
+
+              <!-- Stone Archway -->
+              <use href="#stoneArchShape" />
+              <text class="keystone-sigil" x="160" y="47" font-size="13" fill="#ffb833" text-anchor="middle" font-weight="bold">✶</text>
+            </svg>
+            <div class="cave-indicator">
+              <span class="cave-status-dot"></span>
+              <span class="cave-title-badge">GATE III</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Cave Node 4 (Bottom Left: Chamber IV - Forgotten Hearth) -->
+        <div class="cave-node" id="cave4" data-dungeon-id="4" style="--x: 14%; --y: 81%;">
+          <button class="cave-rock-btn" aria-label="The Forgotten Hearth">
+            <svg class="cave-gate-svg" viewBox="0 0 320 320" preserveAspectRatio="xMidYMid meet">
+              <ellipse class="gate-ground-shadow" cx="160" cy="292" rx="146" ry="18" fill="url(#gfShadow)" />
+              <ellipse class="gate-ground-spill" cx="160" cy="293" rx="82" ry="11" fill="url(#gfSpill)" />
+              
+              <!-- Doorway Interior Backing -->
+              <path d="M 88 284 L 88 140 C 88 72, 232 72, 232 140 L 232 284 Z" fill="#0d0a12" />
+              <path class="portal-inner-light" d="M 94 284 L 94 142 C 94 82, 226 82, 226 142 L 226 284 Z" fill="url(#portalBurst)" opacity="0.35" />
+              <ellipse class="portal-ray-core" cx="160" cy="180" rx="32" ry="46" fill="#ffffff" opacity="0" filter="blur(6px)" />
+
+              <!-- Door Leaf -->
+              <g class="door-leaf">
+                <use href="#doorLeafShape" />
+              </g>
+
+              <!-- Stone Archway -->
+              <use href="#stoneArchShape" />
+              <text class="keystone-sigil" x="160" y="47" font-size="13" fill="#ffb833" text-anchor="middle" font-weight="bold">✵</text>
+            </svg>
+            <div class="cave-indicator">
+              <span class="cave-status-dot"></span>
+              <span class="cave-title-badge">GATE IV</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Cave Node 5 (Bottom Right: Chamber V - Prime Flames) -->
+        <div class="cave-node" id="cave5" data-dungeon-id="5" style="--x: 86%; --y: 81%;">
+          <button class="cave-rock-btn" aria-label="Sanctum of Prime Flames">
+            <svg class="cave-gate-svg" viewBox="0 0 320 320" preserveAspectRatio="xMidYMid meet">
+              <ellipse class="gate-ground-shadow" cx="160" cy="292" rx="146" ry="18" fill="url(#gfShadow)" />
+              <ellipse class="gate-ground-spill" cx="160" cy="293" rx="82" ry="11" fill="url(#gfSpill)" />
+              
+              <!-- Doorway Interior Backing -->
+              <path d="M 88 284 L 88 140 C 88 72, 232 72, 232 140 L 232 284 Z" fill="#0d0a12" />
+              <path class="portal-inner-light" d="M 94 284 L 94 142 C 94 82, 226 82, 226 142 L 226 284 Z" fill="url(#portalBurst)" opacity="0.35" />
+              <ellipse class="portal-ray-core" cx="160" cy="180" rx="32" ry="46" fill="#ffffff" opacity="0" filter="blur(6px)" />
+
+              <!-- Door Leaf -->
+              <g class="door-leaf">
+                <use href="#doorLeafShape" />
+              </g>
+
+              <!-- Stone Archway -->
+              <use href="#stoneArchShape" />
+              <text class="keystone-sigil" x="160" y="47" font-size="13" fill="#ffb833" text-anchor="middle" font-weight="bold">✧</text>
+            </svg>
+            <div class="cave-indicator">
+              <span class="cave-status-dot"></span>
+              <span class="cave-title-badge">GATE V</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Quest Stats Card matching Emberkeep.png -->
+      <footer class="quest-summary-card">
+        <div class="quote-container">
+          <p class="lore-quote">“The ice remembers each crack. Move carefully, and it will hold.”</p>
+        </div>
+        
+        <div class="stats-container">
+          <div class="stat-column">
+            <span class="stat-label">Flag found</span>
+            <span class="stat-value" id="flagCount">0</span>
+          </div>
+          <div class="stat-column">
+            <span class="stat-label">Dungeons cleared</span>
+            <span class="stat-value" id="dungeonCount">0/4</span>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </section>
+
+  <!-- Interactive Introduction Modal -->
+  <aside class="modal-backdrop" id="introModal" aria-hidden="true">
+    <div class="modal-card intro-modal-card">
+      <button class="modal-close-btn" id="introModalCloseBtn" aria-label="Close introduction">&times;</button>
+      
+      <div class="modal-header">
+        <div class="modal-badge">SANCTUM COMPENDIUM</div>
+        <h3 class="modal-title">Welcome to Emberkeep</h3>
+        <p class="modal-subtitle">What this place is, and how the sorting works</p>
+      </div>
+
+      <div class="modal-body intro-modal-body">
+        <div class="intro-overview-box">
+          <div class="intro-sigil-icon">✦</div>
+          <p>
+            You have crossed the dimensional threshold into the <strong>Emberkeep Portal Sanctum</strong>. 
+            An ancient testing realm designed to challenge your intellect, deciphering abilities, and logic across five sacred chambers.
+          </p>
+        </div>
+
+        <div class="intro-steps-grid">
+          <div class="intro-step-card">
+            <div class="step-num">01</div>
+            <h4>Select a Chamber</h4>
+            <p>Each chamber guards an arcane challenge ranging from ancient ciphers to labyrinthine pathways.</p>
+          </div>
+
+          <div class="intro-step-card">
+            <div class="step-num">02</div>
+            <h4>Decipher the Flag</h4>
+            <p>Uncover hidden passkeys formatted as <code>EMBER{...}</code> and submit them to dispel the seals.</p>
+          </div>
+
+          <div class="intro-step-card">
+            <div class="step-num">03</div>
+            <h4>Ascend the Ranks</h4>
+            <p>Earn EXP, awaken portal resonance, and progress your adventurer standing throughout the term.</p>
+          </div>
+        </div>
+
+        <div class="intro-tip-box">
+          <span class="tip-spark">⚡</span>
+          <span><strong>Term Persistence:</strong> All chambers stay unlocked throughout the entire term. You can leave and re-enter freely through the Portal Gate.</span>
+        </div>
+      </div>
+
+      <div class="modal-footer intro-modal-footer">
+        <button class="btn-begin-expedition" id="btnBeginExpedition">
+          <span>Enter the Sanctum</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Interactive Dungeon / Cave Exploration Modal -->
+  <aside class="modal-backdrop" id="dungeonModal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">&times;</button>
+      
+      <div class="modal-header">
+        <div class="modal-badge" id="modalBadge">DUNGEON I</div>
+        <h3 class="modal-title" id="modalTitle">Chamber of Whispering Runes</h3>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-lore" id="modalLore">
+          Beneath the stone battlements lies the ancient gateway. Ancient scripts glow on the frostbitten cavern walls.
+        </div>
+        
+        <div class="challenge-box">
+          <div class="challenge-header">
+            <span class="challenge-tag">CIPHER / KEY</span>
+            <span class="challenge-points">+250 EXP</span>
+          </div>
+          <p class="challenge-prompt" id="modalPrompt">Decipher the secret passkey or submit the flag to seal this dungeon.</p>
+          
+          <div class="flag-input-group">
+            <input 
+              type="text" 
+              class="flag-input" 
+              id="flagInput" 
+              placeholder="Enter flag (e.g. EMBER{...})" 
+              autocomplete="off"
+            />
+            <button class="btn-submit-flag" id="btnSubmitFlag">Submit Flag</button>
+          </div>
+          <div class="flag-feedback" id="flagFeedback"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-quick-solve" id="btnQuickSolve">⚡ Instant Solve (Demo)</button>
+        <button class="btn-secondary" id="modalCloseBottomBtn">Close</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Interactive Modules Modal -->
+  <aside class="modal-backdrop" id="modulesModal" aria-hidden="true">
+    <div class="modal-card wide-modal-card">
+      <button class="modal-close-btn" id="modulesModalCloseBtn" aria-label="Close modules">&times;</button>
+      
+      <div class="modal-header">
+        <div class="modal-badge">SANCTUM ACADEMY • MODULES</div>
+        <h3 class="modal-title">Arcane Knowledge & Curriculum</h3>
+        <p class="modal-subtitle">Master the fundamental disciplines required to conquer the five sanctum chambers</p>
+      </div>
+
+      <div class="modal-body">
+        <div class="modules-grid">
+          <!-- Module 1 -->
+          <div class="module-card">
+            <div class="module-card-header">
+              <span class="module-code">MOD-01</span>
+              <span class="module-status active">4/5 Lessons</span>
+            </div>
+            <div class="module-icon">📜</div>
+            <h4 class="module-title">Cryptographic Runes & Ciphers</h4>
+            <p class="module-desc">Substitution ciphers, frequency divination, XOR matrix seals, and ancient cryptographic primitives.</p>
+            <div class="module-progress-bar"><div class="module-progress-fill" style="width: 80%;"></div></div>
+            <button class="btn-module-action" onclick="app.launchModuleDemo('Cryptographic Runes')">Launch Module</button>
+          </div>
+
+          <!-- Module 2 -->
+          <div class="module-card">
+            <div class="module-card-header">
+              <span class="module-code">MOD-02</span>
+              <span class="module-status active">2/4 Lessons</span>
+            </div>
+            <div class="module-icon">🛡️</div>
+            <h4 class="module-title">Ancient System Architecture</h4>
+            <p class="module-desc">Memory layout deciphering, buffer boundaries, stack protection glyphs, and lock bypass mechanisms.</p>
+            <div class="module-progress-bar"><div class="module-progress-fill" style="width: 50%;"></div></div>
+            <button class="btn-module-action" onclick="app.launchModuleDemo('System Architecture')">Launch Module</button>
+          </div>
+
+          <!-- Module 3 -->
+          <div class="module-card">
+            <div class="module-card-header">
+              <span class="module-code">MOD-03</span>
+              <span class="module-status ready">Available</span>
+            </div>
+            <div class="module-icon">❄️</div>
+            <h4 class="module-title">Logic Labyrinths & Paths</h4>
+            <p class="module-desc">Branching traversal trees, recursive labyrinth solvers, path validation, and truth tables.</p>
+            <div class="module-progress-bar"><div class="module-progress-fill" style="width: 15%;"></div></div>
+            <button class="btn-module-action" onclick="app.launchModuleDemo('Logic Labyrinths')">Launch Module</button>
+          </div>
+
+          <!-- Module 4 -->
+          <div class="module-card locked">
+            <div class="module-card-header">
+              <span class="module-code">MOD-04</span>
+              <span class="module-status locked">Rank II Reqd</span>
+            </div>
+            <div class="module-icon">🔥</div>
+            <h4 class="module-title">Ember Core & Arcane Forensics</h4>
+            <p class="module-desc">Artifact memory recovery, packet flow divination, protocol analysis, and apex sanctum secrets.</p>
+            <div class="module-progress-bar"><div class="module-progress-fill" style="width: 0%;"></div></div>
+            <button class="btn-module-action disabled" disabled>Locked</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="modulesCloseBottomBtn">Return to Sanctum</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Interactive Adventurer Progress & Statistics Modal -->
+  <aside class="modal-backdrop" id="progressModal" aria-hidden="true">
+    <div class="modal-card wide-modal-card">
+      <button class="modal-close-btn" id="progressModalCloseBtn" aria-label="Close progress">&times;</button>
+      
+      <div class="modal-header">
+        <div class="modal-badge">ADVENTURER DOSSIER • PROGRESS</div>
+        <h3 class="modal-title">Expedition Record & Statistics</h3>
+        <p class="modal-subtitle">Your live standing and achievements in the Emberkeep Sanctum</p>
+      </div>
+
+      <div class="modal-body">
+        <!-- Profile Banner -->
+        <div class="progress-hero-banner">
+          <img src="user_avatar.png" class="progress-avatar-img" alt="Adventurer Avatar" />
+          <div class="progress-hero-info">
+            <div class="progress-hero-title">Seeker of the Hearth</div>
+            <div class="progress-hero-rank">Rank I Adventurer • Term IV Cohort</div>
+            <div class="exp-bar-container">
+              <div class="exp-bar-track">
+                <div class="exp-bar-fill" id="expBarFill" style="width: 0%;"></div>
+              </div>
+              <div class="exp-text"><span id="expValue">0</span> / 2,000 EXP</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Stats Row -->
+        <div class="progress-stats-row">
+          <div class="pstat-card">
+            <span class="pstat-label">Dungeons Cleared</span>
+            <span class="pstat-value" id="progDungeonsCleared">0/4</span>
+            <span class="pstat-sub">Gates permanently open</span>
+          </div>
+          <div class="pstat-card">
+            <span class="pstat-label">Flags Captured</span>
+            <span class="pstat-value" id="progFlagsFound">0</span>
+            <span class="pstat-sub">Authenticated tokens</span>
+          </div>
+          <div class="pstat-card">
+            <span class="pstat-label">Sanctum Standing</span>
+            <span class="pstat-value">Top 10%</span>
+            <span class="pstat-sub">Term ranking</span>
+          </div>
+        </div>
+
+        <!-- Badges Collection Grid -->
+        <div class="badges-section">
+          <h4 class="badges-title">Chamber Sigil Badges</h4>
+          <div class="badges-grid">
+            <div class="sigil-badge-card" id="badgeChamber1">
+              <div class="badge-rune">✦</div>
+              <div class="badge-name">Whispering Runes</div>
+              <div class="badge-state">Locked</div>
+            </div>
+            <div class="sigil-badge-card" id="badgeChamber2">
+              <div class="badge-rune">❖</div>
+              <div class="badge-name">Cryptic Vaults</div>
+              <div class="badge-state">Locked</div>
+            </div>
+            <div class="sigil-badge-card" id="badgeChamber3">
+              <div class="badge-rune">✶</div>
+              <div class="badge-name">Glacial Echoes</div>
+              <div class="badge-state">Locked</div>
+            </div>
+            <div class="sigil-badge-card" id="badgeChamber4">
+              <div class="badge-rune">✵</div>
+              <div class="badge-name">Forgotten Hearth</div>
+              <div class="badge-state">Locked</div>
+            </div>
+            <div class="sigil-badge-card" id="badgeChamber5">
+              <div class="badge-rune">✧</div>
+              <div class="badge-name">Prime Flames</div>
+              <div class="badge-state">Locked</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="progressCloseBottomBtn">Close Dossier</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Interactive Adventurer Profile Modal -->
+  <aside class="modal-backdrop" id="profileModal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="profileModalCloseBtn" aria-label="Close profile">&times;</button>
+      
+      <div class="modal-header">
+        <div class="modal-badge">ADVENTURER PROFILE</div>
+        <h3 class="modal-title">Identity & Customization</h3>
+        <p class="modal-subtitle">Manage your title, preferences, and sanctum audio</p>
+      </div>
+
+      <div class="modal-body">
+        <div class="profile-card-content">
+          <div class="profile-avatar-large">
+            <img src="user_avatar.png" alt="Adventurer" />
+            <div class="user-badge-online"></div>
+          </div>
+          <h4 class="profile-name">Adventurer #4092</h4>
+          <p class="profile-cohort">Term IV Participant • Connected</p>
+
+          <div class="profile-options-group">
+            <label class="profile-label">Equipped Title</label>
+            <select class="profile-select" id="titleSelect">
+              <option value="Seeker of the Hearth">Seeker of the Hearth</option>
+              <option value="Rune Weaver">Rune Weaver</option>
+              <option value="Vault Breaker">Vault Breaker</option>
+              <option value="Glacial Pathfinder">Glacial Pathfinder</option>
+              <option value="Flame Warden">Flame Warden</option>
+            </select>
+          </div>
+
+          <div class="profile-options-group">
+            <label class="profile-label">Audio & Resonance</label>
+            <div class="profile-audio-toggle">
+              <span>Synthesizer Sound Effects</span>
+              <button class="btn-audio-pill" id="profileSoundToggle">SFX: ON</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary" id="profileSaveBtn">Save & Return</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>
