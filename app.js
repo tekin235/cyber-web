@@ -400,8 +400,9 @@ class SanctumApp {
 
     // Listen to pageshow in case user navigated back via browser history (bfcache)
     window.addEventListener('pageshow', () => {
-      if (APP_STATE.currentScreen === 'pageDashboard' || window.location.hash.includes('dashboard')) {
-        this.checkReturnFromIntro();
+      const hash = window.location.hash.toLowerCase();
+      if (!hash.includes('dashboard')) {
+        this.handleLogout();
       }
     });
   }

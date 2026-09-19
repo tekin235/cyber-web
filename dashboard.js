@@ -322,12 +322,15 @@ class DashboardApp {
     // 6. Check if user just returned from Introduction Module to trigger the unlock
     this.checkReturnFromIntro();
 
-    // 7. Handle bfcache / browser back button navigation
+    // 7. Intercept browser back button to logout
+    this.setupBackToLogout();
+
+    // 8. Handle bfcache / browser back button navigation
     window.addEventListener('pageshow', () => {
       this.checkReturnFromIntro();
     });
 
-    // 8. Clean up entrance animation after ~2.2s
+    // 9. Clean up entrance animation after ~2.2s
     setTimeout(() => {
       if (this.dom.pageDashboard) {
         this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
@@ -438,6 +441,23 @@ class DashboardApp {
   }
 
   // ===========================================================================
+  // BROWSER BACK BUTTON NAVIGATION (Logs out to Login on back navigation)
+  // ===========================================================================
+  setupBackToLogout() {
+    try {
+      // Ensure there's a history state to intercept the back action
+      if (!window.history.state || window.history.state.sanctum !== 'dashboard') {
+        window.history.pushState({ sanctum: 'dashboard' }, document.title, window.location.href);
+      }
+    } catch (e) {}
+
+    window.addEventListener('popstate', () => {
+      // User clicked browser Back button on 3rd page: execute logout and return to login
+      this.handleLogout();
+    });
+  }
+
+  // ===========================================================================
   // LOGOUT (Reset & Return to Page 1: index.html)
   // ===========================================================================
   handleLogout() {
@@ -451,14 +471,14 @@ class DashboardApp {
     // Lock gate in UI
     this.lockGateDOM();
 
-    // Flash and redirect to Page 1
+    // Flash and redirect to Page 1 Login
     if (this.dom.dashboardWarpFlash) {
       this.dom.dashboardWarpFlash.classList.add('flash-active');
     }
 
     setTimeout(() => {
-      window.location.href = 'index.html#login';
-    }, 280);
+      window.location.replace('index.html#login');
+    }, 250);
   }
 
   // ===========================================================================
