@@ -309,22 +309,22 @@ class DashboardApp {
       }
     }
 
-    // 3. Smooth celestial arrival bloom (ONLY when arriving fresh from Page 2 portal warp)
+    // 3. Realistic optical arrival dissipation (ONLY when arriving fresh from Page 2 portal warp)
     const arrivingFromPortal = sessionStorage.getItem('portalWarpArrival') === 'true';
     if (arrivingFromPortal) {
       sessionStorage.removeItem('portalWarpArrival');
       if (this.dom.dashboardWarpFlash) {
-        this.dom.dashboardWarpFlash.classList.add('flash-active');
-        void this.dom.dashboardWarpFlash.offsetWidth; // Force reflow
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            this.dom.dashboardWarpFlash.classList.remove('flash-active');
-          }, 60);
-        });
+        this.dom.dashboardWarpFlash.classList.remove('flash-active', 'flash-strike');
+        this.dom.dashboardWarpFlash.classList.add('flash-dissipate');
+        setTimeout(() => {
+          if (this.dom.dashboardWarpFlash) {
+            this.dom.dashboardWarpFlash.classList.remove('flash-dissipate');
+          }
+        }, 360);
       }
     } else {
       if (this.dom.dashboardWarpFlash) {
-        this.dom.dashboardWarpFlash.classList.remove('flash-active');
+        this.dom.dashboardWarpFlash.classList.remove('flash-active', 'flash-strike', 'flash-dissipate');
       }
     }
 
@@ -536,16 +536,16 @@ class DashboardApp {
       window.onIntroductionClick();
     }
 
-    // Smooth mystical emerald grove transition to the Introduction Module
+    // Smooth mystical emerald grove optical flash to the Introduction Module
     setTimeout(() => {
       if (this.dom.dashboardWarpFlash) {
-        this.dom.dashboardWarpFlash.classList.remove('void-transition');
-        this.dom.dashboardWarpFlash.classList.add('forest-transition', 'flash-active');
+        this.dom.dashboardWarpFlash.classList.remove('void-transition', 'flash-dissipate');
+        this.dom.dashboardWarpFlash.classList.add('forest-transition', 'flash-strike');
       }
       setTimeout(() => {
         window.location.href = 'introduction-module/index.html';
-      }, 420);
-    }, 350);
+      }, 160);
+    }, 180);
   }
 
   // ===========================================================================

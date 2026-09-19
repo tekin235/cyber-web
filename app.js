@@ -502,13 +502,12 @@ class SanctumApp {
     }
 
     // =========================================================================
-    // CINEMATIC TRANSITION VIDEO EVENTS (Let video play out fully)
+    // CINEMATIC TRANSITION VIDEO EVENTS (Realistic Optical Flash at Climax)
     // =========================================================================
     if (this.dom.portalVideo) {
       this.dom.portalVideo.addEventListener('ended', () => {
-        // Video finished naturally: trigger full-screen radiant flash and complete warp
-        if (this.dom.globalWarpFlash) this.dom.globalWarpFlash.classList.add('flash-active');
-        if (this.dom.transitionWarpFlash) this.dom.transitionWarpFlash.classList.add('flash-active');
+        // Video finished naturally: ensure optical flash strikes and complete warp
+        this.triggerOpticalFlash();
         this.completePortalWarp();
       });
 
@@ -516,10 +515,10 @@ class SanctumApp {
         const video = this.dom.portalVideo;
         if (!video.duration || isNaN(video.duration)) return;
         const remaining = video.duration - video.currentTime;
-        // Build up full-screen radiant flash in final 0.45s of video
-        if (remaining <= 0.45 && APP_STATE.isTransitioning) {
-          if (this.dom.globalWarpFlash) this.dom.globalWarpFlash.classList.add('flash-active');
-          if (this.dom.transitionWarpFlash) this.dom.transitionWarpFlash.classList.add('flash-active');
+        // Strike the realistic optical flash right at the video tunnel's climax (~0.18s remaining)
+        if (remaining <= 0.18 && APP_STATE.isTransitioning && !this.flashStruck) {
+          this.flashStruck = true;
+          this.triggerOpticalFlash();
         }
       });
     }
@@ -600,6 +599,7 @@ class SanctumApp {
   // ===========================================================================
   triggerPortalWarp() {
     APP_STATE.isTransitioning = true;
+    this.flashStruck = false;
     sfx.playWarpWhoosh();
 
     // Show video transition screen
@@ -609,10 +609,10 @@ class SanctumApp {
       this.dom.portalVideo.currentTime = 0;
 
       if (this.dom.globalWarpFlash) {
-        this.dom.globalWarpFlash.classList.remove('flash-active');
+        this.dom.globalWarpFlash.classList.remove('flash-active', 'flash-strike', 'flash-dissipate');
       }
       if (this.dom.transitionWarpFlash) {
-        this.dom.transitionWarpFlash.classList.remove('flash-active');
+        this.dom.transitionWarpFlash.classList.remove('flash-active', 'flash-strike', 'flash-dissipate');
       }
 
       const playPromise = this.dom.portalVideo.play();
@@ -647,28 +647,34 @@ class SanctumApp {
     }
   }
 
+  triggerOpticalFlash() {
+    // Ignite realistic optical flash with anamorphic flare and exposure blowout
+    const targets = [this.dom.globalWarpFlash, this.dom.transitionWarpFlash].filter(Boolean);
+    targets.forEach((el) => {
+      el.classList.remove('flash-dissipate');
+      // Reflow to ensure animation replays crisply from 0ms strike
+      void el.offsetWidth;
+      el.classList.add('flash-strike');
+    });
+  }
+
   completePortalWarp() {
     if (!APP_STATE.isTransitioning) return;
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
-    // Peak full-screen celestial radiance flash
-    if (this.dom.globalWarpFlash) {
-      this.dom.globalWarpFlash.classList.add('flash-active');
-    }
-    if (this.dom.transitionWarpFlash) {
-      this.dom.transitionWarpFlash.classList.add('flash-active');
-    }
+    // Ensure optical strike is ignited
+    this.triggerOpticalFlash();
 
     // Set flag so Page 3 knows this is a genuine portal warp arrival
     try {
       sessionStorage.setItem('portalWarpArrival', 'true');
     } catch (e) {}
 
-    // Seamlessly redirect to standalone Page 3 (dashboard.html)
+    // Seamlessly redirect to standalone Page 3 (dashboard.html) right at peak flash (~150ms)
     setTimeout(() => {
       window.location.href = 'dashboard.html';
-    }, 380);
+    }, 150);
   }
 
   // ===========================================================================
