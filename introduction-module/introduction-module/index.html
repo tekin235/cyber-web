@@ -1856,7 +1856,7 @@
             </div>
             <h3>The Whispering Pines Wi-Fi</h3>
             <p>Opens with network fundamentals. Watch credentials cross the wire in plain text.</p>
-            <p class="room-lock-note" id="lock-note-wifi">Requires: Complete Scene 3 (The Guestbook)</p>
+            <p class="room-lock-note" id="lock-note-wifi">Requires: Complete Station 3 (The Guestbook)</p>
             <div class="room-card-footer" id="footer-room-wifi" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1875,7 +1875,7 @@
             </div>
             <h3>The Runestone Memo</h3>
             <p>Opens with cryptography session. A secret message that was "encrypted" — barely.</p>
-            <p class="room-lock-note" id="lock-note-crypto">Requires: Complete Scene 3 (The Guestbook)</p>
+            <p class="room-lock-note" id="lock-note-crypto">Requires: Complete Station 4 (The Whispering Pines Wi-Fi)</p>
             <div class="room-card-footer" id="footer-room-crypto" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1894,7 +1894,7 @@
             </div>
             <h3>The Hollow Willow Form</h3>
             <p>Opens with terminal/privilege escalation. A form field that gets passed straight to a shell.</p>
-            <p class="room-lock-note" id="lock-note-cmdinj">Requires: Complete Station 4 (Whispering Pines Wi-Fi)</p>
+            <p class="room-lock-note" id="lock-note-cmdinj">Requires: Complete Station 5 (The Runestone Memo)</p>
             <div class="room-card-footer" id="footer-room-cmdinj" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1913,7 +1913,7 @@
             </div>
             <h3>The River Ferry Ledger</h3>
             <p>Opens with web application security. Change one number in a URL, see a stranger's data.</p>
-            <p class="room-lock-note" id="lock-note-idor">Requires: Complete Station 5 or 6</p>
+            <p class="room-lock-note" id="lock-note-idor">Requires: Complete Station 6 (The Hollow Willow Form)</p>
             <div class="room-card-footer" id="footer-room-idor" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -2749,9 +2749,9 @@
       if (!completed) completed = getCompletedChallenges();
       if (['binexp', 'sqli', 'xss'].includes(id)) return true;
       if (id === 'wifi') return completed.includes('xss');
-      if (id === 'crypto') return completed.includes('xss');
-      if (id === 'cmdinj') return completed.includes('wifi') || completed.includes('crypto');
-      if (id === 'idor') return completed.includes('cmdinj') || completed.includes('crypto');
+      if (id === 'crypto') return completed.includes('wifi');
+      if (id === 'cmdinj') return completed.includes('crypto');
+      if (id === 'idor') return completed.includes('cmdinj');
       if (id === 'traversal') return completed.includes('idor');
       if (id === 'social') return completed.includes('traversal');
       return false;
