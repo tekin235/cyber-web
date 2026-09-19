@@ -640,13 +640,14 @@ class SanctumApp {
       if (this.dom.cloudsOverlay) {
         this.dom.cloudsOverlay.classList.remove('parting');
         this.dom.cloudsOverlay.classList.add('active');
-        void this.dom.cloudsOverlay.offsetWidth; // Force reflow to guarantee CSS transition
+        void this.dom.cloudsOverlay.offsetWidth; // Force reflow to guarantee CSS rendering
 
-        requestAnimationFrame(() => {
+        // Deliberate brief moment where clouds are fully seen before fly-through commences
+        setTimeout(() => {
           if (this.dom.cloudsOverlay) {
             this.dom.cloudsOverlay.classList.add('parting');
           }
-        });
+        }, 120);
       }
 
       // Dissolve the white flash directly into the celestial clouds
@@ -654,7 +655,7 @@ class SanctumApp {
         if (this.dom.transitionWarpFlash) {
           this.dom.transitionWarpFlash.classList.remove('flash-active');
         }
-      }, 250);
+      }, 200);
 
       // Clean up cloud overlay after the emergence animation completes
       setTimeout(() => {
@@ -664,7 +665,7 @@ class SanctumApp {
         if (this.dom.pageDashboard) {
           this.dom.pageDashboard.classList.remove('emerge-from-clouds');
         }
-      }, 2800);
+      }, 3200);
     }, 280);
   }
 

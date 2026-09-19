@@ -110,6 +110,20 @@
     </div>
   </section>
 
+  <!-- Atmospheric 3D Clouds Fly-Through & Chasm Overlay (Fixed Fullscreen) -->
+  <div class="clouds-parting-overlay" id="cloudsOverlay" aria-hidden="true">
+    <div class="cloud-canyon-perspective">
+      <!-- Left Cumulus Cloud Bank (Feathered 3D Foreground) -->
+      <div class="canyon-bank-left"></div>
+
+      <!-- Right Cumulus Cloud Bank (Feathered 3D Foreground) -->
+      <div class="canyon-bank-right"></div>
+
+      <!-- Radiant Center Golden Horizon Portal Flare -->
+      <div class="canyon-horizon-portal"></div>
+    </div>
+  </div>
+
   <!-- ========================================================================= -->
   <!-- SCREEN 3 (PAGE 3): MINIMALIST DASHBOARD & SINGLE MEDIEVAL DUNGEON GATE    -->
   <!-- ========================================================================= -->
@@ -121,98 +135,63 @@
       <canvas id="cavernParticlesCanvas"></canvas>
     </div>
 
-    <!-- Atmospheric 3D Clouds Fly-Through & Chasm Overlay -->
-    <div class="clouds-parting-overlay" id="cloudsOverlay" aria-hidden="true">
-      <div class="cloud-canyon-perspective">
-        <!-- Far Chasm Portal Horizon -->
-        <div class="cloud-horizon-glow"></div>
-
-        <!-- Left Cloud Canyon Wall (Towering dense clouds flanking on left) -->
-        <div class="cloud-wall cloud-wall-left-far"></div>
-        <div class="cloud-wall cloud-wall-left-mid"></div>
-        <div class="cloud-wall cloud-wall-left-near"></div>
-
-        <!-- Right Cloud Canyon Wall (Towering dense clouds flanking on right) -->
-        <div class="cloud-wall cloud-wall-right-far"></div>
-        <div class="cloud-wall cloud-wall-right-mid"></div>
-        <div class="cloud-wall cloud-wall-right-near"></div>
-
-        <!-- Overhead Cloud Canopy -->
-        <div class="cloud-wall cloud-canopy-top"></div>
-
-        <!-- Cloud Sea Floor -->
-        <div class="cloud-wall cloud-floor-bottom"></div>
-
-        <!-- Speed Cloud Wisps Rushing Past Camera -->
-        <div class="cloud-wisps-tunnel">
-          <div class="cloud-wisp wisp-1"></div>
-          <div class="cloud-wisp wisp-2"></div>
-          <div class="cloud-wisp wisp-3"></div>
-          <div class="cloud-wisp wisp-4"></div>
-          <div class="cloud-wisp wisp-5"></div>
+    <div class="dashboard-page-content">
+      <!-- Minimalist Top Navigation -->
+      <nav class="emberkeep-nav">
+        <div class="nav-left">
+          <div class="nav-logo-circle" aria-hidden="true">
+            <span class="sigil-inner">✦</span>
+          </div>
+          <span class="nav-event-title" id="navEventTitle">Cybersecurity Classes</span>
         </div>
 
-        <!-- Atmospheric Mist Veil -->
-        <div class="cloud-mist-veil"></div>
-      </div>
-    </div>
-
-    <!-- Minimalist Top Navigation -->
-    <nav class="emberkeep-nav">
-      <div class="nav-left">
-        <div class="nav-logo-circle" aria-hidden="true">
-          <span class="sigil-inner">✦</span>
-        </div>
-        <span class="nav-event-title" id="navEventTitle">Cybersecurity Classes</span>
-      </div>
-
-      <div class="nav-right">
-        <!-- SFX Toggle Button -->
-        <button class="nav-sfx-btn" id="navSoundToggleBtn" title="Toggle Sound FX" aria-label="Toggle Sound Effects">
-          <svg class="sfx-icon-on" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          </svg>
-          <svg class="sfx-icon-off hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-          </svg>
-          <span class="nav-sfx-label" id="navSfxLabel">SFX: ON</span>
-        </button>
-
-        <!-- Adventurer Profile Button with Logout Dropdown -->
-        <div class="profile-menu-container">
-          <button class="nav-avatar-btn" id="avatarBtn" title="Adventurer Profile" aria-label="Open Adventurer Profile" aria-expanded="false">
-            <img src="user_avatar.png" class="nav-avatar-img" alt="Adventurer" />
-            <div class="user-badge-online"></div>
+        <div class="nav-right">
+          <!-- SFX Toggle Button -->
+          <button class="nav-sfx-btn" id="navSoundToggleBtn" title="Toggle Sound FX" aria-label="Toggle Sound Effects">
+            <svg class="sfx-icon-on" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg class="sfx-icon-off hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+            <span class="nav-sfx-label" id="navSfxLabel">SFX: ON</span>
           </button>
 
-          <!-- Profile Dropdown Popup -->
-          <div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
-            <div class="dropdown-header">
-              <img src="user_avatar.png" class="dropdown-avatar-img" alt="User Avatar" />
-              <div class="dropdown-user-info">
-                <span class="dropdown-name">Adventurer</span>
-                <span class="dropdown-role">Term IV Initiate</span>
-              </div>
-            </div>
-            <div class="dropdown-divider"></div>
-            <button type="button" class="dropdown-logout-btn" id="btnLogout" aria-label="Logout">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                <polyline points="16 17 21 12 16 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-              </svg>
-              <span>Logout</span>
+          <!-- Adventurer Profile Button with Logout Dropdown -->
+          <div class="profile-menu-container">
+            <button class="nav-avatar-btn" id="avatarBtn" title="Adventurer Profile" aria-label="Open Adventurer Profile" aria-expanded="false">
+              <img src="user_avatar.png" class="nav-avatar-img" alt="Adventurer" />
+              <div class="user-badge-online"></div>
             </button>
+
+            <!-- Profile Dropdown Popup -->
+            <div class="profile-dropdown" id="profileDropdown" aria-hidden="true">
+              <div class="dropdown-header">
+                <img src="user_avatar.png" class="dropdown-avatar-img" alt="User Avatar" />
+                <div class="dropdown-user-info">
+                  <span class="dropdown-name">Adventurer</span>
+                  <span class="dropdown-role">Term IV Initiate</span>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <button type="button" class="dropdown-logout-btn" id="btnLogout" aria-label="Logout">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
-    <!-- Main Content Area: Centered Introduction & Single Medieval Dungeon Gate -->
-    <main class="dashboard-center-stage">
+      <!-- Main Content Area: Centered Introduction & Single Medieval Dungeon Gate -->
+      <main class="dashboard-center-stage">
       <!-- Introduction Button -->
       <div class="intro-action-container">
         <button class="btn-introduction" id="btnIntroduction" aria-label="Open Introduction">
@@ -487,6 +466,7 @@
         </button>
       </div>
     </main>
+    </div>
   </section>
 
   <!-- Application Logic -->
