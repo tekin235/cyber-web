@@ -502,12 +502,11 @@ class SanctumApp {
     }
 
     // =========================================================================
-    // CINEMATIC TRANSITION VIDEO EVENTS (Realistic Optical Flash at Climax)
+    // CINEMATIC TRANSITION VIDEO EVENTS (Slow, Gentle, Single Celestial Glow)
     // =========================================================================
     if (this.dom.portalVideo) {
       this.dom.portalVideo.addEventListener('ended', () => {
-        // Video finished naturally: ensure optical flash strikes and complete warp
-        this.triggerOpticalFlash();
+        // Video finished naturally: complete warp and navigate
         this.completePortalWarp();
       });
 
@@ -515,10 +514,12 @@ class SanctumApp {
         const video = this.dom.portalVideo;
         if (!video.duration || isNaN(video.duration)) return;
         const remaining = video.duration - video.currentTime;
-        // Strike the realistic optical flash right at the video tunnel's climax (~0.18s remaining)
-        if (remaining <= 0.18 && APP_STATE.isTransitioning && !this.flashStruck) {
-          this.flashStruck = true;
-          this.triggerOpticalFlash();
+        // In the final 0.85s of the video, slowly swell the gentle celestial glow ONCE
+        if (remaining <= 0.85 && APP_STATE.isTransitioning && !this.warpFlashStarted) {
+          this.warpFlashStarted = true;
+          if (this.dom.globalWarpFlash) {
+            this.dom.globalWarpFlash.classList.add('flash-active');
+          }
         }
       });
     }
@@ -599,7 +600,7 @@ class SanctumApp {
   // ===========================================================================
   triggerPortalWarp() {
     APP_STATE.isTransitioning = true;
-    this.flashStruck = false;
+    this.warpFlashStarted = false;
     sfx.playWarpWhoosh();
 
     // Show video transition screen
@@ -609,10 +610,7 @@ class SanctumApp {
       this.dom.portalVideo.currentTime = 0;
 
       if (this.dom.globalWarpFlash) {
-        this.dom.globalWarpFlash.classList.remove('flash-active', 'flash-strike', 'flash-dissipate');
-      }
-      if (this.dom.transitionWarpFlash) {
-        this.dom.transitionWarpFlash.classList.remove('flash-active', 'flash-strike', 'flash-dissipate');
+        this.dom.globalWarpFlash.classList.remove('flash-active');
       }
 
       const playPromise = this.dom.portalVideo.play();
@@ -647,34 +645,25 @@ class SanctumApp {
     }
   }
 
-  triggerOpticalFlash() {
-    // Ignite realistic optical flash with anamorphic flare and exposure blowout
-    const targets = [this.dom.globalWarpFlash, this.dom.transitionWarpFlash].filter(Boolean);
-    targets.forEach((el) => {
-      el.classList.remove('flash-dissipate');
-      // Reflow to ensure animation replays crisply from 0ms strike
-      void el.offsetWidth;
-      el.classList.add('flash-strike');
-    });
-  }
-
   completePortalWarp() {
     if (!APP_STATE.isTransitioning) return;
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
-    // Ensure optical strike is ignited
-    this.triggerOpticalFlash();
+    // Soft celestial glow is fully active (single flash swell)
+    if (this.dom.globalWarpFlash) {
+      this.dom.globalWarpFlash.classList.add('flash-active');
+    }
 
-    // Set flag so Page 3 knows this is a genuine portal warp arrival
+    // Set flag so Page 3 knows this is a genuine portal warp arrival to slowly dissolve out
     try {
       sessionStorage.setItem('portalWarpArrival', 'true');
     } catch (e) {}
 
-    // Seamlessly redirect to standalone Page 3 (dashboard.html) right at peak flash (~150ms)
+    // Seamlessly navigate to standalone Page 3 (dashboard.html)
     setTimeout(() => {
       window.location.href = 'dashboard.html';
-    }, 150);
+    }, 280);
   }
 
   // ===========================================================================

@@ -115,12 +115,7 @@ html, body {
 }
 
 /* ==========================================================================
-   REALISTIC OPTICAL LENS FLASH SYSTEM
-   Features physical cinematography properties:
-   - High dynamic range overexposure bloom (backdrop sensor blowout)
-   - Edge-to-edge anamorphic horizontal lens flare streak (::before)
-   - Incandescent central starburst core with diffraction halo (::after)
-   - Exponential impulse attack (<90ms) and phosphor decay curve (~380ms)
+   SLOW, CINEMATIC CELESTIAL TRANSITION (Gentle & Single Flash)
    ========================================================================== */
 .warp-flash {
   position: fixed;
@@ -132,292 +127,49 @@ html, body {
   height: 100vh;
   z-index: 99999;
   pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  
-  /* Luminous overexposure blowout with physical optical falloff across 100% of viewport */
-  background: radial-gradient(ellipse 135% 105% at 50% 50%,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(255, 250, 235, 0.92) 22%,
-    rgba(255, 232, 175, 0.65) 52%,
-    rgba(165, 205, 255, 0.32) 78%,
-    rgba(255, 245, 225, 0.18) 100%
+
+  /* Soft, warm celestial illumination covering 100% of viewport with smooth falloff */
+  background: radial-gradient(ellipse at center,
+    #ffffff 0%,
+    #fffdf8 35%,
+    #fef7e6 68%,
+    #fbedcb 100%
   );
-  backdrop-filter: brightness(260%) contrast(150%) saturate(130%) blur(4px);
-  -webkit-backdrop-filter: brightness(260%) contrast(150%) saturate(130%) blur(4px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 
   opacity: 0;
   visibility: hidden;
-  transform: translateZ(0);
+  /* Slow, gentle, buttery-smooth transition */
+  transition: opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.85s ease;
 }
 
-/* Layer 1: Anamorphic Horizontal Lens Flare Streak */
-.warp-flash::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100vw;
-  height: 3px;
-  margin-top: -1.5px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(140, 200, 255, 0.2) 10%,
-    rgba(255, 255, 255, 0.88) 32%,
-    #ffffff 50%,
-    rgba(255, 255, 255, 0.88) 68%,
-    rgba(255, 230, 160, 0.28) 90%,
-    transparent 100%
-  );
-  box-shadow: 0 0 16px 5px rgba(255, 255, 255, 0.95),
-              0 0 45px 14px rgba(150, 210, 255, 0.85),
-              0 0 95px 32px rgba(255, 235, 170, 0.6);
-  transform: scaleX(0.05) scaleY(0.4);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Layer 2: Central Incandescent Core & Soft Optical Corona */
-.warp-flash::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 600px;
-  height: 600px;
-  margin-top: -300px;
-  margin-left: -300px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%,
-    #ffffff 0%,
-    rgba(255, 255, 255, 0.98) 25%,
-    rgba(255, 248, 215, 0.72) 48%,
-    rgba(255, 232, 160, 0.28) 72%,
-    transparent 100%
-  );
-  box-shadow: 0 0 80px 35px rgba(255, 255, 255, 0.95),
-              0 0 160px 70px rgba(255, 230, 150, 0.6);
-  filter: blur(14px);
-  -webkit-filter: blur(14px);
-  transform: scale(0.1);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Realistic Flash Strike / Active Ignition */
-.warp-flash.flash-active,
-.warp-flash.flash-strike {
+/* Single Flash Active: Fades in smoothly to full soft illumination */
+.warp-flash.flash-active {
   opacity: 1;
   visibility: visible;
-  animation: realisticFlashImpulse 0.48s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+  transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.85s ease;
 }
 
-.warp-flash.flash-active::before,
-.warp-flash.flash-strike::before {
-  animation: anamorphicStreakImpulse 0.48s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
-}
-
-.warp-flash.flash-active::after,
-.warp-flash.flash-strike::after {
-  animation: opticalCoreImpulse 0.48s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
-}
-
-/* Dissipate Arrival Mode: Used on dashboard arrival to resolve flash seamlessly */
-.warp-flash.flash-dissipate {
-  visibility: visible;
-  animation: realisticFlashDecay 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.warp-flash.flash-dissipate::before {
-  animation: anamorphicStreakDecay 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.warp-flash.flash-dissipate::after {
-  animation: opticalCoreDecay 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* Flash Keyframes — Explosive Optical Strike & Phosphor Decay */
-@keyframes realisticFlashImpulse {
-  0% {
-    opacity: 0;
-    backdrop-filter: brightness(100%) contrast(100%) blur(0px);
-  }
-  15% {
-    /* ~70ms: Blinding optical peak */
-    opacity: 1;
-    backdrop-filter: brightness(280%) contrast(160%) blur(5px);
-  }
-  40% {
-    /* ~190ms: Initial dissipation, warm bloom remains strong */
-    opacity: 0.92;
-    backdrop-filter: brightness(240%) contrast(145%) blur(4px);
-  }
-  70% {
-    /* ~335ms: Scene burning through with rich highlight glow */
-    opacity: 0.55;
-    backdrop-filter: brightness(155%) contrast(125%) blur(2px);
-  }
-  100% {
-    /* ~480ms: Crystal clear view */
-    opacity: 0;
-    backdrop-filter: brightness(100%) contrast(100%) blur(0px);
-    visibility: hidden;
-  }
-}
-
-@keyframes anamorphicStreakImpulse {
-  0% {
-    opacity: 0;
-    transform: scaleX(0.05) scaleY(0.4);
-  }
-  15% {
-    /* Explosive horizon streak stretch */
-    opacity: 1;
-    transform: scaleX(1.5) scaleY(2.2);
-  }
-  40% {
-    opacity: 0.92;
-    transform: scaleX(1.85) scaleY(1.4);
-  }
-  70% {
-    opacity: 0.45;
-    transform: scaleX(2.1) scaleY(0.7);
-  }
-  100% {
-    opacity: 0;
-    transform: scaleX(2.35) scaleY(0.2);
-  }
-}
-
-@keyframes opticalCoreImpulse {
-  0% {
-    opacity: 0;
-    transform: scale(0.1);
-  }
-  15% {
-    opacity: 1;
-    transform: scale(1.35);
-  }
-  40% {
-    opacity: 0.88;
-    transform: scale(1.75);
-  }
-  70% {
-    opacity: 0.35;
-    transform: scale(2.1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(2.4);
-  }
-}
-
-/* Arrival Decay Keyframes (Page 3 Seamless Entry) */
-@keyframes realisticFlashDecay {
-  0% {
-    opacity: 0.9;
-    backdrop-filter: brightness(240%) contrast(145%) blur(4px);
-  }
-  42% {
-    opacity: 0.4;
-    backdrop-filter: brightness(145%) contrast(120%) blur(2px);
-  }
-  100% {
-    opacity: 0;
-    backdrop-filter: brightness(100%) contrast(100%) blur(0px);
-    visibility: hidden;
-  }
-}
-
-@keyframes anamorphicStreakDecay {
-  0% {
-    opacity: 0.95;
-    transform: scaleX(1.6) scaleY(1.4);
-  }
-  42% {
-    opacity: 0.3;
-    transform: scaleX(1.9) scaleY(0.7);
-  }
-  100% {
-    opacity: 0;
-    transform: scaleX(2.25) scaleY(0.2);
-  }
-}
-
-@keyframes opticalCoreDecay {
-  0% {
-    opacity: 0.88;
-    transform: scale(1.45);
-  }
-  42% {
-    opacity: 0.25;
-    transform: scale(1.85);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(2.25);
-  }
-}
-
-/* Variant: Full-Screen Forest Grove Optical Flash */
+/* Variant: Full-Screen Forest Grove Slow Dissolve */
 .warp-flash.forest-transition {
-  background: radial-gradient(ellipse 135% 105% at 50% 50%,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(240, 253, 244, 0.9) 22%,
-    rgba(187, 247, 208, 0.65) 52%,
-    rgba(52, 211, 153, 0.3) 78%,
-    rgba(16, 185, 129, 0.15) 100%
-  );
-  backdrop-filter: brightness(230%) contrast(140%) saturate(150%) blur(4px);
-  -webkit-backdrop-filter: brightness(230%) contrast(140%) saturate(150%) blur(4px);
-}
-
-.warp-flash.forest-transition::before {
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(52, 211, 153, 0.2) 10%,
-    rgba(255, 255, 255, 0.9) 35%,
-    #ffffff 50%,
-    rgba(255, 255, 255, 0.9) 65%,
-    rgba(110, 231, 183, 0.3) 90%,
-    transparent 100%
-  );
-  box-shadow: 0 0 18px 6px rgba(255, 255, 255, 0.95),
-              0 0 50px 16px rgba(52, 211, 153, 0.8),
-              0 0 95px 30px rgba(16, 185, 129, 0.5);
-}
-
-.warp-flash.forest-transition::after {
-  background: radial-gradient(circle at 50% 50%,
+  background: radial-gradient(ellipse at center,
     #ffffff 0%,
-    rgba(255, 255, 255, 1) 20%,
-    rgba(220, 252, 231, 0.85) 45%,
-    rgba(52, 211, 153, 0.35) 68%,
-    transparent 82%
+    #f0fdf4 35%,
+    #dcfce7 68%,
+    #bbf7d0 100%
   );
-  box-shadow: 0 0 70px 30px rgba(255, 255, 255, 0.95),
-              0 0 130px 55px rgba(52, 211, 153, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: opacity 0.75s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.75s ease;
 }
 
-/* Variant: Full-Screen Sanctum Void Fade for Logout (No blinding flash) */
+/* Variant: Full-Screen Sanctum Void Fade for Logout */
 .warp-flash.void-transition {
   background: radial-gradient(ellipse at center, #0a1024 0%, #060a1a 50%, #02040c 100%);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.warp-flash.void-transition::before,
-.warp-flash.void-transition::after {
-  display: none !important;
-}
-
-.warp-flash.void-transition.flash-active {
-  animation: none !important;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.38s ease-in-out, visibility 0.38s;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.65s ease;
 }
 
 /* ==========================================================================
