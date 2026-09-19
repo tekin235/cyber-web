@@ -176,39 +176,44 @@ class SoundFX {
     }, 150);
   }
 
-  playCloudDive() {
+  playDashboardReveal() {
     if (!APP_STATE.soundEnabled) return;
     this.init();
     if (!this.ctx) return;
 
-    // Soft celestial wind whoosh as viewer dives between towering clouds
-    const bufferSize = this.ctx.sampleRate * 2.2;
-    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
+    // Sub resonant boom
+    const sub = this.ctx.createOscillator();
+    const subGain = this.ctx.createGain();
+    sub.type = 'sine';
+    sub.frequency.setValueAtTime(110, this.ctx.currentTime);
+    sub.frequency.exponentialRampToValueAtTime(45, this.ctx.currentTime + 1.2);
 
-    const noise = this.ctx.createBufferSource();
-    noise.buffer = buffer;
+    subGain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+    subGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 1.4);
 
-    const filter = this.ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(280, this.ctx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 1.0);
-    filter.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 2.0);
+    sub.connect(subGain);
+    subGain.connect(this.ctx.destination);
+    sub.start();
+    sub.stop(this.ctx.currentTime + 1.4);
 
-    const gain = this.ctx.createGain();
-    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.15, this.ctx.currentTime + 0.8);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2.1);
+    // Ethereal chord shimmer: A3 (220), C#4 (277.18), E4 (329.63), A4 (440)
+    const chord = [220, 277.18, 329.63, 440];
+    chord.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const start = this.ctx.currentTime + 0.1 + idx * 0.08;
 
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, start);
 
-    noise.start();
-    noise.stop(this.ctx.currentTime + 2.1);
+      gain.gain.setValueAtTime(0.09, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 1.2);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(start);
+      osc.stop(start + 1.2);
+    });
   }
 }
 
@@ -367,8 +372,7 @@ class SanctumApp {
       gateIndicator: document.getElementById('gateIndicator'),
       gateStatusDot: document.getElementById('gateStatusDot'),
       gateTitleBadge: document.getElementById('gateTitleBadge'),
-      keystoneSigil: document.getElementById('keystoneSigil'),
-      cloudsOverlay: document.getElementById('cloudsOverlay')
+      keystoneSigil: document.getElementById('keystoneSigil')
     };
 
     this.init();
@@ -477,17 +481,25 @@ class SanctumApp {
     }
 
     // =========================================================================
-    // CINEMATIC TRANSITION VIDEO EVENTS
+    // CINEMATIC TRANSITION VIDEO EVENTS (Let video play out fully)
     // =========================================================================
     if (this.dom.portalVideo) {
       this.dom.portalVideo.addEventListener('ended', () => {
-        this.completePortalWarp();
+        // Video finished naturally: trigger flash peak and complete warp
+        if (this.dom.transitionWarpFlash) {
+          this.dom.transitionWarpFlash.classList.add('flash-active');
+        }
+        setTimeout(() => {
+          this.completePortalWarp();
+        }, 120);
       });
 
       this.dom.portalVideo.addEventListener('timeupdate', () => {
         const video = this.dom.portalVideo;
+        if (!video.duration || isNaN(video.duration)) return;
         const remaining = video.duration - video.currentTime;
-        if (remaining <= 0.45 && APP_STATE.isTransitioning && this.dom.transitionWarpFlash) {
+        // Build up warp flash in final 0.4 seconds of video
+        if (remaining <= 0.4 && APP_STATE.isTransitioning && this.dom.transitionWarpFlash) {
           this.dom.transitionWarpFlash.classList.add('flash-active');
         }
       });
@@ -565,55 +577,51 @@ class SanctumApp {
   }
 
   // ===========================================================================
-  // CINEMATIC WARP ORCHESTRATION & CLOUD EMERGENCE
+  // CINEMATIC WARP ORCHESTRATION
   // ===========================================================================
   triggerPortalWarp() {
     APP_STATE.isTransitioning = true;
     sfx.playWarpWhoosh();
-
-    // Prepare transition screen and reset previous states
-    if (this.dom.transitionWarpFlash) {
-      this.dom.transitionWarpFlash.classList.remove('flash-active');
-    }
-    if (this.dom.pageDashboard) {
-      this.dom.pageDashboard.classList.remove('emerge-from-clouds');
-    }
-    if (this.dom.cloudsOverlay) {
-      this.dom.cloudsOverlay.classList.remove('active', 'parting');
-    }
 
     // Show video transition screen
     this.showScreen('portalTransitionSection');
 
     if (this.dom.portalVideo) {
       this.dom.portalVideo.currentTime = 0;
+
+      if (this.dom.transitionWarpFlash) {
+        this.dom.transitionWarpFlash.classList.remove('flash-active');
+      }
+
       const playPromise = this.dom.portalVideo.play();
       if (playPromise !== undefined) {
         playPromise.catch((err) => {
-          console.warn('Video autoplay blocked or failed, continuing:', err);
-          // Fallback only if video genuinely fails to play
+          console.warn('Autoplay prevented or playback error:', err);
+          // Only fallback if video playback is prevented by browser policy
           setTimeout(() => {
-            this.completePortalWarp();
+            if (APP_STATE.isTransitioning) {
+              this.completePortalWarp();
+            }
           }, 3500);
         });
       }
 
-      // Allow the video to play out FULLY until 'ended'.
-      // We only keep a generous safety watchdog in case playback is suspended by OS:
+      // Generous safety timer ONLY if video somehow stalls indefinitely (video is ~5.05s)
       clearTimeout(this.warpFallbackTimer);
-      const safeDuration = this.dom.portalVideo.duration 
-        ? (this.dom.portalVideo.duration + 4) * 1000 
-        : 45000;
+      const safeDuration = (this.dom.portalVideo.duration && !isNaN(this.dom.portalVideo.duration))
+        ? (this.dom.portalVideo.duration + 2.5) * 1000
+        : 8500;
+
       this.warpFallbackTimer = setTimeout(() => {
         if (APP_STATE.isTransitioning) {
-          console.warn('Video watchdog timeout reached, completing transition.');
+          console.warn('Warp fallback triggered after full duration window');
           this.completePortalWarp();
         }
       }, safeDuration);
     } else {
       setTimeout(() => {
         this.completePortalWarp();
-      }, 1500);
+      }, 2500);
     }
   }
 
@@ -622,46 +630,39 @@ class SanctumApp {
     APP_STATE.isTransitioning = false;
     clearTimeout(this.warpFallbackTimer);
 
-    // 1. Peak warp flash
+    // Peak white-gold radiance flash
     if (this.dom.transitionWarpFlash) {
       this.dom.transitionWarpFlash.classList.add('flash-active');
     }
 
-    // 2. Pre-mount clouds overlay so it is ready at 100% opacity behind the flash
-    if (this.dom.cloudsOverlay) {
-      this.dom.cloudsOverlay.classList.remove('parting');
-      this.dom.cloudsOverlay.classList.add('active');
-    }
-
-    // 3. Dissolve white flash into the celestial clouds — revealing them clearly!
     setTimeout(() => {
+      // Transition to Page 3 (Dashboard)
       this.showScreen('pageDashboard');
-      sfx.playCloudDive();
 
-      if (this.dom.transitionWarpFlash) {
-        this.dom.transitionWarpFlash.classList.remove('flash-active');
-      }
-    }, 180);
-
-    // 4. Give the user sustained time (~450ms) to clearly admire the clouds before fly-through commences!
-    setTimeout(() => {
-      if (this.dom.cloudsOverlay) {
-        this.dom.cloudsOverlay.classList.add('parting');
-      }
+      // Trigger choreographed Page 3 entrance animations after the flash
       if (this.dom.pageDashboard) {
-        this.dom.pageDashboard.classList.add('emerge-from-clouds');
-      }
-    }, 620);
+        this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
+        void this.dom.pageDashboard.offsetWidth; // Force CSS reflow
+        this.dom.pageDashboard.classList.add('dashboard-enter-anim');
 
-    // 5. Clean up cloud overlay after the emergence animation fully completes
-    setTimeout(() => {
-      if (this.dom.cloudsOverlay) {
-        this.dom.cloudsOverlay.classList.remove('active', 'parting');
+        // Play ambient sanctuary chime / resonance
+        sfx.playDashboardReveal();
+
+        // Clean up entrance animation class once completed (~2.2s)
+        setTimeout(() => {
+          if (this.dom.pageDashboard) {
+            this.dom.pageDashboard.classList.remove('dashboard-enter-anim');
+          }
+        }, 2200);
       }
-      if (this.dom.pageDashboard) {
-        this.dom.pageDashboard.classList.remove('emerge-from-clouds');
-      }
-    }, 3800);
+
+      // Dissolve the warp flash smoothly
+      setTimeout(() => {
+        if (this.dom.transitionWarpFlash) {
+          this.dom.transitionWarpFlash.classList.remove('flash-active');
+        }
+      }, 120);
+    }, 280);
   }
 
   // ===========================================================================
