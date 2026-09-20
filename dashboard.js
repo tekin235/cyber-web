@@ -524,7 +524,7 @@ class DashboardApp {
     }
 
     setTimeout(() => {
-      window.location.replace('index.html#login');
+      window.location.replace('index.html');
     }, 380);
   }
 
@@ -575,11 +575,11 @@ class DashboardApp {
       window.onIntroductionClick();
     }
 
-    // Smooth, slow emerald grove transition to the Introduction Module
+    // Smooth dimensional transition to the Introduction Module
     setTimeout(() => {
       if (this.dom.dashboardWarpFlash) {
-        this.dom.dashboardWarpFlash.classList.remove('void-transition');
-        this.dom.dashboardWarpFlash.classList.add('forest-transition', 'flash-active');
+        this.dom.dashboardWarpFlash.classList.remove('void-transition', 'forest-transition');
+        this.dom.dashboardWarpFlash.classList.add('flash-active');
       }
       setTimeout(() => {
         window.location.href = 'introduction-module/index.html';

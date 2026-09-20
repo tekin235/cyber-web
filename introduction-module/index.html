@@ -35,48 +35,57 @@
       --font-accent: 'Outfit', sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
 
-      /* Forest Color Tokens */
-      --color-forest-dark: #030a06;
-      --color-forest-bg: #05140d;
-      --color-forest-mid: #0b2217;
-      --color-forest-canopy: #123826;
-      --color-forest-light: #1a4f36;
+      /* Clean Minimalist Theme (Dark Slate & Charcoal) */
+      --color-bg-dark: #090d16;
+      --color-bg-base: #0f172a;
+      --color-bg-card: #1e293b;
+      --color-bg-card-hover: #27354f;
 
-      /* Foliage & Spore Emeralds */
-      --color-emerald: #10b981;
-      --color-emerald-glow: rgba(16, 185, 129, 0.4);
-      --color-emerald-bright: #34d399;
-      --color-emerald-mint: #6ee7b7;
+      /* UI Panels */
+      --color-panel: rgba(15, 23, 42, 0.94);
+      --color-panel-2: rgba(30, 41, 59, 0.94);
+      --color-border: rgba(51, 65, 85, 0.65);
+      --color-border-glow: rgba(56, 189, 248, 0.35);
 
-      /* Ancient Timber & Bark */
-      --color-timber-dark: #22140a;
-      --color-timber: #3d2413;
-      --color-timber-light: #6a4325;
-      --color-timber-border: rgba(138, 93, 56, 0.35);
+      /* Primary Brand / Clean Cyber Blue & Cyan */
+      --color-primary: #38bdf8;
+      --color-primary-bright: #7dd3fc;
+      --color-primary-glow: rgba(56, 189, 248, 0.25);
+      --color-cyan: #06b6d4;
 
-      /* River & Lake Luminous Blues */
-      --color-river-deep: #022538;
+      /* Gold & Amber Highlights */
+      --color-gold: #f59e0b;
+      --color-gold-bright: #fbbf24;
+      --color-gold-glow: rgba(245, 158, 11, 0.25);
+
+      /* Status Colors */
+      --color-success: #10b981;
+      --color-success-bright: #34d399;
+      --color-red: #ef4444;
+
+      /* Compatibility Aliases for Challenge Components */
+      --color-forest-dark: #090d16;
+      --color-forest-bg: #0f172a;
+      --color-forest-mid: #1e293b;
+      --color-forest-canopy: #243048;
+      --color-forest-light: #334155;
+      --color-emerald: #38bdf8;
+      --color-emerald-glow: rgba(56, 189, 248, 0.25);
+      --color-emerald-bright: #38bdf8;
+      --color-emerald-mint: #7dd3fc;
+      --color-timber-dark: #0f172a;
+      --color-timber: #1e293b;
+      --color-timber-light: #334155;
+      --color-timber-border: rgba(51, 65, 85, 0.65);
+      --color-river-deep: #0f172a;
       --color-river-blue: #0284c7;
       --color-river-sparkle: #38bdf8;
-      --color-water-glow: rgba(56, 189, 248, 0.35);
-
-      /* Warm Lantern & Firefly Amber */
+      --color-water-glow: rgba(56, 189, 248, 0.25);
       --color-lantern: #f59e0b;
       --color-lantern-bright: #fbbf24;
-      --color-lantern-glow: rgba(251, 191, 36, 0.4);
-      --color-gold: #fbbf24;
-      --color-gold-bright: #fef08a;
-
-      /* Cave Stone */
-      --color-cave-stone: #131c19;
-      --color-cave-border: rgba(52, 211, 153, 0.25);
-
-      /* UI Panels (Glassmorphic Moss/Basalt) */
-      --color-panel: rgba(8, 24, 16, 0.88);
-      --color-panel-2: rgba(13, 38, 26, 0.92);
-      --color-border: rgba(52, 211, 153, 0.22);
-      --color-border-glow: rgba(52, 211, 153, 0.45);
-      --color-red: #ef4444;
+      --color-lantern-glow: rgba(245, 158, 11, 0.25);
+      --color-cave-stone: #111827;
+      --color-cave-border: rgba(51, 65, 85, 0.65);
 
       --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -91,17 +100,17 @@
     html, body {
       width: 100%;
       min-height: 100%;
-      background-color: var(--color-forest-dark);
+      background-color: var(--color-bg-dark);
+      background-image: radial-gradient(circle at 50% 10%, #17223b 0%, #090d16 65%);
+      background-attachment: fixed;
       color: #e2e8f0;
       font-family: var(--font-ui);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    /* =========================================================================
-       FOREST ENVIRONMENT BACKDROP (Sky, Mist, Trees, River, Lake, Cave, Treehouse)
-       ========================================================================= */
-    .forest-backdrop {
+    /* Clean Minimal Backdrop */
+    .module-backdrop {
       position: fixed;
       inset: 0;
       pointer-events: none;
@@ -109,113 +118,14 @@
       overflow: hidden;
     }
 
-    /* Ambient Twilight Canopy Sky Gradient */
-    .forest-sky {
+    .module-ambient-grid {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 15%, #0e3424 0%, #061910 50%, #030a06 100%);
-    }
-
-    /* Animated Forest Mist Layers */
-    .forest-mist-layer {
-      position: absolute;
-      left: -50%;
-      width: 200%;
-      height: 100%;
-      background: radial-gradient(ellipse at 50% 40%, rgba(16, 185, 129, 0.07) 0%, transparent 60%),
-                  radial-gradient(ellipse at 30% 70%, rgba(56, 189, 248, 0.06) 0%, transparent 50%),
-                  radial-gradient(ellipse at 70% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 55%);
-      animation: mistDrift 38s ease-in-out infinite alternate;
-      opacity: 0.85;
-    }
-
-    .forest-mist-layer-2 {
-      position: absolute;
-      left: -30%;
-      width: 160%;
-      height: 100%;
-      background: radial-gradient(ellipse at 60% 30%, rgba(52, 211, 153, 0.06) 0%, transparent 50%),
-                  radial-gradient(ellipse at 40% 85%, rgba(6, 78, 59, 0.15) 0%, transparent 60%);
-      animation: mistDrift2 48s ease-in-out infinite alternate;
-      opacity: 0.7;
-    }
-
-    @keyframes mistDrift {
-      0% { transform: translateX(0) translateY(0); }
-      50% { transform: translateX(6%) translateY(-20px); }
-      100% { transform: translateX(-4%) translateY(10px); }
-    }
-
-    @keyframes mistDrift2 {
-      0% { transform: translateX(0) scale(1); }
-      50% { transform: translateX(-5%) scale(1.04); }
-      100% { transform: translateX(3%) scale(0.98); }
-    }
-
-    /* Fireflies Canvas */
-    #forestParticlesCanvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-
-    /* Environmental Scenery SVG Container */
-    .forest-scenery-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-      object-fit: cover;
-    }
-
-    /* Hanging Canopy Foliage at Top */
-    .canopy-vines {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 140px;
-      background: radial-gradient(ellipse at 20% 0%, rgba(16, 68, 42, 0.6) 0%, transparent 70%),
-                  radial-gradient(ellipse at 80% 0%, rgba(16, 68, 42, 0.6) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 3;
-    }
-
-    /* Lantern Sway Animation */
-    @keyframes lanternSway {
-      0% { transform: rotate(-5deg); }
-      50% { transform: rotate(5deg); }
-      100% { transform: rotate(-5deg); }
-    }
-
-    .swaying-lantern {
-      transform-origin: 1720px 420px;
-      animation: lanternSway 4.2s ease-in-out infinite;
-    }
-
-    /* Water Ripple Shimmer Animation */
-    @keyframes waterShimmer {
-      0% { opacity: 0.45; stroke-dashoffset: 0; }
-      50% { opacity: 0.85; stroke-dashoffset: 40; }
-      100% { opacity: 0.45; stroke-dashoffset: 80; }
-    }
-
-    .ripple-wave {
-      stroke-dasharray: 12, 18;
-      animation: waterShimmer 6s linear infinite;
-    }
-
-    /* Cave Rune Glow Animation */
-    @keyframes runeGlow {
-      0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 4px #10b981); }
-      50% { opacity: 0.95; filter: drop-shadow(0 0 12px #34d399); }
-    }
-
-    .cave-rune {
-      animation: runeGlow 3.6s ease-in-out infinite;
+      background-size: 48px 48px;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      opacity: 0.8;
     }
 
     /* =========================================================================
@@ -1431,7 +1341,7 @@
       font-size: 0.78rem;
     }
 
-    /* Slow, Gentle Emerald Forest Portal Veil */
+    /* Smooth Celestial Portal Veil */
     .forest-portal-veil {
       position: fixed;
       top: 0;
@@ -1444,9 +1354,9 @@
       pointer-events: none;
       background: radial-gradient(ellipse at center,
         #ffffff 0%,
-        #f0fdf4 35%,
-        #dcfce7 68%,
-        #bbf7d0 100%
+        #f8fafc 35%,
+        #e2e8f0 68%,
+        #94a3b8 100%
       );
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
@@ -1465,214 +1375,11 @@
   <!-- Smooth Celestial Forest Portal Veil -->
   <div class="forest-portal-veil" id="forestPortalVeil"></div>
 
+
+  <!-- CLEAN AMBIENT BACKDROP                                                  -->
   <!-- ===================================================================== -->
-  <!-- FOREST ENVIRONMENT BACKDROP (Trees, River, Lake, Cave, Treehouse)       -->
-  <!-- ===================================================================== -->
-  <div class="forest-backdrop">
-    <!-- Twilight Sky & Mist -->
-    <div class="forest-sky"></div>
-    <div class="forest-mist-layer"></div>
-    <div class="forest-mist-layer-2"></div>
-    <div class="canopy-vines"></div>
-
-    <!-- Fireflies / Bioluminescent Forest Spores Canvas -->
-    <canvas id="forestParticlesCanvas"></canvas>
-
-    <!-- Scalable Forest Scenery SVG Artwork -->
-    <svg class="forest-scenery-svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Gradients -->
-        <linearGradient id="trunkGradLeft" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#140b05" />
-          <stop offset="60%" stop-color="#2a170a" />
-          <stop offset="100%" stop-color="#3d220f" />
-        </linearGradient>
-
-        <linearGradient id="trunkGradRight" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#2a170a" />
-          <stop offset="70%" stop-color="#190e06" />
-          <stop offset="100%" stop-color="#0e0703" />
-        </linearGradient>
-
-        <linearGradient id="canopyGradDeep" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0a2a19" />
-          <stop offset="50%" stop-color="#061b10" />
-          <stop offset="100%" stop-color="#030c07" />
-        </linearGradient>
-
-        <linearGradient id="canopyGradMid" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#104428" />
-          <stop offset="70%" stop-color="#092918" />
-          <stop offset="100%" stop-color="#04130b" />
-        </linearGradient>
-
-        <linearGradient id="lakeGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#042636" stop-opacity="0.8" />
-          <stop offset="40%" stop-color="#073d4c" stop-opacity="0.9" />
-          <stop offset="100%" stop-color="#02141c" stop-opacity="0.95" />
-        </linearGradient>
-
-        <linearGradient id="riverStreamGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.6" />
-          <stop offset="50%" stop-color="#0284c7" stop-opacity="0.75" />
-          <stop offset="100%" stop-color="#0369a1" stop-opacity="0.85" />
-        </linearGradient>
-
-        <radialGradient id="lanternRadial" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#fef08a" stop-opacity="0.95" />
-          <stop offset="40%" stop-color="#fbbf24" stop-opacity="0.65" />
-          <stop offset="80%" stop-color="#f59e0b" stop-opacity="0.2" />
-          <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
-        </radialGradient>
-
-        <radialGradient id="caveRuneGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#34d399" stop-opacity="0.9" />
-          <stop offset="60%" stop-color="#10b981" stop-opacity="0.4" />
-          <stop offset="100%" stop-color="#059669" stop-opacity="0" />
-        </radialGradient>
-      </defs>
-
-      <!-- 1. DISTANT MOUNTAINS & FOREST RIDGES -->
-      <path d="M 0 680 Q 300 560 650 640 T 1350 610 T 1920 630 L 1920 1080 L 0 1080 Z" fill="#05160e" opacity="0.6" />
-      <path d="M 0 740 C 420 680, 800 730, 1150 710 C 1500 690, 1750 720, 1920 700 L 1920 1080 L 0 1080 Z" fill="#04120b" opacity="0.75" />
-
-      <!-- 2. WINDING RIVER & TRANQUIL LAKE -->
-      <!-- Winding River flowing from middle valley down to foreground lake -->
-      <path d="M 720 700 C 760 740, 830 760, 800 800 C 770 840, 680 870, 710 920 C 740 960, 860 990, 920 1080 L 640 1080 C 600 1010, 560 960, 580 910 C 610 840, 690 810, 680 770 C 670 730, 690 710, 720 700 Z" fill="url(#riverStreamGrad)" opacity="0.75" />
-
-      <!-- Foreground Lake Body -->
-      <path d="M 0 880 C 380 840, 720 890, 1050 860 C 1380 830, 1680 880, 1920 850 L 1920 1080 L 0 1080 Z" fill="url(#lakeGrad)" />
-
-      <!-- River & Lake Water Shimmer Ripples -->
-      <path class="ripple-wave" d="M 120 920 Q 350 900 580 930" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.5" />
-      <path class="ripple-wave" d="M 640 950 Q 880 930 1120 960" stroke="#67e8f9" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6" style="animation-delay:-2s;" />
-      <path class="ripple-wave" d="M 1180 910 Q 1420 890 1660 920" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5" style="animation-delay:-4s;" />
-      <path class="ripple-wave" d="M 280 980 Q 560 960 840 990" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.4" style="animation-delay:-1.5s;" />
-      <path class="ripple-wave" d="M 980 1010 Q 1280 980 1560 1020" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.5" style="animation-delay:-3.5s;" />
-
-      <!-- Lily Pads & Water Reeds on Lake Shore -->
-      <ellipse cx="260" cy="940" rx="22" ry="7" fill="#0f4a2d" />
-      <ellipse cx="295" cy="948" rx="16" ry="5" fill="#145a37" />
-      <ellipse cx="880" cy="970" rx="26" ry="8" fill="#0f4a2d" />
-      <ellipse cx="915" cy="978" rx="18" ry="6" fill="#145a37" />
-      <ellipse cx="1320" cy="940" rx="20" ry="6" fill="#0f4a2d" />
-
-      <!-- 3. LEFT FLANK: MASSIVE ANCIENT OAK & GNARLED ROOTS -->
-      <!-- Gnarled Roots gripping shoreline -->
-      <path d="M 0 920 Q 120 960 180 1080 L 0 1080 Z" fill="#170d06" />
-      <path d="M 80 880 Q 220 920 260 1080 L 160 1080 Z" fill="#24130a" />
-
-      <!-- Massive Tree Trunk Left -->
-      <path d="M -60 1080 C 140 940, 80 720, 110 520 C 130 380, 80 180, 50 0 L -80 0 Z" fill="url(#trunkGradLeft)" />
-      <!-- Tree Bark Ridges -->
-      <path d="M 20 860 Q 90 640 70 420 Q 90 260 50 80" stroke="#3d220f" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.6" />
-      <path d="M 70 940 Q 120 760 100 560 Q 120 380 80 200" stroke="#4a2a13" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5" />
-      <!-- Creeping Moss on Trunk -->
-      <path d="M 50 780 Q 90 740 60 700 Q 110 650 75 600" stroke="#10b981" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.4" />
-
-      <!-- Ancient Branches Arching Over Left/Top -->
-      <path d="M 110 440 C 220 380, 360 410, 480 340 C 560 300, 680 320, 780 260" stroke="#24130a" stroke-width="26" stroke-linecap="round" fill="none" />
-      <path d="M 100 280 C 240 220, 440 240, 580 160 C 660 120, 760 130, 840 80" stroke="#1e1008" stroke-width="20" stroke-linecap="round" fill="none" />
-
-      <!-- Canopy Foliage Clusters Left -->
-      <circle cx="80" cy="180" r="140" fill="url(#canopyGradDeep)" opacity="0.95" />
-      <circle cx="240" cy="220" r="130" fill="url(#canopyGradMid)" opacity="0.92" />
-      <circle cx="420" cy="260" r="120" fill="url(#canopyGradDeep)" opacity="0.9" />
-      <circle cx="580" cy="220" r="110" fill="url(#canopyGradMid)" opacity="0.88" />
-      <circle cx="720" cy="180" r="100" fill="url(#canopyGradDeep)" opacity="0.85" />
-      <circle cx="320" cy="120" r="110" fill="#145231" opacity="0.7" />
-      <circle cx="480" cy="140" r="95" fill="#1a633c" opacity="0.6" />
-
-      <!-- 4. RIGHT FLANK: ANCIENT TREETOP & HIGH CANOPY TREEHOUSE -->
-      <!-- Giant Right Tree Trunk -->
-      <path d="M 1720 1080 C 1660 920, 1690 680, 1680 480 C 1670 320, 1720 140, 1750 0 L 1980 0 L 1980 1080 Z" fill="url(#trunkGradRight)" />
-      <!-- Treehouse Support Branches -->
-      <path d="M 1690 580 C 1580 520, 1460 540, 1360 480" stroke="#24130a" stroke-width="22" stroke-linecap="round" fill="none" />
-      <path d="M 1680 460 C 1540 420, 1420 380, 1320 320" stroke="#1e1008" stroke-width="18" stroke-linecap="round" fill="none" />
-
-      <!-- CANOPY TREEHOUSE STRUCTURE -->
-      <!-- Wooden Support Struts -->
-      <line x1="1680" y1="560" x2="1520" y2="440" stroke="#3d2413" stroke-width="8" stroke-linecap="round" />
-      <line x1="1640" y1="570" x2="1620" y2="440" stroke="#3d2413" stroke-width="8" stroke-linecap="round" />
-      <!-- Treehouse Platform Deck -->
-      <rect x="1460" y="430" width="220" height="14" rx="3" fill="#54331b" stroke="#26150a" stroke-width="2" />
-      <!-- Treehouse Cabin Walls -->
-      <path d="M 1490 430 L 1490 320 L 1650 320 L 1650 430 Z" fill="#3a2211" stroke="#1f1208" stroke-width="3" />
-      <!-- Horizontal Wood Planks Texture -->
-      <line x1="1490" y1="350" x2="1650" y2="350" stroke="#4d2e18" stroke-width="2" />
-      <line x1="1490" y1="380" x2="1650" y2="380" stroke="#4d2e18" stroke-width="2" />
-      <line x1="1490" y1="410" x2="1650" y2="410" stroke="#4d2e18" stroke-width="2" />
-      <!-- Glowing Treehouse Window -->
-      <rect x="1540" y="345" width="34" height="40" rx="4" fill="#fbbf24" stroke="#1f1208" stroke-width="3" />
-      <line x1="1557" y1="345" x2="1557" y2="385" stroke="#1f1208" stroke-width="2" />
-      <line x1="1540" y1="365" x2="1574" y2="365" stroke="#1f1208" stroke-width="2" />
-      <circle cx="1557" cy="365" r="28" fill="url(#lanternRadial)" opacity="0.6" />
-      <!-- Peaked Thatched/Timber Roof -->
-      <polygon points="1460,320 1570,250 1680,320" fill="#2d190c" stroke="#190e06" stroke-width="3" />
-      <path d="M 1450 324 Q 1570 318 1690 324" stroke="#10b981" stroke-width="4" fill="none" opacity="0.6" /> <!-- Moss on eaves -->
-
-      <!-- Rope Suspension Bridge from Treehouse towards Center -->
-      <path d="M 1460 434 Q 1320 455 1180 430" stroke="#784826" stroke-width="4" fill="none" />
-      <path d="M 1460 410 Q 1320 430 1180 405" stroke="#965a30" stroke-width="3" fill="none" />
-      <!-- Bridge Vertical Rope Slats -->
-      <line x1="1420" y1="418" x2="1420" y2="442" stroke="#5a341a" stroke-width="2" />
-      <line x1="1370" y1="423" x2="1370" y2="447" stroke="#5a341a" stroke-width="2" />
-      <line x1="1320" y1="425" x2="1320" y2="449" stroke="#5a341a" stroke-width="2" />
-      <line x1="1270" y1="422" x2="1270" y2="446" stroke="#5a341a" stroke-width="2" />
-      <line x1="1220" y1="414" x2="1220" y2="438" stroke="#5a341a" stroke-width="2" />
-
-      <!-- Hanging Rope Ladder down from Treehouse -->
-      <line x1="1510" y1="444" x2="1510" y2="580" stroke="#784826" stroke-width="2.5" />
-      <line x1="1530" y1="444" x2="1530" y2="580" stroke="#784826" stroke-width="2.5" />
-      <!-- Ladder Rungs -->
-      <line x1="1510" y1="465" x2="1530" y2="465" stroke="#54331b" stroke-width="3" />
-      <line x1="1510" y1="490" x2="1530" y2="490" stroke="#54331b" stroke-width="3" />
-      <line x1="1510" y1="515" x2="1530" y2="515" stroke="#54331b" stroke-width="3" />
-      <line x1="1510" y1="540" x2="1530" y2="540" stroke="#54331b" stroke-width="3" />
-      <line x1="1510" y1="565" x2="1530" y2="565" stroke="#54331b" stroke-width="3" />
-
-      <!-- Warm Brass Lantern Hanging from Treehouse Beam -->
-      <g class="swaying-lantern">
-        <line x1="1660" y1="430" x2="1660" y2="465" stroke="#1f1208" stroke-width="2" />
-        <!-- Lantern Cage -->
-        <rect x="1650" y="465" width="20" height="26" rx="3" fill="#1f1208" />
-        <rect x="1653" y="469" width="14" height="18" rx="2" fill="#fbbf24" />
-        <!-- Lantern Radial Warm Ambient Light -->
-        <circle cx="1660" cy="478" r="70" fill="url(#lanternRadial)" opacity="0.75" />
-      </g>
-
-      <!-- Right Canopy Foliage -->
-      <circle cx="1780" cy="180" r="160" fill="url(#canopyGradDeep)" opacity="0.95" />
-      <circle cx="1620" cy="220" r="140" fill="url(#canopyGradMid)" opacity="0.9" />
-      <circle cx="1450" cy="200" r="120" fill="url(#canopyGradDeep)" opacity="0.88" />
-      <circle cx="1520" cy="120" r="110" fill="#124a2c" opacity="0.7" />
-
-      <!-- 5. LOWER RIGHT: MYSTIC MOSSY CAVE GROTTO (DESCENT TO THE DUNGEON) -->
-      <!-- Heavy Rocky Boulders of Cave Entrance -->
-      <path d="M 1520 1080 Q 1550 890 1660 840 Q 1790 820 1920 860 L 1920 1080 Z" fill="#141d1a" />
-      <path d="M 1580 1080 Q 1620 930 1720 890 Q 1830 870 1920 900 L 1920 1080 Z" fill="#0f1614" />
-      
-      <!-- The Dark Cavern Arch Mouth -->
-      <path d="M 1660 1080 C 1660 960, 1710 930, 1790 930 C 1870 930, 1920 970, 1920 1080 Z" fill="#030705" />
-
-      <!-- Ancient Stone Steps Carved into Cave Mouth -->
-      <path d="M 1720 1040 L 1860 1040 L 1870 1055 L 1710 1055 Z" fill="#202b27" />
-      <path d="M 1735 1010 L 1845 1010 L 1855 1022 L 1725 1022 Z" fill="#1b2421" />
-      <path d="M 1750 985 L 1830 985 L 1838 995 L 1742 995 Z" fill="#151d1a" />
-
-      <!-- Glowing Runic Crystals at Cave Entrance -->
-      <polygon class="cave-rune" points="1670,980 1678,960 1684,985 1675,995" fill="#34d399" />
-      <circle cx="1678" cy="975" r="30" fill="url(#caveRuneGlow)" />
-      
-      <polygon class="cave-rune" points="1870,965 1878,945 1885,970 1876,980" fill="#38bdf8" style="animation-delay:-1.8s;" />
-      <circle cx="1878" cy="960" r="30" fill="url(#caveRuneGlow)" style="animation-delay:-1.8s;" />
-
-      <!-- Moss & Hanging Ferns Draping Over Cave Mouth -->
-      <path d="M 1650 930 Q 1720 950 1790 935 Q 1860 955 1920 930" stroke="#10b981" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.7" />
-      <path d="M 1680 940 Q 1700 970 1710 980" stroke="#059669" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6" />
-      <path d="M 1760 942 Q 1775 975 1780 990" stroke="#059669" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6" />
-      <path d="M 1830 940 Q 1845 968 1850 982" stroke="#059669" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6" />
-    </svg>
+  <div class="module-backdrop">
+    <div class="module-ambient-grid"></div>
   </div>
 
   <!-- ===================================================================== -->
@@ -1680,12 +1387,12 @@
   <!-- ===================================================================== -->
   <nav class="sanctum-topbar">
     <div class="topbar-left">
-      <div class="topbar-sigil">🌿</div>
-      <div class="topbar-title">Cybersecurity Classes</div>
+      <div class="topbar-sigil">✦</div>
+      <div class="topbar-title">Cybersecurity Training Lab</div>
       <div class="topbar-crumbs">
-        <a onclick="goScreen('dashboard')">The Grove</a>
+        <a onclick="goScreen('dashboard')">Foundations Lab</a>
         <span>/</span>
-        <span id="navCrumbScene">Canopy Outpost 0417</span>
+        <span id="navCrumbScene">Terminal 0417</span>
       </div>
     </div>
 
@@ -1710,21 +1417,21 @@
     <!-- ===================================================================== -->
     <section class="screen-view active" id="screen-dashboard">
       <div class="case-dash">
-        <div class="case-tag-badge">🌲 Canopy Outpost — Leaked Archives 0417</div>
-        <h1>Someone leaked a competitor's dev server. You found the drive in the woods.</h1>
+        <div class="case-tag-badge">✦ Lab 0417 — Leaked Server Image</div>
+        <h1>Someone leaked a competitor's dev server. You acquired the forensic image.</h1>
         <p class="lead-text">
-          High in the forest canopy along the ancient river trail, an abandoned terminal was discovered. 
-          Before descending into the subterranean dungeon sanctum, you've got one evening to explore what lies inside: 
-          a stripped-down build tool, an unsecured lake portal, and a ranger guestbook. Go see what's actually on that drive.
+          An unindexed test environment was exposed during system migration.
+          Before proceeding into advanced operational zones, explore the acquired targets: 
+          a compiled binary tool, an exposed internal endpoint, and an insecure message board. Analyze what was left behind.
         </p>
 
         <div class="hero-case-card">
           <div class="hero-case-text">
             <h2>
-              <span>Open the drive</span>
-              <span style="font-size:1.1rem; color:var(--color-emerald-bright);">✦</span>
+              <span>Explore Targets</span>
+              <span style="font-size:1.1rem; color:var(--color-primary-bright);">✦</span>
             </h2>
-            <p>Three interactive woodland scenes, no setup required. Each one introduces real-world security techniques you'll master throughout your expedition.</p>
+            <p>Interactive security challenges, zero setup required. Each module covers real-world offensive and defensive techniques.</p>
             <div id="dashHeroProgress" style="display:none; margin-top: 12px;">
               <span class="room-status-badge completed" id="dashHeroProgressText">0 of 3 Challenges Completed</span>
             </div>
@@ -1741,24 +1448,24 @@
         <!-- Environmental Highlights -->
         <div class="forest-lore-strip">
           <div class="lore-card">
-            <div class="lore-icon-wrap">🏡</div>
+            <div class="lore-icon-wrap">⚙️</div>
             <div>
-              <h4>High Canopy Treehouse</h4>
-              <p>An elevated workshop hidden in the branches, running custom binary build tools.</p>
+              <h4>Binary Analysis</h4>
+              <p>A compiled utility running stripped build tools. Inspect raw assembly and string tables.</p>
             </div>
           </div>
           <div class="lore-card">
-            <div class="lore-icon-wrap">🌊</div>
+            <div class="lore-icon-wrap">🌐</div>
             <div>
-              <h4>The River & Lake Shore</h4>
-              <p>Unindexed company web portals exposed along the quiet waterside trail.</p>
+              <h4>Web Application Defense</h4>
+              <p>Unindexed application endpoints exposed during cloud migration.</p>
             </div>
           </div>
           <div class="lore-card">
-            <div class="lore-icon-wrap">🪨</div>
+            <div class="lore-icon-wrap">🛡️</div>
             <div>
-              <h4>The Cavern Descent</h4>
-              <p>Ancient mossy stone stairs leading deep into the underground dungeon gate.</p>
+              <h4>System Hardening</h4>
+              <p>Sequential lab modules unlocking as you master security fundamentals.</p>
             </div>
           </div>
         </div>
@@ -1766,22 +1473,22 @@
     </section>
 
     <!-- ===================================================================== -->
-    <!-- SCREEN 2: NINE-ROOM CHALLENGE GRID (Woodland Trail Map)                 -->
+    <!-- SCREEN 2: NINE-ROOM CHALLENGE GRID (Challenge Index)                   -->
     <!-- ===================================================================== -->
     <section class="screen-view" id="screen-module">
       <div class="module-grid-wrapper">
-        <h1>What's on the drive</h1>
+        <h1>Challenge Index</h1>
         <p class="lead-text">
-          Three woodland stations are active right now. You can navigate between them at any time — nothing needs to be finished in one sitting. 
-          The remaining cavern gates unlock as your training deepens over the semester.
+          Core challenge modules are active. You can navigate between them at any time — progress is saved automatically. 
+          Additional challenges unlock sequentially as you complete prerequisites.
         </p>
 
         <!-- Expedition Progress Tracker -->
         <div class="expedition-progress-card">
           <div class="progress-text-row">
             <div class="progress-title-wrap">
-              <span>🌿</span>
-              <span>Woodland Expedition Progress</span>
+              <span>✦</span>
+              <span>Training Lab Progress</span>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
               <button type="button" class="btn-action ghost small" style="padding:3px 10px; font-size:0.75rem; border:1px solid rgba(239,68,68,0.35); color:#f87171; border-radius:6px;" onclick="resetAllChallenges()" title="Reset all challenges and start fresh">↺ Reset Progress</button>
@@ -1798,10 +1505,10 @@
           <div class="room-card" id="card-room-binexp" onclick="handleRoomClick('binexp')">
             <div class="room-card-header">
               <div class="room-sigil-box">▧</div>
-              <span class="room-status-badge" id="badge-room-binexp">Canopy Open</span>
+              <span class="room-status-badge" id="badge-room-binexp">Active</span>
             </div>
             <h3>The build tool</h3>
-            <p>A binary called <code>vault</code> sits in the treehouse workshop. It's hiding more than it's showing.</p>
+            <p>A compiled binary called <code>vault</code> was recovered from the server image. It's hiding more than it's showing.</p>
             <div class="room-card-footer" id="footer-room-binexp" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1816,10 +1523,10 @@
           <div class="room-card" id="card-room-sqli" onclick="handleRoomClick('sqli')">
             <div class="room-card-header">
               <div class="room-sigil-box">≋</div>
-              <span class="room-status-badge" id="badge-room-sqli">Canopy Open</span>
+              <span class="room-status-badge" id="badge-room-sqli">Active</span>
             </div>
             <h3>The page that shouldn't exist</h3>
-            <p>Acme's lake portal tells crawlers to stay away from something. Naturally, you don't.</p>
+            <p>Acme's portal tells crawlers to stay away from something. Naturally, you don't.</p>
             <div class="room-card-footer" id="footer-room-sqli" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1834,10 +1541,10 @@
           <div class="room-card" id="card-room-xss" onclick="handleRoomClick('xss')">
             <div class="room-card-header">
               <div class="room-sigil-box">🪶</div>
-              <span class="room-status-badge" id="badge-room-xss">Canopy Open</span>
+              <span class="room-status-badge" id="badge-room-xss">Active</span>
             </div>
             <h3>The guestbook</h3>
-            <p>Somewhere, an admin reads every comment posted on the ranger board. Make that a problem for them.</p>
+            <p>Somewhere, an admin reads every comment posted on the support board. Make that a problem for them.</p>
             <div class="room-card-footer" id="footer-room-xss" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1848,15 +1555,15 @@
             </div>
           </div>
 
-          <!-- Room 4: Whispering Pines Wi-Fi -->
+          <!-- Room 4: Wireless Traffic Analysis -->
           <div class="room-card locked" id="card-room-wifi" onclick="handleRoomClick('wifi')">
             <div class="room-card-header">
               <div class="room-sigil-box">⇄</div>
-              <span class="room-status-badge" id="badge-room-wifi">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-wifi">Locked</span>
             </div>
-            <h3>The Whispering Pines Wi-Fi</h3>
+            <h3>Wireless Traffic Analysis</h3>
             <p>Opens with network fundamentals. Watch credentials cross the wire in plain text.</p>
-            <p class="room-lock-note" id="lock-note-wifi">Requires: Complete Station 3 (The Guestbook)</p>
+            <p class="room-lock-note" id="lock-note-wifi">Requires: Complete Module 3 (The guestbook)</p>
             <div class="room-card-footer" id="footer-room-wifi" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1867,15 +1574,15 @@
             </div>
           </div>
 
-          <!-- Room 5: The Runestone Memo -->
+          <!-- Room 5: The Encrypted Memo -->
           <div class="room-card locked" id="card-room-crypto" onclick="handleRoomClick('crypto')">
             <div class="room-card-header">
               <div class="room-sigil-box">✷</div>
-              <span class="room-status-badge" id="badge-room-crypto">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-crypto">Locked</span>
             </div>
-            <h3>The Runestone Memo</h3>
+            <h3>The Encrypted Memo</h3>
             <p>Opens with cryptography session. A secret message that was "encrypted" — barely.</p>
-            <p class="room-lock-note" id="lock-note-crypto">Requires: Complete Station 4 (The Whispering Pines Wi-Fi)</p>
+            <p class="room-lock-note" id="lock-note-crypto">Requires: Complete Module 4 (Wireless Traffic Analysis)</p>
             <div class="room-card-footer" id="footer-room-crypto" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1886,15 +1593,15 @@
             </div>
           </div>
 
-          <!-- Room 6: The Hollow Willow Form -->
+          <!-- Room 6: System Ping Diagnostics -->
           <div class="room-card locked" id="card-room-cmdinj" onclick="handleRoomClick('cmdinj')">
             <div class="room-card-header">
               <div class="room-sigil-box">⌁</div>
-              <span class="room-status-badge" id="badge-room-cmdinj">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-cmdinj">Locked</span>
             </div>
-            <h3>The Hollow Willow Form</h3>
+            <h3>System Ping Diagnostics</h3>
             <p>Opens with terminal/privilege escalation. A form field that gets passed straight to a shell.</p>
-            <p class="room-lock-note" id="lock-note-cmdinj">Requires: Complete Station 5 (The Runestone Memo)</p>
+            <p class="room-lock-note" id="lock-note-cmdinj">Requires: Complete Module 5 (The Encrypted Memo)</p>
             <div class="room-card-footer" id="footer-room-cmdinj" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1905,15 +1612,15 @@
             </div>
           </div>
 
-          <!-- Room 7: The River Ferry Ledger -->
+          <!-- Room 7: Account Billing Ledger -->
           <div class="room-card locked" id="card-room-idor" onclick="handleRoomClick('idor')">
             <div class="room-card-header">
               <div class="room-sigil-box">▤</div>
-              <span class="room-status-badge" id="badge-room-idor">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-idor">Locked</span>
             </div>
-            <h3>The River Ferry Ledger</h3>
+            <h3>Account Billing Ledger</h3>
             <p>Opens with web application security. Change one number in a URL, see a stranger's data.</p>
-            <p class="room-lock-note" id="lock-note-idor">Requires: Complete Station 6 (The Hollow Willow Form)</p>
+            <p class="room-lock-note" id="lock-note-idor">Requires: Complete Module 6 (System Ping Diagnostics)</p>
             <div class="room-card-footer" id="footer-room-idor" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1924,15 +1631,15 @@
             </div>
           </div>
 
-          <!-- Room 8: The Mossy Ravine Bridge -->
+          <!-- Room 8: Storage File Viewer -->
           <div class="room-card locked" id="card-room-traversal" onclick="handleRoomClick('traversal')">
             <div class="room-card-header">
               <div class="room-sigil-box">⛁</div>
-              <span class="room-status-badge" id="badge-room-traversal">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-traversal">Locked</span>
             </div>
-            <h3>The Mossy Ravine Bridge</h3>
+            <h3>Storage File Viewer</h3>
             <p>Opens with path traversal. A file picker that never checks where you're pointing it.</p>
-            <p class="room-lock-note" id="lock-note-traversal">Requires: Complete Station 7 (The River Ferry Ledger)</p>
+            <p class="room-lock-note" id="lock-note-traversal">Requires: Complete Module 7 (Account Billing Ledger)</p>
             <div class="room-card-footer" id="footer-room-traversal" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1943,15 +1650,15 @@
             </div>
           </div>
 
-          <!-- Room 9: The Signal Fire Lookout -->
+          <!-- Room 9: Voice Verification Hotline -->
           <div class="room-card locked" id="card-room-social" onclick="handleRoomClick('social')">
             <div class="room-card-header">
               <div class="room-sigil-box">☏</div>
-              <span class="room-status-badge" id="badge-room-social">Cave Locked</span>
+              <span class="room-status-badge" id="badge-room-social">Locked</span>
             </div>
-            <h3>The Signal Fire Lookout</h3>
+            <h3>Voice Verification Hotline</h3>
             <p>Opens with social engineering. No exploit code — just a very convincing voice.</p>
-            <p class="room-lock-note" id="lock-note-social">Requires: Complete Station 8 (The Mossy Ravine Bridge)</p>
+            <p class="room-lock-note" id="lock-note-social">Requires: Complete Module 8 (Storage File Viewer)</p>
             <div class="room-card-footer" id="footer-room-social" style="display: none;">
               <span class="completion-pill">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3">
@@ -1971,9 +1678,9 @@
     <section class="screen-view" id="screen-room-binexp">
       <div class="room-interactive-layout">
         <aside class="room-brief-panel">
-          <div class="case-tag-badge">Scene 1 — Treehouse Workshop</div>
+          <div class="case-tag-badge">Module 1 — Binary Analysis</div>
           <h2>The build tool</h2>
-          <div class="room-sub-caption">Canopy Terminal · inspect strings, figure it out as you go</div>
+          <div class="room-sub-caption">Forensic Terminal · inspect strings, figure it out as you go</div>
           
           <div class="dialogue-bubble" id="be-dialogue">
             A folder from the leak just landed on this machine. You don't know what's in it yet — 
@@ -1992,7 +1699,7 @@
         <section class="room-stage-panel">
           <div class="stage-header-row">
             <div class="stage-title-group">
-              <h1>~/leak (Canopy Terminal)</h1>
+              <h1>~/leak (Forensic Terminal)</h1>
               <span class="room-stage-badge" id="stage-badge-binexp" style="display:none;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -2173,12 +1880,12 @@
     <section class="screen-view" id="screen-room-wifi">
       <div class="room-interactive-layout">
         <aside class="room-brief-panel">
-          <div class="case-tag-badge">Scene 4 — Whispering Pines Wi-Fi</div>
-          <h2>Whispering Pines Wi-Fi</h2>
-          <div class="room-sub-caption">Radio Terminal · unencrypted broadcast packets across the pine canopy</div>
+          <div class="case-tag-badge">Module 4 — Wireless Traffic Analysis</div>
+          <h2>Wireless Traffic Analysis</h2>
+          <div class="room-sub-caption">Packet Monitor · unencrypted broadcast packets across the network</div>
 
           <div class="dialogue-bubble" id="wf-dialogue">
-            An open access point is transmitting unencrypted packets across the canopy trail. 
+            An open access point is transmitting unencrypted packets across the network. 
             Inspect the captured traffic log: <span class="hint">sniff or cat capture.pcap</span>
           </div>
 
@@ -2240,12 +1947,12 @@
     <section class="screen-view" id="screen-room-crypto">
       <div class="room-interactive-layout">
         <aside class="room-brief-panel">
-          <div class="case-tag-badge">Scene 5 — Ancient Runestone Memo</div>
-          <h2>The Runestone Memo</h2>
-          <div class="room-sub-caption">Decryption Slate · decipher the intercepted ancient Caesar/ROT13 cipher</div>
+          <div class="case-tag-badge">Module 5 — Cryptography</div>
+          <h2>The Encrypted Memo</h2>
+          <div class="room-sub-caption">Decryption Utility · decipher intercepted Caesar/ROT13 cipher text</div>
 
           <div class="dialogue-bubble" id="cr-dialogue">
-            An encrypted courier note was left in the hollow oak. The letters appear shifted by an ancient cipher. 
+            An encrypted memo was intercepted in transit. The characters appear shifted by a basic cipher. 
             <span class="hint">Adjust the Shift slider to 13 (ROT13) to reveal the message.</span>
           </div>
 
@@ -2260,7 +1967,7 @@
         <section class="room-stage-panel">
           <div class="stage-header-row">
             <div class="stage-title-group">
-              <h1>Runestone Decryption Slate</h1>
+              <h1>Cipher Decryption Utility</h1>
               <span class="room-stage-badge" id="stage-badge-crypto" style="display:none;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -2275,7 +1982,7 @@
           </div>
 
           <div class="cipher-tool-card">
-            <div style="font-size:0.85rem; color:#9bb1a4;">Intercepted Ciphertext from Canopy Courier:</div>
+            <div style="font-size:0.85rem; color:#9bb1a4;">Intercepted Ciphertext Transmission:</div>
             <div style="font-family:var(--font-mono); font-size:1.15rem; color:#fbbf24; background:#04120a; padding:12px; border-radius:8px; border:1px solid rgba(251,191,36,0.3);">
               SYNT{p4rf4e_ebg13_punpx_fhpprff}
             </div>
@@ -2314,12 +2021,12 @@
     <section class="screen-view" id="screen-room-cmdinj">
       <div class="room-interactive-layout">
         <aside class="room-brief-panel">
-          <div class="case-tag-badge">Scene 6 — The Hollow Willow Form</div>
-          <h2>The Hollow Willow Form</h2>
+          <div class="case-tag-badge">Module 6 — Command Injection</div>
+          <h2>System Ping Diagnostics</h2>
           <div class="room-sub-caption">Diagnostics Terminal · form fields piped straight to OS shell execution</div>
 
           <div class="dialogue-bubble" id="ci-dialogue">
-            This outpost server diagnostic tool pings target hosts without validating input. 
+            This server diagnostic tool pings target hosts without validating input. 
             <span class="hint">Inject a shell delimiter: 127.0.0.1; cat flag.txt</span>
           </div>
 
@@ -2334,7 +2041,7 @@
         <section class="room-stage-panel">
           <div class="stage-header-row">
             <div class="stage-title-group">
-              <h1>Outpost Diagnostics Utility</h1>
+              <h1>System Diagnostics Utility</h1>
               <span class="room-stage-badge" id="stage-badge-cmdinj" style="display:none;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -2382,13 +2089,13 @@
     <section class="screen-view" id="screen-room-idor">
       <div class="room-interactive-layout">
         <aside class="room-brief-panel">
-          <div class="case-tag-badge">Scene 7 — River Ferry Ledger</div>
-          <h2>The River Ferry Ledger</h2>
-          <div class="room-sub-caption">Passenger Portal · unauthorized direct object reference via URL parameters</div>
+          <div class="case-tag-badge">Module 7 — IDOR Analysis</div>
+          <h2>Account Billing Ledger</h2>
+          <div class="room-sub-caption">Billing Portal · unauthorized direct object reference via URL parameters</div>
 
           <div class="dialogue-bubble" id="id-dialogue">
-            You're viewing your normal passenger ticket <code>#1042</code>. Notice how the URL references the ticket ID directly: <code>?id=1042</code>. 
-            <span class="hint">Change the ticket ID to 1001 to inspect the confidential Harbor Master record.</span>
+            You're viewing your normal billing invoice <code>#1042</code>. Notice how the URL references the invoice ID directly: <code>?id=1042</code>. 
+            <span class="hint">Change the ID parameter to 1001 to inspect the administrator billing account.</span>
           </div>
 
           <div class="mech-box" id="id-mech">
@@ -2402,7 +2109,7 @@
         <section class="room-stage-panel">
           <div class="stage-header-row">
             <div class="stage-title-group">
-              <h1>acmewidgets.co/ferry/ticket (Browser)</h1>
+              <h1>acmewidgets.co/billing/invoice (Browser)</h1>
               <span class="room-stage-badge" id="stage-badge-idor" style="display:none;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -2420,7 +2127,7 @@
             <div class="browser-toolbar">
               <div class="browser-dots"><span></span><span></span><span></span></div>
               <div class="browser-addr-field" style="display:flex; align-items:center; gap:4px;">
-                <span>acmewidgets.co/ferry/ticket?id=</span>
+                <span>acmewidgets.co/billing/invoice?id=</span>
                 <input type="number" id="id-addr-input" value="1042" style="width:70px; border:1px solid #94a3b8; border-radius:4px; padding:2px 6px; font-family:var(--font-mono); font-size:0.82rem;" onchange="loadIdorTicket(this.value)" />
                 <button type="button" class="btn-action teal small" style="padding:4px 10px; font-size:0.75rem;" onclick="loadIdorTicket(document.getElementById('id-addr-input').value)">Go</button>
               </div>
@@ -2450,12 +2157,12 @@
     <section class="screen-view" id="screen-room-traversal">
       <div class="room-interactive-layout">
         <aside class="room-brief-panel">
-          <div class="case-tag-badge">Scene 8 — The Mossy Ravine Bridge</div>
-          <h2>The Mossy Ravine Bridge</h2>
-          <div class="room-sub-caption">Maintenance Viewer · unvalidated file paths escaping the web root</div>
+          <div class="case-tag-badge">Module 8 — Path Traversal</div>
+          <h2>Storage File Viewer</h2>
+          <div class="room-sub-caption">Storage Viewer · unvalidated file paths escaping the web root</div>
 
           <div class="dialogue-bubble" id="tr-dialogue">
-            This maintenance portal loads files directly from the filesystem using the <code>file</code> parameter. 
+            This storage portal loads files directly from the filesystem using the <code>file</code> parameter. 
             <span class="hint">Use ../ to escape the folder and read system files: ../../../../etc/passwd</span>
           </div>
 
@@ -2489,7 +2196,7 @@
               <div class="browser-dots"><span></span><span></span><span></span></div>
               <div class="browser-addr-field" style="display:flex; align-items:center; gap:4px;">
                 <span>acmewidgets.co/view?file=</span>
-                <input type="text" id="tr-addr-input" value="bridge_logs.txt" style="flex:1; border:1px solid #94a3b8; border-radius:4px; padding:2px 8px; font-family:var(--font-mono); font-size:0.82rem;" />
+                <input type="text" id="tr-addr-input" value="system_logs.txt" style="flex:1; border:1px solid #94a3b8; border-radius:4px; padding:2px 8px; font-family:var(--font-mono); font-size:0.82rem;" />
                 <button type="button" class="btn-action teal small" style="padding:4px 10px; font-size:0.75rem;" onclick="loadTraversalFile(document.getElementById('tr-addr-input').value)">Fetch File</button>
               </div>
             </div>
@@ -2518,12 +2225,12 @@
     <section class="screen-view" id="screen-room-social">
       <div class="room-interactive-layout">
         <aside class="room-brief-panel">
-          <div class="case-tag-badge">Scene 9 — The Signal Fire Lookout</div>
-          <h2>The Signal Fire Lookout</h2>
-          <div class="room-sub-caption">Radio Dispatch Transceiver · defending against voice urgency & impersonation</div>
+          <div class="case-tag-badge">Module 9 — Social Engineering Defense</div>
+          <h2>Voice Verification Hotline</h2>
+          <div class="room-sub-caption">Voice Hotline Dispatch · defending against urgency & impersonation attacks</div>
 
           <div class="dialogue-bubble" id="so-dialogue">
-            An urgent incoming radio broadcast is demanding emergency access credentials. 
+            An urgent incoming call is demanding emergency admin bypass credentials. 
             <span class="hint">Notice the artificial urgency and lack of identity verification. Challenge their protocol!</span>
           </div>
 
@@ -2538,7 +2245,7 @@
         <section class="room-stage-panel">
           <div class="stage-header-row">
             <div class="stage-title-group">
-              <h1>Emergency Radio Dispatch (146.520 MHz)</h1>
+              <h1>Emergency Verification Hotline (Line 01)</h1>
               <span class="room-stage-badge" id="stage-badge-social" style="display:none;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3">
                   <polyline points="20 6 9 17 4 12"></polyline>
@@ -2554,23 +2261,23 @@
 
           <div class="cipher-tool-card" style="border-color:rgba(251,191,36,0.4);">
             <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.85rem; color:#fbbf24;">
-              <span>📡 INCOMING TRANSMISSION · PRIORITY URGENT</span>
-              <span>FREQ 146.520 MHz</span>
+              <span>📡 INCOMING CALL · PRIORITY URGENT</span>
+              <span>LINE 01 · CALLER ID SPOOF DETECTED</span>
             </div>
             <div style="background:#020704; border:1px solid #163622; border-radius:8px; padding:16px; font-family:var(--font-mono); font-size:0.92rem; line-height:1.6; color:#e2e8f0;" id="so-transcript">
-              [CALLER]: "Lookout post, this is Superintendent Sterling from Regional HQ! We have a critical power breach at the underground cavern gate right now! I need you to read me the emergency keystone bypass code immediately or the whole sector goes dark!"
+              [CALLER]: "Security desk, this is Operations Director Sterling from Regional HQ! We have a critical infrastructure outage in the primary datacenter right now! I need you to read me the emergency admin bypass code immediately or the whole sector goes offline!"
             </div>
 
             <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-top:8px;">Choose your response protocol:</div>
             <div class="radio-choices-container" id="so-choices">
               <button type="button" class="radio-choice-btn" onclick="chooseSocial(1)">
-                A. "Understood Superintendent, the emergency keystone bypass code is KEYSTONE-GOLD-992. Please hurry!"
+                A. "Understood Director, the emergency admin bypass code is KEYSTONE-GOLD-992. Please hurry!"
               </button>
               <button type="button" class="radio-choice-btn" onclick="chooseSocial(2)">
-                B. "Protocol requires all emergency overrides to be verified. Please state your badge ID and call back on official frequency 144.200 MHz."
+                B. "Protocol requires all emergency overrides to be verified through the secure ticketing queue. Please state your badge ID and callback number."
               </button>
               <button type="button" class="radio-choice-btn" onclick="chooseSocial(3)">
-                C. "I don't know who you are, I'm shutting down the radio."
+                C. "I don't know who you are, I'm disconnecting the line."
               </button>
             </div>
             <div id="so-result-msg" style="display:none; font-family:var(--font-mono); font-size:0.86rem; padding:10px; border-radius:6px; margin-top:8px;"></div>
@@ -2838,10 +2545,10 @@
             badge.innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Completed`;
           } else if (unlocked) {
             badge.className = 'room-status-badge';
-            badge.textContent = 'Canopy Open';
+            badge.textContent = 'Active';
           } else {
             badge.className = 'room-status-badge';
-            badge.textContent = 'Cave Locked';
+            badge.textContent = 'Locked';
           }
         }
 
@@ -2868,17 +2575,17 @@
 
       const crumbEl = document.getElementById('navCrumbScene');
       if (crumbEl) {
-        if (id === 'dashboard') crumbEl.textContent = 'Canopy Outpost 0417';
-        else if (id === 'module') crumbEl.textContent = 'Woodland Trail';
-        else if (id === 'room-binexp') crumbEl.textContent = 'Scene 1: Treehouse Workshop';
-        else if (id === 'room-sqli') crumbEl.textContent = 'Scene 2: Lake Grotto';
-        else if (id === 'room-xss') crumbEl.textContent = 'Scene 3: Ranger Board';
-        else if (id === 'room-wifi') crumbEl.textContent = 'Scene 4: Whispering Pines Wi-Fi';
-        else if (id === 'room-crypto') crumbEl.textContent = 'Scene 5: The Runestone Memo';
-        else if (id === 'room-cmdinj') crumbEl.textContent = 'Scene 6: The Hollow Willow Form';
-        else if (id === 'room-idor') crumbEl.textContent = 'Scene 7: The River Ferry Ledger';
-        else if (id === 'room-traversal') crumbEl.textContent = 'Scene 8: The Mossy Ravine Bridge';
-        else if (id === 'room-social') crumbEl.textContent = 'Scene 9: The Signal Fire Lookout';
+        if (id === 'dashboard') crumbEl.textContent = 'Terminal 0417';
+        else if (id === 'module') crumbEl.textContent = 'Challenge Index';
+        else if (id === 'room-binexp') crumbEl.textContent = 'Module 1: Binary Analysis';
+        else if (id === 'room-sqli') crumbEl.textContent = 'Module 2: Database Injection';
+        else if (id === 'room-xss') crumbEl.textContent = 'Module 3: Cross-Site Scripting';
+        else if (id === 'room-wifi') crumbEl.textContent = 'Module 4: Wireless Traffic Analysis';
+        else if (id === 'room-crypto') crumbEl.textContent = 'Module 5: The Encrypted Memo';
+        else if (id === 'room-cmdinj') crumbEl.textContent = 'Module 6: Command Injection';
+        else if (id === 'room-idor') crumbEl.textContent = 'Module 7: IDOR Analysis';
+        else if (id === 'room-traversal') crumbEl.textContent = 'Module 8: Path Traversal';
+        else if (id === 'room-social') crumbEl.textContent = 'Module 9: Social Engineering Defense';
       }
       updateChallengesUI();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2935,7 +2642,7 @@
       if (flagbox) flagbox.classList.remove('show');
       setDialogue('be-dialogue', 'A folder from the leak just landed on this machine. You don\'t know what\'s in it yet — <span class="hint">start by looking: ls</span>');
       beSetMech('Binaries keep readable text embedded inside them — function names, messages, file paths — left over from compiling. Reading that text is usually the fastest way to learn what a program can do without touching its assembly.');
-      beLine('leak/ mounted on canopy station.', 'echo');
+      beLine('leak/ mounted on forensic workstation.', 'echo');
     }
 
     function hintBinexp() {
@@ -3236,7 +2943,7 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
       const flagbox = document.getElementById('wf-flagbox');
       if (flagbox) flagbox.classList.remove('show');
       wfLine('wlan0mon: passive tap online on channel 6.', 'echo');
-      setDialogue('wf-dialogue', 'An open access point is transmitting unencrypted packets across the canopy trail. <span class="hint">Inspect the captured traffic log: sniff or cat capture.pcap</span>');
+      setDialogue('wf-dialogue', 'An open access point is transmitting unencrypted packets across the local subnet. <span class="hint">Inspect the captured traffic log: sniff or cat capture.pcap</span>');
     }
 
     function hintWifi() {
@@ -3280,7 +2987,7 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
       if (c.startsWith('auth')) {
         if (c.includes('admin') && c.includes('p1n3s_w1f1_s3cr3t')) {
           playFlagSuccess();
-          wfLine('[AUTH OK] Canopy router session authenticated as admin.', 'out');
+          wfLine('[AUTH OK] Network router session authenticated as admin.', 'out');
           wfLine('FLAG{cl34rt3xt_cr3ds_0n_th3_w1r3}', 'flag');
           document.getElementById('wf-flagbox').classList.add('show');
           setDialogue('wf-dialogue', '✦ Network challenge complete! Unencrypted packets surrendered admin credentials without cracking.');
@@ -3467,36 +3174,36 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
         page.innerHTML = `
           <div style="padding:16px;">
             <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
-              <h3 style="margin:0; color:#0f172a;">Harbor Ferry Manifest #1001</h3>
-              <span style="background:#ef4444; color:#ffffff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px;">CONFIDENTIAL · MASTER HARBOR</span>
+              <h3 style="margin:0; color:#0f172a;">Customer Account Ledger #1001</h3>
+              <span style="background:#ef4444; color:#ffffff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px;">CONFIDENTIAL · MASTER ACCOUNT</span>
             </div>
-            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Passenger:</strong> Harbor Master Vance &amp; Expedition Escort</p>
-            <p style="font-size:0.9rem; color:#334155;"><strong>Route:</strong> Cavern Gate Terminal -&gt; Restricted Vault Island</p>
+            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Account Owner:</strong> Executive Director &amp; Core Systems Lead</p>
+            <p style="font-size:0.9rem; color:#334155;"><strong>Route:</strong> Gateway Proxy -&gt; Restricted Datacenter Node</p>
             <p style="font-size:0.9rem; color:#334155;"><strong>Clearance Key:</strong> <code style="background:#fee2e2; color:#b91c1c; padding:2px 6px; border-radius:4px;">FLAG&#123;1d0r_p4ss3ng3r_l3dg3r_l34k&#125;</code></p>
           </div>
         `;
         playFlagSuccess();
         const flagbox = document.getElementById('id-flagbox');
         if (flagbox) flagbox.classList.add('show');
-        setDialogue('id-dialogue', '✦ IDOR breached! Modifying the object identifier leaked the Harbor Master\'s private transport record.');
+        setDialogue('id-dialogue', '✦ IDOR breached! Modifying the object identifier leaked the master administrative account record.');
         markChallengeCompleted('idor');
       } else if (id === '1042') {
         page.innerHTML = `
           <div style="padding:16px;">
             <div style="display:flex; justify-content:space-between; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">
-              <h3 style="margin:0; color:#0f172a;">Harbor Ferry Ticket #1042</h3>
-              <span style="background:#10b981; color:#ffffff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px;">STANDARD PASSENGER</span>
+              <h3 style="margin:0; color:#0f172a;">Customer Invoice #1042</h3>
+              <span style="background:#10b981; color:#ffffff; font-size:0.75rem; font-weight:700; padding:2px 8px; border-radius:4px;">STANDARD CLIENT</span>
             </div>
-            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Passenger:</strong> Scout Trainee #42</p>
-            <p style="font-size:0.9rem; color:#334155;"><strong>Fare:</strong> 4 Silver Shells (Paid)</p>
-            <p style="font-size:0.9rem; color:#64748b; font-style:italic;">No elevated privileges associated with this standard passenger ticket.</p>
+            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Account Owner:</strong> Standard Client #42</p>
+            <p style="font-size:0.9rem; color:#334155;"><strong>Billing Amount:</strong> $40.00 USD (Paid)</p>
+            <p style="font-size:0.9rem; color:#64748b; font-style:italic;">No elevated privileges associated with this standard client invoice.</p>
           </div>
         `;
       } else {
         page.innerHTML = `
           <div style="padding:16px;">
-            <h3 style="margin:0; color:#0f172a;">Harbor Ferry Ticket #${id}</h3>
-            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Passenger:</strong> Guest Traveler</p>
+            <h3 style="margin:0; color:#0f172a;">Customer Invoice #${id}</h3>
+            <p style="margin-top:12px; font-size:0.9rem; color:#334155;"><strong>Account Owner:</strong> Guest User</p>
             <p style="font-size:0.9rem; color:#334155;"><strong>Status:</strong> Archived Record</p>
           </div>
         `;
@@ -3508,11 +3215,11 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
        ========================================================================= */
     function resetTraversal() {
       const input = document.getElementById('tr-addr-input');
-      if (input) input.value = 'bridge_logs.txt';
+      if (input) input.value = 'system_logs.txt';
       const flagbox = document.getElementById('tr-flagbox');
       if (flagbox) flagbox.classList.remove('show');
-      loadTraversalFile('bridge_logs.txt');
-      setDialogue('tr-dialogue', 'This maintenance portal loads files directly from the filesystem using the <code>file</code> parameter. <span class="hint">Use ../ to escape the folder and read system files: ../../../../etc/passwd</span>');
+      loadTraversalFile('system_logs.txt');
+      setDialogue('tr-dialogue', 'This storage portal loads files directly from the filesystem using the <code>file</code> parameter. <span class="hint">Use ../ to escape the folder and read system files: ../../../../etc/passwd</span>');
     }
 
     function hintTraversal() {
@@ -3537,7 +3244,7 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
             <div style="color:#ef4444; font-weight:700; margin-bottom:8px;">[SYSTEM FILE DISCLOSED: /etc/passwd]</div>
             <div>root:x:0:0:root:/root:/bin/bash</div>
             <div>daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</div>
-            <div>cavern_keeper:x:1000:1000:Keeper:/home/keeper:/bin/sh</div>
+            <div>sys_admin:x:1000:1000:Admin:/home/admin:/bin/sh</div>
             <div style="color:#10b981; font-weight:700; margin-top:8px;">FLAG&#123;d0t_d0t_sl4sh_tr4v3rs4l&#125;</div>
           </div>
         `;
@@ -3550,8 +3257,8 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
         page.innerHTML = `
           <div style="padding:16px; font-family:var(--font-mono); font-size:0.86rem; background:#f8fafc; color:#334155; border-radius:6px;">
             <div style="font-weight:700; color:#0f172a; margin-bottom:6px;">Viewing: ${f}</div>
-            <div>2026-09-18 08:00 - Suspension cables oiled and inspected.</div>
-            <div>2026-09-19 14:22 - Ravine water levels nominal. Warning: Do not expose raw filesystem endpoints.</div>
+            <div>2026-09-18 08:00 - Gateway proxy services restarted and inspected.</div>
+            <div>2026-09-19 14:22 - Storage cluster health nominal. Warning: Do not expose raw filesystem endpoints.</div>
           </div>
         `;
       }
@@ -3569,9 +3276,9 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
       if (flagbox) flagbox.classList.remove('show');
       const transcript = document.getElementById('so-transcript');
       if (transcript) {
-        transcript.textContent = '[CALLER]: "Lookout post, this is Superintendent Sterling from Regional HQ! We have a critical power breach at the underground cavern gate right now! I need you to read me the emergency keystone bypass code immediately or the whole sector goes dark!"';
+        transcript.textContent = '[CALLER]: "Security desk, this is Operations Director Sterling from Regional HQ! We have a critical infrastructure outage in the primary datacenter right now! I need you to read me the emergency admin bypass code immediately or the whole sector goes offline!"';
       }
-      setDialogue('so-dialogue', 'An urgent incoming radio broadcast is demanding emergency access credentials. <span class="hint">Notice the artificial urgency and lack of identity verification. Challenge their protocol!</span>');
+      setDialogue('so-dialogue', 'An urgent incoming call is demanding emergency admin bypass credentials. <span class="hint">Notice the artificial urgency and lack of identity verification. Challenge their protocol!</span>');
     }
 
     function hintSocial() {

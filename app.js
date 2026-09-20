@@ -10,7 +10,7 @@
 // 1. APPLICATION STATE
 // =============================================================================
 const APP_STATE = {
-  currentScreen: 'pageLogin', // 'pageLogin' | 'pageAccessCode' | 'portalTransitionSection' | 'pageDashboard'
+  currentScreen: 'pageAccessCode', // 'pageAccessCode' | 'pageLogin' | 'portalTransitionSection' | 'pageDashboard'
   soundEnabled: true,
   isGateUnlocked: false,
   isTransitioning: false,
@@ -430,25 +430,7 @@ class SanctumApp {
 
   bindEvents() {
     // =========================================================================
-    // PAGE 1: GOOGLE LOGIN
-    // =========================================================================
-    if (this.dom.btnGoogleLogin) {
-      this.dom.btnGoogleLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        sfx.playClick();
-
-        // Smooth transition to Page 2 (Access Code)
-        this.showScreen('pageAccessCode');
-        if (this.dom.accessCodeInput) {
-          setTimeout(() => {
-            this.dom.accessCodeInput.focus();
-          }, 200);
-        }
-      });
-    }
-
-    // =========================================================================
-    // PAGE 2: ACCESS CODE SUBMISSION
+    // PAGE 1: ACCESS CODE SUBMISSION
     // =========================================================================
     const handleCodeSubmit = (e) => {
       if (e) e.preventDefault();
@@ -477,17 +459,16 @@ class SanctumApp {
       // Valid access code accepted
       sfx.playClick();
       APP_STATE.accessCode = codeVal;
-      try {
-        sessionStorage.setItem('sanctumAuth', 'true');
-      } catch (e) {}
 
       if (this.dom.codeStatusMsg) {
-        this.dom.codeStatusMsg.textContent = '✦ Clearance accepted. Opening sanctum portal...';
+        this.dom.codeStatusMsg.textContent = '✦ Clearance accepted. Proceed to authentication...';
         this.dom.codeStatusMsg.className = 'card-status-message success';
       }
 
-      // Initiate Cinematic Portal Warp Transition
-      this.triggerPortalWarp();
+      // Smooth transition to Page 2 (Google Login)
+      setTimeout(() => {
+        this.showScreen('pageLogin');
+      }, 350);
     };
 
     if (this.dom.btnSubmitCode) {
@@ -498,6 +479,23 @@ class SanctumApp {
         if (e.key === 'Enter') {
           handleCodeSubmit(e);
         }
+      });
+    }
+
+    // =========================================================================
+    // PAGE 2: GOOGLE LOGIN (Triggers Cinematic Portal Warp)
+    // =========================================================================
+    if (this.dom.btnGoogleLogin) {
+      this.dom.btnGoogleLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        sfx.playClick();
+
+        try {
+          sessionStorage.setItem('sanctumAuth', 'true');
+        } catch (e) {}
+
+        // Initiate Cinematic Portal Warp Transition to Dashboard
+        this.triggerPortalWarp();
       });
     }
 
@@ -726,8 +724,8 @@ class SanctumApp {
     // Reset dungeon gate to locked state
     this.lockGateDOM();
 
-    // Smooth transition back to Page 1 (Login)
-    this.showScreen('pageLogin');
+    // Smooth transition back to Page 1 (Access Code)
+    this.showScreen('pageAccessCode');
   }
 
   // ===========================================================================
@@ -913,6 +911,8 @@ class SanctumApp {
     } else if (hash.includes('dashboard') || query.includes('dashboard')) {
       // Forward to standalone Page 3 (dashboard.html)
       window.location.href = 'dashboard.html';
+    } else {
+      this.showScreen('pageAccessCode');
     }
   }
 }
