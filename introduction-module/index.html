@@ -35,28 +35,32 @@
       --font-accent: 'Outfit', sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
 
-      /* Clean Minimalist Theme (Dark Slate & Charcoal) */
-      --color-bg-dark: #090d16;
-      --color-bg-base: #0f172a;
-      --color-bg-card: #1e293b;
-      --color-bg-card-hover: #27354f;
+      /* Royal Dark Sapphire & Sanctum Cosmic Theme (Matching Sanctum Chamber) */
+      --color-gold: #ffb833;
+      --color-gold-bright: #ffe28a;
+      --color-gold-glow: rgba(255, 184, 51, 0.45);
+      --color-dark-bg: #070b19;
+      --color-card-glass: rgba(14, 20, 42, 0.78);
+      --color-card-border: rgba(255, 215, 120, 0.22);
+      --color-card-border-glow: rgba(255, 184, 51, 0.45);
+      --color-card-hover: rgba(20, 30, 62, 0.88);
+
+      --color-bg-dark: #070b19;
+      --color-bg-base: #0c142b;
+      --color-bg-card: rgba(14, 20, 42, 0.85);
+      --color-bg-card-hover: rgba(22, 32, 66, 0.9);
 
       /* UI Panels */
-      --color-panel: rgba(15, 23, 42, 0.94);
-      --color-panel-2: rgba(30, 41, 59, 0.94);
-      --color-border: rgba(51, 65, 85, 0.65);
-      --color-border-glow: rgba(56, 189, 248, 0.35);
+      --color-panel: rgba(14, 22, 46, 0.92);
+      --color-panel-2: rgba(20, 30, 60, 0.92);
+      --color-border: rgba(255, 215, 120, 0.22);
+      --color-border-glow: rgba(255, 184, 51, 0.35);
 
-      /* Primary Brand / Clean Cyber Blue & Cyan */
-      --color-primary: #38bdf8;
-      --color-primary-bright: #7dd3fc;
-      --color-primary-glow: rgba(56, 189, 248, 0.25);
-      --color-cyan: #06b6d4;
-
-      /* Gold & Amber Highlights */
-      --color-gold: #f59e0b;
-      --color-gold-bright: #fbbf24;
-      --color-gold-glow: rgba(245, 158, 11, 0.25);
+      /* Primary Brand / Sanctum Gold */
+      --color-primary: #ffb833;
+      --color-primary-bright: #ffe28a;
+      --color-primary-glow: rgba(255, 184, 51, 0.45);
+      --color-cyan: #38bdf8;
 
       /* Status Colors */
       --color-success: #10b981;
@@ -64,28 +68,28 @@
       --color-red: #ef4444;
 
       /* Compatibility Aliases for Challenge Components */
-      --color-forest-dark: #090d16;
-      --color-forest-bg: #0f172a;
-      --color-forest-mid: #1e293b;
-      --color-forest-canopy: #243048;
-      --color-forest-light: #334155;
-      --color-emerald: #38bdf8;
-      --color-emerald-glow: rgba(56, 189, 248, 0.25);
-      --color-emerald-bright: #38bdf8;
-      --color-emerald-mint: #7dd3fc;
-      --color-timber-dark: #0f172a;
-      --color-timber: #1e293b;
-      --color-timber-light: #334155;
-      --color-timber-border: rgba(51, 65, 85, 0.65);
-      --color-river-deep: #0f172a;
-      --color-river-blue: #0284c7;
-      --color-river-sparkle: #38bdf8;
-      --color-water-glow: rgba(56, 189, 248, 0.25);
-      --color-lantern: #f59e0b;
-      --color-lantern-bright: #fbbf24;
-      --color-lantern-glow: rgba(245, 158, 11, 0.25);
-      --color-cave-stone: #111827;
-      --color-cave-border: rgba(51, 65, 85, 0.65);
+      --color-forest-dark: #070b19;
+      --color-forest-bg: #0b132b;
+      --color-forest-mid: #111a3b;
+      --color-forest-canopy: #18254f;
+      --color-forest-light: #24356b;
+      --color-emerald: #ffb833;
+      --color-emerald-glow: rgba(255, 184, 51, 0.35);
+      --color-emerald-bright: #ffe28a;
+      --color-emerald-mint: #ffd97a;
+      --color-timber-dark: #070b19;
+      --color-timber: #0f1836;
+      --color-timber-light: #1b2854;
+      --color-timber-border: rgba(255, 215, 120, 0.25);
+      --color-river-deep: #070b19;
+      --color-river-blue: #1d4ed8;
+      --color-river-sparkle: #60a5fa;
+      --color-water-glow: rgba(96, 165, 250, 0.3);
+      --color-lantern: #ffb833;
+      --color-lantern-bright: #ffe28a;
+      --color-lantern-glow: rgba(255, 184, 51, 0.45);
+      --color-cave-stone: #060914;
+      --color-cave-border: rgba(255, 215, 120, 0.22);
 
       --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -101,7 +105,7 @@
       width: 100%;
       min-height: 100%;
       background-color: var(--color-bg-dark);
-      background-image: radial-gradient(circle at 50% 10%, #17223b 0%, #090d16 65%);
+      background-image: radial-gradient(ellipse at 50% 45%, #101a38 0%, #080c1d 60%, #04060e 100%);
       background-attachment: fixed;
       color: #e2e8f0;
       font-family: var(--font-ui);
@@ -109,27 +113,60 @@
       overflow-x: hidden;
     }
 
-    /* Clean Minimal Backdrop */
-    .module-backdrop {
+    /* Ambient Starfield & Vortex Layers (Exact match to Sanctum Chamber) */
+    .emberkeep-bg {
       position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
       overflow: hidden;
+      pointer-events: none;
     }
 
-    .module-ambient-grid {
+    .stars-layer {
       position: absolute;
-      inset: 0;
-      background-size: 48px 48px;
-      background-image:
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      opacity: 0.8;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(1px 1px at 15% 20%, #ffffff, transparent),
+                  radial-gradient(1.5px 1.5px at 45% 15%, #ffd27a, transparent),
+                  radial-gradient(1px 1px at 70% 35%, #ffffff, transparent),
+                  radial-gradient(2px 2px at 85% 65%, #ffd27a, transparent),
+                  radial-gradient(1.2px 1.2px at 25% 75%, #ffffff, transparent),
+                  radial-gradient(1.5px 1.5px at 90% 18%, #ffffff, transparent),
+                  radial-gradient(1px 1px at 60% 85%, #ffd27a, transparent);
+      background-size: 550px 550px;
+      opacity: 0.6;
+    }
+
+    .sanctum-ambient-vortex {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 720px;
+      height: 720px;
+      background: radial-gradient(circle, rgba(30, 58, 138, 0.28) 0%, rgba(13, 23, 56, 0.15) 50%, transparent 75%);
+      filter: blur(50px);
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    #cavernParticlesCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
     }
 
     /* =========================================================================
-       TOP NAVIGATION BAR (Woodland Ranger Post Aesthetic)
+       TOP NAVIGATION BAR (Matching Sanctum Chamber emberkeep-nav)
        ========================================================================= */
     .sanctum-topbar {
       position: relative;
@@ -137,12 +174,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 36px;
-      border-bottom: 1px solid var(--color-border);
-      background: rgba(5, 18, 12, 0.88);
+      padding: 20px 36px;
+      border-bottom: 1px solid rgba(255, 215, 120, 0.18);
+      background: rgba(7, 11, 25, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), inset 0 -1px 0 rgba(52, 211, 153, 0.15);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), inset 0 -1px 0 rgba(255, 215, 120, 0.12);
     }
 
     .topbar-left {
@@ -152,26 +189,26 @@
     }
 
     .topbar-sigil {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #184832 0%, #071c12 100%);
-      border: 1.5px solid rgba(52, 211, 153, 0.5);
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+      background: radial-gradient(circle at 35% 35%, #2a3a6a 0%, #101938 100%);
+      border: 1px solid rgba(255, 215, 120, 0.4);
+      box-shadow: 0 0 14px rgba(255, 184, 51, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--color-emerald-bright);
+      color: var(--color-gold);
       font-size: 1.1rem;
     }
 
     .topbar-title {
       font-family: var(--font-display);
-      font-size: 1.15rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #ffffff;
       letter-spacing: 0.04em;
-      text-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+      text-shadow: 0 0 14px rgba(255, 184, 51, 0.25);
     }
 
     .topbar-crumbs {
@@ -182,11 +219,11 @@
       color: #94a3b8;
       margin-left: 10px;
       padding-left: 14px;
-      border-left: 1px solid rgba(52, 211, 153, 0.2);
+      border-left: 1px solid rgba(255, 215, 120, 0.25);
     }
 
     .topbar-crumbs a {
-      color: var(--color-emerald-bright);
+      color: var(--color-gold-bright);
       text-decoration: none;
       cursor: pointer;
       transition: color 0.2s;
@@ -212,9 +249,11 @@
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      background: linear-gradient(135deg, rgba(14, 38, 26, 0.95) 0%, rgba(6, 20, 14, 0.95) 100%);
-      border: 1.5px solid rgba(52, 211, 153, 0.4);
-      color: #f8fafc;
+      background: rgba(13, 23, 56, 0.72);
+      border: 1px solid rgba(255, 215, 120, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #e2e8f0;
       padding: 9px 20px;
       border-radius: 9999px;
       cursor: pointer;
@@ -224,25 +263,25 @@
       letter-spacing: 0.03em;
       text-decoration: none;
       transition: all 0.25s var(--ease-cinematic);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 14px rgba(16, 185, 129, 0.15);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }
 
     .btn-return-dashboard:hover {
-      background: linear-gradient(135deg, rgba(20, 56, 38, 0.95) 0%, rgba(10, 32, 22, 0.95) 100%);
-      border-color: var(--color-emerald-bright);
+      background: rgba(255, 184, 51, 0.15);
+      border-color: var(--color-gold);
       color: #ffffff;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.55), 0 0 24px rgba(16, 185, 129, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 184, 51, 0.3);
     }
 
     .btn-return-dashboard svg {
       transition: transform 0.2s ease;
-      color: var(--color-emerald-bright);
+      color: var(--color-gold);
     }
 
     .btn-return-dashboard:hover svg {
       transform: translateX(-3px);
-      color: #ffffff;
+      color: var(--color-gold-bright);
     }
 
     /* =========================================================================
@@ -282,7 +321,7 @@
     }
 
     /* =========================================================================
-       SCREEN 1: CASE FILE DASHBOARD LANDING (Treehouse Lookout / Forest Outpost)
+       SCREEN 1: CASE FILE DASHBOARD LANDING
        ========================================================================= */
     .case-dash {
       max-width: 1020px;
@@ -295,16 +334,16 @@
       align-items: center;
       gap: 8px;
       font-size: 0.78rem;
-      color: var(--color-emerald-bright);
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: var(--color-gold-bright);
+      background: rgba(255, 184, 51, 0.12);
+      border: 1px solid rgba(255, 215, 120, 0.35);
       padding: 6px 16px;
       border-radius: 9999px;
       margin-bottom: 22px;
       font-family: var(--font-mono);
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      box-shadow: 0 0 14px rgba(16, 185, 129, 0.15);
+      box-shadow: 0 0 14px rgba(255, 184, 51, 0.15);
     }
 
     .case-dash h1 {
@@ -314,23 +353,23 @@
       color: #ffffff;
       line-height: 1.25;
       margin-bottom: 14px;
-      text-shadow: 0 3px 18px rgba(0, 0, 0, 0.8), 0 0 25px rgba(16, 185, 129, 0.15);
+      text-shadow: 0 3px 18px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 184, 51, 0.15);
     }
 
     .case-dash p.lead-text {
-      color: #a7b9b0;
+      color: #94a3b8;
       font-size: 1.02rem;
       max-width: 680px;
       line-height: 1.68;
       margin-bottom: 38px;
     }
 
-    /* Hero Case Card (High Canopy Treehouse Post) */
+    /* Hero Case Card */
     .hero-case-card {
       position: relative;
       overflow: hidden;
-      border: 1.5px solid rgba(52, 211, 153, 0.35);
-      background: linear-gradient(135deg, rgba(12, 34, 23, 0.88) 0%, rgba(6, 18, 12, 0.94) 100%);
+      border: 1.5px solid rgba(255, 215, 120, 0.22);
+      background: linear-gradient(135deg, rgba(16, 24, 52, 0.85) 0%, rgba(10, 15, 34, 0.94) 100%);
       border-radius: 20px;
       padding: 38px 42px;
       display: flex;
@@ -339,13 +378,13 @@
       gap: 28px;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 30px rgba(16, 185, 129, 0.12);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 184, 51, 0.1);
       transition: transform 0.3s ease, border-color 0.3s ease;
     }
 
     .hero-case-card:hover {
-      border-color: rgba(52, 211, 153, 0.6);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(16, 185, 129, 0.22);
+      border-color: rgba(255, 215, 120, 0.55);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(255, 184, 51, 0.22);
     }
 
     .hero-case-card::after {
@@ -355,7 +394,7 @@
       top: 0;
       bottom: 0;
       width: 60%;
-      background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.1), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 120, 0.12), transparent);
       animation: scanSweep 5.5s linear infinite;
       pointer-events: none;
     }
@@ -377,7 +416,7 @@
 
     .hero-case-text p {
       margin: 0;
-      color: #9bb1a4;
+      color: #94a3b8;
       font-size: 0.95rem;
       max-width: 500px;
       line-height: 1.62;
@@ -394,21 +433,21 @@
       font-size: 0.96rem;
       padding: 14px 30px;
       border-radius: 9999px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #031c11;
-      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, #ffb833 0%, #d97706 100%);
+      color: #0b132b;
+      box-shadow: 0 8px 24px rgba(255, 184, 51, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
       transition: all 0.25s var(--ease-cinematic);
       white-space: nowrap;
     }
 
     .btn-start-case:hover {
       transform: translateY(-3px) scale(1.03);
-      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-      box-shadow: 0 12px 32px rgba(16, 185, 129, 0.6);
-      color: #02140c;
+      background: linear-gradient(135deg, #ffe28a 0%, #ffb833 100%);
+      box-shadow: 0 12px 32px rgba(255, 184, 51, 0.55);
+      color: #040814;
     }
 
-    /* Environmental Highlights Strip (Trees, Lake/River, Cave) */
+    /* Environmental Highlights Strip */
     .forest-lore-strip {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -421,8 +460,8 @@
     }
 
     .lore-card {
-      background: rgba(8, 24, 16, 0.7);
-      border: 1px solid rgba(52, 211, 153, 0.18);
+      background: rgba(14, 20, 42, 0.78);
+      border: 1px solid rgba(255, 215, 120, 0.18);
       border-radius: 14px;
       padding: 20px 22px;
       display: flex;
@@ -433,7 +472,7 @@
     }
 
     .lore-card:hover {
-      border-color: rgba(52, 211, 153, 0.4);
+      border-color: rgba(255, 215, 120, 0.45);
       transform: translateY(-2px);
     }
 
@@ -441,12 +480,12 @@
       width: 38px;
       height: 38px;
       border-radius: 10px;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(52, 211, 153, 0.3);
+      background: rgba(255, 184, 51, 0.12);
+      border: 1px solid rgba(255, 215, 120, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--color-emerald-bright);
+      color: var(--color-gold);
       font-size: 1.15rem;
       flex-shrink: 0;
     }
@@ -460,13 +499,13 @@
 
     .lore-card p {
       font-size: 0.82rem;
-      color: #9bb1a4;
+      color: #94a3b8;
       line-height: 1.5;
       margin: 0;
     }
 
     /* =========================================================================
-       SCREEN 2: NINE-ROOM CHALLENGE GRID (The Woodland Trail Map)
+       SCREEN 2: NINE-ROOM CHALLENGE GRID
        ========================================================================= */
     .module-grid-wrapper {
       max-width: 1100px;
@@ -480,11 +519,11 @@
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 8px;
-      text-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
+      text-shadow: 0 0 16px rgba(255, 184, 51, 0.25);
     }
 
     .module-grid-wrapper p.lead-text {
-      color: #9bb1a4;
+      color: #94a3b8;
       font-size: 0.96rem;
       margin-bottom: 34px;
       max-width: 700px;
@@ -506,8 +545,8 @@
 
     .room-card {
       position: relative;
-      border: 1.5px solid rgba(52, 211, 153, 0.25);
-      background: linear-gradient(145deg, rgba(12, 34, 23, 0.82) 0%, rgba(6, 18, 12, 0.92) 100%);
+      border: 1.5px solid rgba(255, 215, 120, 0.22);
+      background: linear-gradient(145deg, rgba(16, 24, 52, 0.85) 0%, rgba(10, 15, 34, 0.94) 100%);
       border-radius: 16px;
       padding: 24px;
       cursor: pointer;
@@ -517,16 +556,16 @@
     }
 
     .room-card:hover:not(.locked) {
-      border-color: var(--color-emerald-bright);
+      border-color: var(--color-gold);
       transform: translateY(-4px);
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65), 0 0 24px rgba(255, 184, 51, 0.3);
     }
 
     .room-card.locked {
       cursor: default;
       opacity: 0.52;
       border-color: rgba(255, 255, 255, 0.08);
-      background: rgba(6, 16, 11, 0.65);
+      background: rgba(8, 12, 26, 0.65);
     }
 
     .room-card.locked:hover {
@@ -545,12 +584,12 @@
       width: 38px;
       height: 38px;
       border-radius: 10px;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(52, 211, 153, 0.3);
+      background: rgba(255, 184, 51, 0.12);
+      border: 1px solid rgba(255, 215, 120, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--color-emerald-bright);
+      color: var(--color-gold-bright);
       font-size: 1.05rem;
     }
 
@@ -563,9 +602,9 @@
     .room-status-badge {
       font-size: 0.72rem;
       font-weight: 600;
-      color: var(--color-emerald-bright);
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid var(--color-emerald-glow);
+      color: var(--color-gold-bright);
+      background: rgba(255, 184, 51, 0.12);
+      border: 1px solid rgba(255, 215, 120, 0.3);
       border-radius: 9999px;
       padding: 3px 11px;
       letter-spacing: 0.04em;
@@ -588,19 +627,19 @@
     .room-card p {
       margin: 0;
       font-size: 0.86rem;
-      color: #9bb1a4;
+      color: #94a3b8;
       line-height: 1.55;
     }
 
     /* Completed Room Card Styling */
     .room-card.completed {
-      border-color: rgba(52, 211, 153, 0.7);
-      background: linear-gradient(145deg, rgba(14, 46, 30, 0.92) 0%, rgba(6, 24, 15, 0.96) 100%);
+      border-color: rgba(52, 211, 153, 0.6);
+      background: linear-gradient(145deg, rgba(14, 36, 48, 0.9) 0%, rgba(8, 20, 32, 0.95) 100%);
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 24px rgba(16, 185, 129, 0.28);
     }
 
     .room-card.completed:hover {
-      border-color: var(--color-emerald-bright);
+      border-color: var(--color-success-bright);
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 32px rgba(52, 211, 153, 0.45);
     }
 
@@ -629,7 +668,7 @@
     .room-card-footer {
       margin-top: 14px;
       padding-top: 12px;
-      border-top: 1px solid rgba(52, 211, 153, 0.25);
+      border-top: 1px solid rgba(255, 215, 120, 0.18);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -645,12 +684,12 @@
       letter-spacing: 0.02em;
     }
 
-    /* Expedition Progress Bar on Woodland Trail Screen */
+    /* Expedition Progress Bar */
     .expedition-progress-card {
       margin-bottom: 24px;
       padding: 16px 22px;
-      background: rgba(12, 34, 23, 0.85);
-      border: 1.5px solid rgba(52, 211, 153, 0.35);
+      background: rgba(14, 20, 42, 0.85);
+      border: 1.5px solid rgba(255, 215, 120, 0.22);
       border-radius: 14px;
       backdrop-filter: blur(10px);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
@@ -678,9 +717,9 @@
       font-family: var(--font-mono);
       font-size: 0.82rem;
       font-weight: 600;
-      color: var(--color-emerald-bright);
-      background: rgba(16, 185, 129, 0.14);
-      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: var(--color-gold-bright);
+      background: rgba(255, 184, 51, 0.12);
+      border: 1px solid rgba(255, 215, 120, 0.3);
       border-radius: 9999px;
       padding: 3px 12px;
     }
@@ -688,18 +727,18 @@
     .progress-track {
       width: 100%;
       height: 8px;
-      background: rgba(4, 18, 12, 0.85);
+      background: rgba(6, 10, 24, 0.85);
       border-radius: 9999px;
       overflow: hidden;
-      border: 1px solid rgba(52, 211, 153, 0.2);
+      border: 1px solid rgba(255, 215, 120, 0.18);
     }
 
     .progress-fill-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #10b981, #34d399);
+      background: linear-gradient(90deg, #ffb833, #ffe28a);
       border-radius: 9999px;
-      box-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+      box-shadow: 0 0 12px rgba(255, 184, 51, 0.6);
       transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
@@ -743,13 +782,13 @@
       font-weight: 700;
       letter-spacing: 0.06em;
       color: #ffffff;
-      text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+      text-shadow: 0 0 8px rgba(255, 184, 51, 0.5);
     }
 
     .flag-code {
       font-family: var(--font-mono);
       font-size: 1.05rem;
-      color: var(--color-emerald-bright);
+      color: var(--color-gold-bright);
     }
 
     .room-lock-note {
@@ -764,10 +803,10 @@
       display: block;
     }
 
-    /* Runestone Cipher Tool */
+    /* Runestone / Cipher Tool */
     .cipher-tool-card {
-      background: rgba(12, 34, 23, 0.92);
-      border: 1.5px solid rgba(52, 211, 153, 0.35);
+      background: rgba(14, 22, 48, 0.92);
+      border: 1.5px solid rgba(255, 215, 120, 0.3);
       border-radius: 14px;
       padding: 22px;
       display: flex;
@@ -785,7 +824,7 @@
 
     .cipher-slider-row input[type=range] {
       flex: 1;
-      accent-color: #10b981;
+      accent-color: #ffb833;
       height: 8px;
       cursor: pointer;
     }
@@ -794,18 +833,18 @@
       font-family: var(--font-mono);
       font-size: 0.95rem;
       font-weight: 700;
-      color: var(--color-emerald-bright);
+      color: var(--color-gold-bright);
       min-width: 90px;
     }
 
     .cipher-output-box {
-      background: #030a06;
-      border: 1.5px solid rgba(52, 211, 153, 0.3);
+      background: #040814;
+      border: 1.5px solid rgba(255, 215, 120, 0.3);
       border-radius: 10px;
       padding: 16px;
       font-family: var(--font-mono);
       font-size: 1.05rem;
-      color: #38bdf8;
+      color: var(--color-gold-bright);
       min-height: 48px;
       word-break: break-all;
     }
@@ -821,8 +860,8 @@
     .radio-choice-btn {
       text-align: left;
       padding: 14px 18px;
-      background: rgba(16, 185, 129, 0.08);
-      border: 1.5px solid rgba(52, 211, 153, 0.28);
+      background: rgba(255, 184, 51, 0.08);
+      border: 1.5px solid rgba(255, 215, 120, 0.25);
       border-radius: 10px;
       color: #f1f5f9;
       cursor: pointer;
@@ -833,8 +872,8 @@
     }
 
     .radio-choice-btn:hover {
-      background: rgba(16, 185, 129, 0.22);
-      border-color: var(--color-emerald-bright);
+      background: rgba(255, 184, 51, 0.2);
+      border-color: var(--color-gold);
       transform: translateX(4px);
     }
 
@@ -849,8 +888,8 @@
     .tool-input-row input {
       flex: 1;
       padding: 10px 14px;
-      background: #030a06;
-      border: 1px solid rgba(52, 211, 153, 0.3);
+      background: #040814;
+      border: 1px solid rgba(255, 215, 120, 0.3);
       border-radius: 8px;
       font-family: var(--font-mono);
       font-size: 0.88rem;
@@ -858,7 +897,7 @@
     }
 
     /* =========================================================================
-       SCREENS 3, 4, 5: INTERACTIVE ROOM LAYOUTS (Woodland Research Field Stations)
+       SCREENS 3, 4, 5: INTERACTIVE ROOM LAYOUTS
        ========================================================================= */
     .room-interactive-layout {
       display: grid;
@@ -871,9 +910,9 @@
     }
 
     .room-brief-panel {
-      border-right: 1px solid var(--color-border);
+      border-right: 1px solid rgba(255, 215, 120, 0.18);
       padding: 30px 24px;
-      background: rgba(7, 20, 14, 0.9);
+      background: rgba(10, 16, 36, 0.92);
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -883,7 +922,7 @@
     @media (max-width: 900px) {
       .room-brief-panel {
         border-right: none;
-        border-bottom: 1px solid var(--color-border);
+        border-bottom: 1px solid rgba(255, 215, 120, 0.18);
       }
     }
 
@@ -896,14 +935,14 @@
     }
 
     .room-sub-caption {
-      color: #8da396;
+      color: #94a3b8;
       font-size: 0.82rem;
       line-height: 1.45;
     }
 
     .dialogue-bubble {
-      background: rgba(12, 34, 23, 0.9);
-      border: 1px solid rgba(52, 211, 153, 0.35);
+      background: rgba(14, 22, 48, 0.9);
+      border: 1px solid rgba(255, 215, 120, 0.25);
       border-radius: 14px;
       padding: 16px;
       font-size: 0.88rem;
@@ -914,23 +953,23 @@
     }
 
     .dialogue-bubble.pulse {
-      border-color: var(--color-emerald-bright);
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.35);
+      border-color: var(--color-gold);
+      box-shadow: 0 0 20px rgba(255, 184, 51, 0.35);
     }
 
     .dialogue-bubble .hint {
       display: block;
       margin-top: 10px;
       padding-top: 10px;
-      border-top: 1px dashed rgba(52, 211, 153, 0.25);
+      border-top: 1px dashed rgba(255, 215, 120, 0.25);
       color: var(--color-gold-bright);
       font-family: var(--font-mono);
       font-size: 0.82rem;
     }
 
     .mech-box {
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(255, 215, 120, 0.25);
+      background: rgba(255, 184, 51, 0.08);
       border-radius: 12px;
       padding: 15px;
       font-size: 0.82rem;
@@ -940,14 +979,14 @@
     }
 
     .mech-box.pulse {
-      border-color: var(--color-emerald);
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+      border-color: var(--color-gold);
+      box-shadow: 0 0 16px rgba(255, 184, 51, 0.35);
     }
 
     .mech-box .label {
       display: block;
       font-size: 0.74rem;
-      color: var(--color-emerald-bright);
+      color: var(--color-gold-bright);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -959,7 +998,7 @@
       display: flex;
       flex-direction: column;
       gap: 18px;
-      background: rgba(4, 14, 9, 0.65);
+      background: rgba(7, 11, 24, 0.7);
     }
 
     .stage-header-row {
@@ -985,10 +1024,10 @@
       gap: 10px;
     }
 
-    /* Terminal Component (Woodland Basalt Console) */
+    /* Terminal Component */
     .sanctum-terminal {
-      background: #030a06;
-      border: 1.5px solid rgba(52, 211, 153, 0.25);
+      background: #040814;
+      border: 1.5px solid rgba(255, 215, 120, 0.22);
       border-radius: 14px;
       flex: 1;
       display: flex;
@@ -997,7 +1036,7 @@
       font-family: var(--font-mono);
       font-size: 0.86rem;
       min-height: 380px;
-      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.75), 0 0 20px rgba(16, 185, 129, 0.08);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.75), 0 0 20px rgba(255, 184, 51, 0.08);
     }
 
     .term-titlebar {
@@ -1005,8 +1044,8 @@
       align-items: center;
       gap: 8px;
       padding: 10px 16px;
-      background: #07160e;
-      border-bottom: 1px solid rgba(52, 211, 153, 0.15);
+      background: #091024;
+      border-bottom: 1px solid rgba(255, 215, 120, 0.15);
     }
 
     .term-titlebar span {
@@ -1033,22 +1072,22 @@
       margin-bottom: 3px;
     }
 
-    .term-line.echo { color: #8da396; }
+    .term-line.echo { color: #94a3b8; }
     .term-line.out { color: #f1f5f9; }
     .term-line.warn { color: #f87171; }
-    .term-line.flag { color: #34d399; font-weight: 700; font-size: 0.95rem; }
+    .term-line.flag { color: #ffe28a; font-weight: 700; font-size: 0.95rem; text-shadow: 0 0 10px rgba(255, 184, 51, 0.4); }
 
     .term-input-container {
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 12px 18px;
-      background: #051009;
-      border-top: 1px solid rgba(52, 211, 153, 0.15);
+      background: #060b1b;
+      border-top: 1px solid rgba(255, 215, 120, 0.15);
     }
 
     .term-prompt-label {
-      color: var(--color-emerald-bright);
+      color: var(--color-gold);
       font-weight: 600;
     }
 
@@ -1063,13 +1102,13 @@
     }
 
     .term-input-field.filled {
-      box-shadow: 0 0 0 2px var(--color-emerald);
+      box-shadow: 0 0 0 2px var(--color-gold);
     }
 
-    /* Fake Browser Component (Grotto Research Slate) */
+    /* Fake Browser Component */
     .sanctum-browser {
       background: #ffffff;
-      border: 1.5px solid rgba(52, 211, 153, 0.3);
+      border: 1.5px solid rgba(255, 215, 120, 0.28);
       border-radius: 14px;
       flex: 1;
       display: flex;
@@ -1085,7 +1124,7 @@
       gap: 10px;
       align-items: center;
       padding: 10px 14px;
-      background: #e6edea;
+      background: #e8ecf4;
       border-bottom: 1px solid #cbd5e1;
     }
 
@@ -1171,7 +1210,7 @@
     }
 
     .login-box-widget input.filled {
-      box-shadow: 0 0 0 2px var(--color-emerald);
+      box-shadow: 0 0 0 2px var(--color-gold);
     }
 
     .login-box-widget button {
@@ -1180,7 +1219,7 @@
       padding: 10px;
       border: none;
       border-radius: 6px;
-      background: #0f2e1e;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
       color: #ffffff;
       cursor: pointer;
       font-weight: 600;
@@ -1189,7 +1228,7 @@
     }
 
     .login-box-widget button:hover {
-      background: #14442b;
+      background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
     }
 
     .login-box-widget .err-text {
@@ -1228,14 +1267,14 @@
     }
 
     .guestbook-form textarea.filled {
-      box-shadow: 0 0 0 2px var(--color-emerald);
+      box-shadow: 0 0 0 2px var(--color-gold);
     }
 
     .guestbook-form button {
       padding: 9px 18px;
       border: none;
       border-radius: 6px;
-      background: #0f2e1e;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
       color: #ffffff;
       cursor: pointer;
       font-weight: 600;
@@ -1243,8 +1282,8 @@
     }
 
     .admin-review-log {
-      background: #061009;
-      border: 1px solid #1c3d28;
+      background: #040814;
+      border: 1px solid rgba(255, 215, 120, 0.2);
       border-radius: 8px;
       padding: 12px 14px;
       margin-top: 16px;
@@ -1253,23 +1292,23 @@
       color: #94a3b8;
     }
 
-    .admin-review-log .cap { color: #34d399; font-weight: 600; }
+    .admin-review-log .cap { color: var(--color-gold-bright); font-weight: 600; }
 
-    /* Flag Notification Banner (Forest Bloom) */
+    /* Flag Notification Banner */
     .flag-banner-box {
       display: none;
-      border: 1.5px solid var(--color-emerald-bright);
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(5, 40, 26, 0.9) 100%);
+      border: 1.5px solid var(--color-gold-bright);
+      background: linear-gradient(135deg, rgba(255, 184, 51, 0.18) 0%, rgba(14, 22, 48, 0.95) 100%);
       border-radius: 14px;
       padding: 16px 22px;
       font-family: var(--font-mono);
       font-size: 0.95rem;
       font-weight: 600;
-      color: #34d399;
+      color: var(--color-gold-bright);
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.35);
+      box-shadow: 0 8px 30px rgba(255, 184, 51, 0.35);
     }
 
     .flag-banner-box.show {
@@ -1290,50 +1329,50 @@
       border: none;
       cursor: pointer;
       font-family: var(--font-ui);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.85rem;
       padding: 10px 18px;
       border-radius: 8px;
-      background: var(--color-emerald);
-      color: #031c11;
+      background: linear-gradient(135deg, #ffb833 0%, #d97706 100%);
+      color: #0b132b;
       transition: all 0.2s ease;
       white-space: nowrap;
     }
 
     .btn-action:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-      background: var(--color-emerald-bright);
+      box-shadow: 0 4px 16px rgba(255, 184, 51, 0.4);
+      background: linear-gradient(135deg, #ffe28a 0%, #ffb833 100%);
     }
 
     .btn-action.ghost {
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(52, 211, 153, 0.25);
+      border: 1px solid rgba(255, 215, 120, 0.25);
       color: #f1f5f9;
     }
 
     .btn-action.ghost:hover {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(52, 211, 153, 0.5);
+      background: rgba(255, 184, 51, 0.15);
+      border-color: var(--color-gold);
       box-shadow: none;
       color: #ffffff;
     }
 
     .btn-action.teal {
-      background: var(--color-emerald);
-      color: #031c11;
+      background: linear-gradient(135deg, #ffb833 0%, #d97706 100%);
+      color: #0b132b;
       font-weight: 700;
     }
 
     .btn-action.teal-outline {
       background: transparent;
-      border: 1px solid rgba(52, 211, 153, 0.5);
-      color: #34d399;
+      border: 1px solid rgba(255, 215, 120, 0.4);
+      color: var(--color-gold-bright);
     }
 
     .btn-action.teal-outline:hover {
-      background: rgba(16, 185, 129, 0.12);
-      border-color: var(--color-emerald-bright);
+      background: rgba(255, 184, 51, 0.12);
+      border-color: var(--color-gold);
     }
 
     .btn-action.small {
@@ -1341,7 +1380,7 @@
       font-size: 0.78rem;
     }
 
-    /* Smooth Celestial Portal Veil */
+    /* Smooth Celestial Portal Veil (Warm Sanctum Radial Gradient) */
     .forest-portal-veil {
       position: fixed;
       top: 0;
@@ -1354,9 +1393,9 @@
       pointer-events: none;
       background: radial-gradient(ellipse at center,
         #ffffff 0%,
-        #f8fafc 35%,
-        #e2e8f0 68%,
-        #94a3b8 100%
+        #fffdf8 35%,
+        #fef7e6 68%,
+        #fbedcb 100%
       );
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
@@ -1376,21 +1415,23 @@
   <div class="forest-portal-veil" id="forestPortalVeil"></div>
 
 
-  <!-- CLEAN AMBIENT BACKDROP                                                  -->
+  <!-- AMBIENT STARFIELD, VORTEX & CAVERN PARTICLES CANVAS                   -->
   <!-- ===================================================================== -->
-  <div class="module-backdrop">
-    <div class="module-ambient-grid"></div>
+  <div class="emberkeep-bg">
+    <div class="stars-layer"></div>
+    <div class="sanctum-ambient-vortex"></div>
+    <canvas id="cavernParticlesCanvas"></canvas>
   </div>
 
   <!-- ===================================================================== -->
-  <!-- TOP NAVIGATION BAR                                                     -->
+  <!-- TOP NAVIGATION BAR (Matching Sanctum Chamber)                         -->
   <!-- ===================================================================== -->
   <nav class="sanctum-topbar">
     <div class="topbar-left">
-      <div class="topbar-sigil">✦</div>
-      <div class="topbar-title">Cybersecurity Training Lab</div>
+      <div class="topbar-sigil" aria-hidden="true">✦</div>
+      <div class="topbar-title">Cybersecurity Classes</div>
       <div class="topbar-crumbs">
-        <a onclick="goScreen('dashboard')">Foundations Lab</a>
+        <a onclick="goScreen('dashboard')">Introduction Module</a>
         <span>/</span>
         <span id="navCrumbScene">Terminal 0417</span>
       </div>
@@ -2302,83 +2343,7 @@
   </main>
 
   <script>
-    // =========================================================================
-    // BIOLUMINESCENT FIREFLIES & FOREST SPORES CANVAS
-    // =========================================================================
-    (function initForestParticles() {
-      const canvas = document.getElementById('forestParticlesCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let width = canvas.width = window.innerWidth;
-      let height = canvas.height = window.innerHeight;
 
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
-
-      const particles = [];
-      const PARTICLE_COUNT = 48;
-
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 2.2 + 1.2,
-          color: Math.random() > 0.45 ? 'rgba(52, 211, 153, ' : 'rgba(251, 191, 36, ',
-          alpha: Math.random() * 0.7 + 0.2,
-          speedY: Math.random() * 0.45 + 0.15,
-          driftAngle: Math.random() * Math.PI * 2,
-          driftSpeed: Math.random() * 0.02 + 0.01,
-          pulseSpeed: Math.random() * 0.03 + 0.01,
-          pulsePhase: Math.random() * Math.PI
-        });
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, width, height);
-
-        for (let i = 0; i < particles.length; i++) {
-          const p = particles[i];
-          p.driftAngle += p.driftSpeed;
-          p.pulsePhase += p.pulseSpeed;
-
-          p.x += Math.sin(p.driftAngle) * 0.55;
-          p.y -= p.speedY;
-
-          // Wrap around top/edges
-          if (p.y < -20) {
-            p.y = height + 20;
-            p.x = Math.random() * width;
-          }
-          if (p.x < -20) p.x = width + 20;
-          if (p.x > width + 20) p.x = -20;
-
-          const currentAlpha = p.alpha * (0.6 + 0.4 * Math.sin(p.pulsePhase));
-          const glowRadius = p.radius * 3.5;
-
-          // Draw Firefly Glow
-          const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
-          grad.addColorStop(0, p.color + currentAlpha + ')');
-          grad.addColorStop(0.4, p.color + (currentAlpha * 0.4) + ')');
-          grad.addColorStop(1, p.color + '0)');
-
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Core bright point
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius * 0.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        requestAnimationFrame(animate);
-      }
-      animate();
-    })();
 
     // Simple Web Audio Clicks & Chimes
     const audioCtx = window.AudioContext ? new AudioContext() : null;
@@ -3329,8 +3294,80 @@ Disallow: /portal-8f2c/</pre><p style="margin-top:14px"><a class="plink" onclick
     resetSocial();
     updateChallengesUI();
 
-    // Forest Portal Veil Transition (Slow, Gentle Dissolve)
+    // =========================================================================
+    // AMBIENT CAVERN PARTICLES SYSTEM (Matching Sanctum Chamber Dashboard)
+    // =========================================================================
+    class CavernParticleCanvas {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.maxParticles = 55;
+        this.animId = null;
+
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.initParticles();
+        this.animate();
+      }
+
+      resize() {
+        if (!this.canvas) return;
+        this.width = this.canvas.width = window.innerWidth;
+        this.height = this.canvas.height = window.innerHeight;
+      }
+
+      initParticles() {
+        this.particles = [];
+        for (let i = 0; i < this.maxParticles; i++) {
+          this.particles.push(this.createParticle(true));
+        }
+      }
+
+      createParticle(randomY = false) {
+        return {
+          x: Math.random() * this.width,
+          y: randomY ? Math.random() * this.height : this.height + 10,
+          radius: Math.random() * 2 + 0.7,
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: -(Math.random() * 0.65 + 0.25),
+          alpha: Math.random() * 0.55 + 0.25,
+          hue: Math.random() > 0.45 ? 40 : 210
+        };
+      }
+
+      animate() {
+        if (!this.ctx) return;
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        for (let i = 0; i < this.particles.length; i++) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.y < -10 || p.x < -10 || p.x > this.width + 10) {
+            this.particles[i] = this.createParticle(false);
+            continue;
+          }
+
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          this.ctx.fillStyle = p.hue === 40 
+            ? `rgba(255, 184, 51, ${p.alpha})`
+            : `rgba(147, 197, 253, ${p.alpha * 0.7})`;
+          this.ctx.fill();
+        }
+
+        this.animId = requestAnimationFrame(() => this.animate());
+      }
+    }
+
+    let cavernParticles = null;
+
+    // Celestial Portal Veil Transition & Particle Initialization
     window.addEventListener('DOMContentLoaded', () => {
+      cavernParticles = new CavernParticleCanvas('cavernParticlesCanvas');
       const veil = document.getElementById('forestPortalVeil');
       if (veil) {
         requestAnimationFrame(() => {
