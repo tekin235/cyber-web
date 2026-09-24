@@ -1,29 +1,46 @@
-/* =============================================================================
-   HOUSE RIMEGUARD — FROZEN CITADEL STYLESHEET
-   Authentic 2D Game Fortress with Living Atmospheric Motion & Thaw Physics
-   ============================================================================= */
+/* =========================================================================
+   HOUSE RIMEGUARD — FROZEN FORTRESS STYLESHEET
+   100% Shared Design System & Visual Relationship with Introduction Module
+   ========================================================================= */
 
 :root {
-  /* Theme Palette (from theme-rimeguard contract) */
-  --house-bg: #040914;
-  --house-surface: #0d1a27;
-  --house-surface-light: #16283b;
-  --house-surface-deep: #08111a;
-  --house-accent: #38bdf8;
-  --house-accent-glow: rgba(56, 189, 248, 0.45);
-  --house-accent-strong: #f0f9ff;
-  --house-border: rgba(125, 211, 252, 0.3);
-  --house-border-strong: rgba(56, 189, 248, 0.65);
-  --house-text: #f0f9ff;
-  --house-text-muted: #93c5fd;
-
-  /* Typography */
   --font-display: 'Cinzel', serif;
-  --font-decorative: 'Cinzel Decorative', 'Cinzel', serif;
-  --font-riddle: 'Cormorant Garamond', Georgia, serif;
-  --font-ui: 'Manrope', -apple-system, sans-serif;
-  --font-accent: 'Outfit', sans-serif;
+  --font-ui: 'Outfit', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+
+  /* Rimeguard Permafrost Color Tokens (Harmonized with Intro Module Emerald Structure) */
+  --bg-deep: #030812;          /* Deepest permafrost night */
+  --bg-slate: #060e18;         /* Citadel backdrop */
+  --bg-card: rgba(8, 20, 32, 0.88);   /* Frosted obsidian slate */
+  --bg-card-hover: rgba(14, 30, 48, 0.94);
+  --bg-panel: rgba(10, 24, 38, 0.92);
+
+  /* Glacial Cyan & Crystalline Accents */
+  --color-cyan: #6fd6ff;
+  --color-cyan-glow: rgba(111, 214, 255, 0.45);
+  --color-cyan-bright: #aee7ff;
+  --color-cyan-mint: #bbf7d0;
+  --color-frost-white: #f2fbff;
+  --color-ice-blue: #0284c7;
+  --color-ice-deep: #032b48;
+
+  /* UI Borders & Outlines */
+  --color-border: rgba(111, 214, 255, 0.24);
+  --color-border-glow: rgba(111, 214, 255, 0.6);
+  --color-border-dim: rgba(255, 255, 255, 0.1);
+
+  /* Text & States */
+  --color-text-main: #f1f8fc;
+  --color-text-muted: #8eaec4;
+  --color-text-dim: #5c7b91;
+  --color-success: #38ef7d;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+
+  /* Animation Easings */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 *, *::before, *::after {
@@ -34,1611 +51,1654 @@
 
 html, body {
   width: 100%;
-  height: 100%;
-  background-color: var(--house-bg);
-  color: var(--house-text);
-  font-family: var(--font-ui);
-  overflow: hidden;
-  user-select: none;
+  min-height: 100%;
+  background-color: var(--bg-deep);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* =============================================================================
-   1. VIEWPORT STAGE & BACKGROUND SCENIC CANVAS
-   ============================================================================= */
-.rimeguard-viewport-stage {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  background-color: var(--house-bg);
-}
-
-/* 60fps Snowdrift Canvas (Behind HUD and hotspots, above base art) */
-.snowdrift-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 30;
-}
-
-/* Celestial Warp Radiance Bloom */
-.rimeguard-warp-flash {
+/* =========================================================================
+   ATMOSPHERIC BACKDROP (Twilight Sky, Aurora, Mist & Snow Canvas)
+   ========================================================================= */
+.frost-backdrop {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, #ffffff 0%, #bae6fd 60%, rgba(56, 189, 248, 0.8) 100%);
-  opacity: 0;
   pointer-events: none;
-  z-index: 999;
-  transition: opacity 0.45s ease-out;
-}
-
-.rimeguard-warp-flash.flash-active {
-  opacity: 1;
-}
-
-/* Fortress Illustration Canvas */
-.fortress-illustration-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 0;
   overflow: hidden;
 }
 
-.fortress-illustrated-artwork {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center bottom;
-  display: block;
-}
-
-/* =============================================================================
-   2. AUTHENTIC SCENE CLOUDS IN ALPINE DRIFT MOTION
-   ============================================================================= */
-.scene-clouds-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 5;
-}
-
-.scene-cloud-wrapper {
-  position: absolute;
-  top: 0;
-  pointer-events: none;
-  will-change: transform;
-}
-
-.cloud-left-wrapper {
-  left: 0;
-  width: 34%;
-  max-width: 530px;
-  transform-origin: 20% 10%;
-  animation: leftCloudAlpineDrift 20s ease-in-out infinite alternate;
-}
-
-.cloud-right-wrapper {
-  right: 0;
-  width: 35%;
-  max-width: 540px;
-  transform-origin: 80% 10%;
-  animation: rightCloudAlpineDrift 24s ease-in-out infinite alternate;
-}
-
-.cloud-sprite {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 4px 16px rgba(4, 15, 30, 0.12));
-}
-
-.cloud-left-sprite {
-  transform-origin: center bottom;
-  animation: cloudBillowPuffLeft 7.5s ease-in-out infinite alternate;
-}
-
-.cloud-right-sprite {
-  transform-origin: center bottom;
-  animation: cloudBillowPuffRight 8.8s ease-in-out infinite alternate;
-}
-
-@keyframes leftCloudAlpineDrift {
-  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-  35% { transform: translate3d(32px, -8px, 0) scale(1.025) rotate(0.6deg); }
-  70% { transform: translate3d(-14px, 5px, 0) scale(0.985) rotate(-0.4deg); }
-  100% { transform: translate3d(20px, -4px, 0) scale(1.01) rotate(0.3deg); }
-}
-
-@keyframes rightCloudAlpineDrift {
-  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
-  30% { transform: translate3d(-35px, 6px, 0) scale(0.98) rotate(-0.6deg); }
-  75% { transform: translate3d(18px, -10px, 0) scale(1.03) rotate(0.5deg); }
-  100% { transform: translate3d(-20px, 4px, 0) scale(0.995) rotate(-0.3deg); }
-}
-
-@keyframes cloudBillowPuffLeft {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.03) translateY(-4px); }
-}
-
-@keyframes cloudBillowPuffRight {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.035) translateY(-5px); }
-}
-
-/* =============================================================================
-   3. ANIMATED VECTOR FLAGS (SVG Overlay)
-   ============================================================================= */
-.rimeguard-animated-flags-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 18;
-  overflow: visible;
-}
-
-/* =============================================================================
-   4. ATMOSPHERIC AURORAS, SNOW GLINTS & CRACKED ICE DATA PULSES
-   ============================================================================= */
-.mountain-atmospheric-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* Celestial Aurora Ribbon Sweep */
-.mountain-aurora-sweep {
-  position: absolute;
-  top: 6%;
-  left: 20%;
-  width: 60%;
-  height: 25%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(56, 189, 248, 0.16) 0%, rgba(16, 185, 129, 0.08) 45%, rgba(4, 9, 20, 0) 75%);
-  filter: blur(28px);
-  animation: auroraBorealisSweep 12s ease-in-out infinite alternate;
-}
-
-@keyframes auroraBorealisSweep {
-  0% { transform: translateY(0) scaleX(0.95); opacity: 0.5; }
-  50% { transform: translateY(-8px) scaleX(1.05); opacity: 0.85; filter: blur(22px); }
-  100% { transform: translateY(4px) scaleX(1); opacity: 0.6; }
-}
-
-/* Snow Crest Glints */
-.mountain-snow-glint {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background-color: #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #ffffff, 0 0 18px #7dd3fc;
-  opacity: 0;
-  animation: snowGlintTwinkle 6s ease-in-out infinite;
-}
-
-.glint-1 { top: 28%; left: 24%; animation-delay: 0.5s; }
-.glint-2 { top: 32%; left: 74%; animation-delay: 2.5s; }
-.glint-3 { top: 22%; left: 63%; animation-delay: 4.2s; }
-
-@keyframes snowGlintTwinkle {
-  0%, 100% { opacity: 0; transform: scale(0.2); }
-  50% { opacity: 1; transform: scale(1.3); }
-}
-
-/* Frozen Waterfall Mid-Fall Sheen */
-.waterfall-ice-sheen {
-  position: absolute;
-  top: 32%;
-  right: 1.5%;
-  width: 14%;
-  height: 64%;
-  background: linear-gradient(180deg, rgba(224, 242, 254, 0) 0%, rgba(224, 242, 254, 0.18) 45%, rgba(56, 189, 248, 0.22) 80%, rgba(224, 242, 254, 0) 100%);
-  filter: blur(8px);
-  animation: waterfallSheenFlow 4.5s ease-in-out infinite alternate;
-}
-
-@keyframes waterfallSheenFlow {
-  0% { opacity: 0.45; transform: scaleY(0.96); }
-  100% { opacity: 0.9; transform: scaleY(1.02); }
-}
-
-/* Pulsing Cyan Data Streams in Cracked Ice Path */
-.path-fissure-pulse-layer {
-  position: absolute;
-  bottom: 0;
-  left: 36%;
-  width: 28%;
-  height: 48%;
-  pointer-events: none;
-  z-index: 12;
-}
-
-.data-pulse-line {
-  position: absolute;
-  background: linear-gradient(180deg, rgba(56, 189, 248, 0.8) 0%, rgba(125, 211, 252, 0.2) 100%);
-  filter: drop-shadow(0 0 8px #38bdf8);
-  border-radius: 2px;
-  animation: dataStreamPulse 3.5s ease-in-out infinite alternate;
-}
-
-.pulse-line-1 {
-  top: 25%;
-  left: 48%;
-  width: 3px;
-  height: 60%;
-  transform: rotate(-3deg);
-}
-
-.pulse-line-2 {
-  top: 45%;
-  left: 54%;
-  width: 2.5px;
-  height: 45%;
-  transform: rotate(5deg);
-  animation-delay: 1.5s;
-}
-
-@keyframes dataStreamPulse {
-  0% { opacity: 0.3; filter: drop-shadow(0 0 3px #38bdf8); }
-  50% { opacity: 1; filter: drop-shadow(0 0 12px #a5f3fc); }
-  100% { opacity: 0.4; filter: drop-shadow(0 0 4px #38bdf8); }
-}
-
-/* =============================================================================
-   5. LANDMARK: ROTATING 3D ICE-CORE AT PINNACLE APEX
-   ============================================================================= */
-.landmark-ice-core-anchor {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  width: 90px;
-  height: 90px;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 16;
-}
-
-.ice-orbit-halo {
-  position: absolute;
-  width: 84px;
-  height: 84px;
-  border-radius: 50%;
-  border: 1.5px dashed rgba(56, 189, 248, 0.85);
-  box-shadow: 0 0 24px rgba(56, 189, 248, 0.7);
-  animation: orbitHaloSpin 16s linear infinite;
-}
-
-.ice-orbit-halo-inner {
-  position: absolute;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  border: 1px dotted rgba(224, 242, 254, 0.9);
-  animation: orbitHaloSpin 10s linear infinite reverse;
-}
-
-@keyframes orbitHaloSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.ice-prism-rotator {
-  position: relative;
-  width: 34px;
-  height: 52px;
-  animation: prismLevitate 4s ease-in-out infinite alternate;
-}
-
-@keyframes prismLevitate {
-  0% { transform: translateY(-4px) rotateY(0deg); }
-  50% { transform: translateY(4px) rotateY(180deg); }
-  100% { transform: translateY(-4px) rotateY(360deg); }
-}
-
-.prism-gem-facet {
+.frost-sky {
   position: absolute;
   inset: 0;
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(56, 189, 248, 0.85) 100%);
-  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 1));
+  background: radial-gradient(circle at 50% 12%, #0e2236 0%, #071322 50%, #030812 100%);
 }
 
-.ice-core-ambient-flare {
+.frost-mist-layer {
   position: absolute;
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(56, 189, 248, 0) 70%);
-  animation: flareBreathe 3s ease-in-out infinite alternate;
-}
-
-@keyframes flareBreathe {
-  0% { transform: scale(0.85); opacity: 0.5; }
-  100% { transform: scale(1.2); opacity: 1; }
-}
-
-/* =============================================================================
-   6. DIEGETIC WAYSIDE RUNESTONE MONOLITH
-   ============================================================================= */
-.oracle-wayside-monolith {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  z-index: 25;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: transform 0.25s cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.oracle-wayside-monolith:hover {
-  transform: translate(-50%, -55%) scale(1.1);
-}
-
-.monolith-stone-body {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  filter: drop-shadow(0 4px 12px rgba(6, 16, 28, 0.85));
-}
-
-.monolith-svg {
-  width: 38px;
-  height: 52px;
-  display: block;
-}
-
-.monolith-carved-rune {
-  animation: runicFaintPulse 3s ease-in-out infinite alternate;
-}
-
-@keyframes runicFaintPulse {
-  0% { opacity: 0.6; filter: drop-shadow(0 0 2px #38bdf8); }
-  50% { opacity: 1; filter: drop-shadow(0 0 8px #a5f3fc); }
-  100% { opacity: 0.7; filter: drop-shadow(0 0 3px #38bdf8); }
-}
-
-.monolith-frost-mist {
-  position: absolute;
-  bottom: 0;
-  width: 130%;
-  height: 12px;
-  background: radial-gradient(ellipse at 50% 50%, rgba(186, 230, 253, 0.45) 0%, rgba(186, 230, 253, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.monolith-heraldic-tag {
-  margin-top: 4px;
-  background: linear-gradient(180deg, #1d3146 0%, #132232 100%);
-  border: 1.5px solid #162433;
-  box-shadow: 0 0 0 1px #486d91, 0 4px 12px rgba(0, 0, 0, 0.6);
-  border-radius: 3px;
-  padding: 3px 9px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.22s ease, transform 0.22s ease;
-}
-
-.oracle-wayside-monolith:hover .monolith-heraldic-tag {
-  opacity: 1;
-  transform: translateY(0);
-  box-shadow: 0 0 0 1px #7dd3fc, 0 4px 16px rgba(56, 189, 248, 0.5);
-}
-
-.monolith-tag-text {
-  font-family: var(--font-display);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #e0f2fe;
-  white-space: nowrap;
-}
-
-/* =============================================================================
-   7. INTERACTIVE GATE HOTSPOTS & FROST-WOLVES
-   ============================================================================= */
-.fortress-interactive-zone {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  z-index: 22;
-  border-radius: 12px;
-}
-
-/* Organic Radial Aura on Hover */
-.radial-aura-spotlight {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 140%;
-  height: 140%;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(56, 189, 248, 0.28) 0%, rgba(56, 189, 248, 0.1) 45%, rgba(56, 189, 248, 0) 70%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.fortress-interactive-zone:hover .radial-aura-spotlight {
-  opacity: 1;
-  animation: auraBreathe 2s ease-in-out infinite alternate;
-}
-
-.radial-aura-spotlight.castle-aura {
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(56, 189, 248, 0.24) 0%, rgba(56, 189, 248, 0.08) 50%, rgba(56, 189, 248, 0) 70%);
-}
-
-@keyframes auraBreathe {
-  0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
-  100% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-}
-
-/* Sentinel Frost Beacon Indicator */
-.sentinel-frost-beacon {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 10;
-}
-
-.sentinel-frost-beacon.castle-beacon-pos {
-  top: 22%;
-}
-
-.beacon-star {
-  font-size: 14px;
-  color: #cbeafe;
-  filter: drop-shadow(0 0 6px #38bdf8);
-  animation: beaconTwinkle 3s ease-in-out infinite alternate;
-}
-
-.beacon-ripple {
-  position: absolute;
-  width: 100%;
+  left: -40%;
+  width: 180%;
   height: 100%;
-  border-radius: 50%;
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  animation: beaconPulse 2.8s infinite cubic-bezier(0.2, 1, 0.4, 1);
+  background: radial-gradient(ellipse at 50% 35%, rgba(111, 214, 255, 0.08) 0%, transparent 65%),
+              radial-gradient(ellipse at 25% 75%, rgba(56, 189, 248, 0.06) 0%, transparent 55%),
+              radial-gradient(ellipse at 75% 85%, rgba(147, 112, 219, 0.05) 0%, transparent 55%);
+  animation: mistDrift 36s ease-in-out infinite alternate;
+  opacity: 0.85;
 }
 
-body.sentinels-hidden .sentinel-frost-beacon {
-  opacity: 0;
-  pointer-events: none;
-}
-
-@keyframes beaconTwinkle {
-  0%, 100% { opacity: 0.35; transform: scale(0.85); }
-  50% { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 10px #ffffff); }
-}
-
-@keyframes beaconPulse {
-  0% { transform: scale(0.6); opacity: 0.8; }
-  80% { transform: scale(1.9); opacity: 0; }
-  100% { transform: scale(1.9); opacity: 0; }
-}
-
-/* Heraldic Crest Shield Marker */
-.bastion-shield-marker {
+.frost-mist-layer-2 {
   position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 34px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  filter: drop-shadow(0 4px 10px rgba(10, 20, 32, 0.8));
-  transition: transform 0.25s cubic-bezier(0.2, 1, 0.4, 1), opacity 0.25s ease;
-  z-index: 12;
-}
-
-.bastion-shield-marker.castle-marker-pos {
-  top: 18%;
-}
-
-.heraldic-shield-svg {
-  width: 100%;
+  left: -20%;
+  width: 150%;
   height: 100%;
-  display: block;
+  background: radial-gradient(ellipse at 65% 25%, rgba(174, 231, 255, 0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 35% 80%, rgba(13, 38, 60, 0.22) 0%, transparent 60%);
+  animation: mistDrift2 44s ease-in-out infinite alternate;
+  opacity: 0.7;
 }
 
-.shield-roman-numeral {
-  position: absolute;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 800;
-  color: #f0f9ff;
-  text-shadow: 0 1px 3px rgba(10, 20, 32, 0.9);
-  pointer-events: none;
+@keyframes mistDrift {
+  0% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(5%) translateY(-15px); }
+  100% { transform: translateX(-4%) translateY(10px); }
 }
 
-.shield-glint-spark {
-  position: absolute;
-  top: 4px;
-  right: 5px;
-  width: 4px;
-  height: 4px;
-  background-color: #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 0 6px #ffffff;
-  opacity: 0.8;
-  animation: shieldSparkle 3s ease-in-out infinite alternate;
+@keyframes mistDrift2 {
+  0% { transform: translateX(0) scale(1); }
+  50% { transform: translateX(-4%) scale(1.04); }
+  100% { transform: translateX(3%) scale(0.98); }
 }
 
-@keyframes shieldSparkle {
-  0%, 100% { opacity: 0.3; transform: scale(0.7); }
-  50% { opacity: 1; transform: scale(1.2); }
-}
-
-/* Heraldic Ribbon Banner on Hover */
-.bastion-parchment-banner {
-  position: absolute;
-  top: -42px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.22s ease, transform 0.22s ease;
-  filter: drop-shadow(0 8px 20px rgba(6, 16, 28, 0.85));
-}
-
-.fortress-interactive-zone:hover .bastion-parchment-banner {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-6px);
-}
-
-.bastion-parchment-banner.castle-banner-pos {
-  top: -38px;
-}
-
-.banner-ribbon-center {
-  background: linear-gradient(180deg, #1c3248 0%, #132434 100%);
-  border: 1.5px solid #162433;
-  box-shadow: inset 0 0 0 1px #466c8f;
-  padding: 5px 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-}
-
-.banner-bastion-title {
-  font-family: var(--font-display);
-  font-size: 12.5px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #f0f9ff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-}
-
-.banner-status-tag {
-  font-family: var(--font-display);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 2px 7px;
-  border-radius: 2px;
-  border: 1px solid #162433;
-}
-
-.banner-status-tag.status-thawed {
-  background-color: #064e3b;
-  border-color: #059669;
-  color: #6ee7b7;
-}
-
-.banner-status-tag.status-sealed {
-  background-color: #0c2d48;
-  border-color: #0284c7;
-  color: #7dd3fc;
-}
-
-.banner-ribbon-tail {
-  width: 10px;
-  height: 28px;
-  background: #111e2b;
-  position: relative;
-}
-
-.banner-ribbon-tail.tail-left {
-  clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
-}
-
-.banner-ribbon-tail.tail-right {
-  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
-}
-
-/* Spectral Frost-Wolf (Guardian Characters on Hover) */
-.spectral-frost-wolf {
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 58px;
-  height: 38px;
-  background: radial-gradient(ellipse at 50% 60%, rgba(224, 242, 254, 0.9) 0%, rgba(56, 189, 248, 0.5) 50%, rgba(56, 189, 248, 0) 100%);
-  border-radius: 50%;
-  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 1));
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.fortress-interactive-zone:hover .spectral-frost-wolf {
-  opacity: 1;
-  animation: wolfPace 1.8s ease-in-out infinite alternate;
-}
-
-.spectral-frost-wolf.wolf-castle-pos {
-  bottom: 8%;
-}
-
-@keyframes wolfPace {
-  0% { transform: translateX(-60%) scaleX(1); }
-  100% { transform: translateX(-40%) scaleX(1.05); }
-}
-
-.wolf-glow-eye {
-  position: absolute;
-  top: 14px;
-  right: 18px;
-  width: 4px;
-  height: 4px;
-  background-color: #38bdf8;
-  border-radius: 50%;
-  box-shadow: 0 0 6px #ffffff;
-}
-
-.wolf-frost-breath {
-  position: absolute;
-  top: 12px;
-  right: 6px;
-  width: 14px;
-  height: 8px;
-  background: radial-gradient(circle, rgba(224, 242, 254, 0.8) 0%, rgba(224, 242, 254, 0) 70%);
-  border-radius: 50%;
-  animation: wolfBreath 1.4s ease-in-out infinite alternate;
-}
-
-@keyframes wolfBreath {
-  0% { opacity: 0.2; transform: scale(0.6); }
-  100% { opacity: 0.8; transform: scale(1.3); }
-}
-
-/* =============================================================================
-   8. TOP CINEMATIC HUD (Matching provided design)
-   ============================================================================= */
-.rimeguard-cinematic-hud {
-  position: absolute;
-  top: 18px;
-  left: 28px;
-  right: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 40;
-  pointer-events: none;
-}
-
-/* Left: Crest & Title */
-.hud-cinematic-title {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  pointer-events: auto;
-  filter: drop-shadow(0 2px 12px rgba(4, 12, 22, 0.95));
-}
-
-.cinematic-crest-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.45));
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.cinematic-crest-icon:hover {
-  transform: scale(1.08) rotate(-2deg);
-}
-
-.cinematic-title-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.cinematic-house-name {
-  margin: 0;
-  font-family: var(--font-decorative);
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 0.16em;
-  color: #f8fafc;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 24px rgba(186, 230, 253, 0.5);
-  line-height: 1.1;
-}
-
-.cinematic-realm-sub {
-  font-family: var(--font-display);
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.26em;
-  color: #93c5fd;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-  opacity: 0.9;
-}
-
-/* Right Controls Cluster */
-.hud-cinematic-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  pointer-events: auto;
-}
-
-/* Toggle Sentinel Markers */
-.btn-sentinel-toggle {
-  background: rgba(15, 29, 44, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(125, 211, 252, 0.3);
-  box-shadow: 0 4px 16px rgba(2, 6, 12, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 7px 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #bae6fd;
-  transition: all 0.25s ease;
-}
-
-.btn-sentinel-toggle:hover {
-  background: rgba(26, 49, 74, 0.85);
-  border-color: #38bdf8;
-  color: #f0f9ff;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
-  transform: translateY(-1px);
-}
-
-.sentinel-sigil {
-  font-size: 11px;
-  color: #38bdf8;
-}
-
-/* Commune with Oracle Button */
-.btn-cinematic-talisman {
-  background: rgba(15, 29, 44, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(125, 211, 252, 0.3);
-  box-shadow: 0 4px 16px rgba(2, 6, 12, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 7px 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.btn-cinematic-talisman:hover {
-  background: rgba(26, 49, 74, 0.85);
-  border-color: #7dd3fc;
-  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
-  transform: translateY(-1px);
-}
-
-.talisman-rune {
-  font-size: 14px;
-  color: #7dd3fc;
-  filter: drop-shadow(0 0 4px #38bdf8);
-}
-
-.talisman-text {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #f0f9ff;
-}
-
-/* Gate Unsealed Progress Badge */
-.cinematic-defense-badge {
-  background: rgba(15, 29, 44, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(125, 211, 252, 0.3);
-  box-shadow: 0 4px 16px rgba(2, 6, 12, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 7px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s ease;
-}
-
-.defense-gems-row {
-  display: flex;
-  gap: 6px;
-}
-
-.defense-gem-diamond {
-  width: 9px;
-  height: 9px;
-  transform: rotate(45deg);
-  border: 1px solid #1e3a53;
-  transition: all 0.3s ease;
-}
-
-.defense-gem-diamond.gem-thawed {
-  background: linear-gradient(135deg, #6ee7b7 0%, #10b981 100%);
-  border-color: #a7f3d0;
-  box-shadow: 0 0 8px #34d399;
-}
-
-.defense-gem-diamond.gem-sealed {
-  background: rgba(16, 32, 48, 0.85);
-  border-color: #3b5e7d;
-}
-
-.defense-status-text {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: #bae6fd;
-}
-
-/* SFX Audio Button */
-.btn-sfx-toggle {
-  background: rgba(15, 29, 44, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(125, 211, 252, 0.3);
-  border-radius: 4px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #bae6fd;
-  transition: all 0.2s ease;
-}
-
-.btn-sfx-toggle:hover {
-  background: rgba(26, 49, 74, 0.85);
-  border-color: #38bdf8;
-  color: #ffffff;
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* Profile Menu */
-.profile-menu-container {
-  position: relative;
-}
-
-.nav-avatar-btn {
-  position: relative;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(56, 189, 248, 0.5);
-  background: #0d1a27;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.nav-avatar-btn:hover {
-  transform: scale(1.08);
-  border-color: #bae6fd;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
-}
-
-.nav-avatar-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
-
-.user-badge-online {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 9px;
-  height: 9px;
-  background: #10b981;
-  border: 2px solid #060a10;
-  border-radius: 50%;
-}
-
-.profile-dropdown {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 220px;
-  background: rgba(13, 26, 39, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(125, 211, 252, 0.3);
-  border-radius: 6px;
-  box-shadow: 0 12px 32px rgba(2, 6, 14, 0.9);
-  padding: 12px;
-  display: none;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 70;
-  animation: modalFadeIn 0.2s ease-out;
-}
-
-.profile-dropdown.open {
-  display: flex;
-}
-
-.dropdown-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-bottom: 8px;
-}
-
-.dropdown-avatar-img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid #38bdf8;
-}
-
-.dropdown-user-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.dropdown-name {
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  color: #f0f9ff;
-}
-
-.dropdown-role {
-  font-size: 10.5px;
-  color: #7dd3fc;
-}
-
-.dropdown-divider {
-  height: 1px;
-  background: rgba(125, 211, 252, 0.2);
-  margin: 4px 0;
-}
-
-.dropdown-link-btn, .dropdown-logout-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #cbd5e1;
-  text-decoration: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: var(--font-ui);
-}
-
-.dropdown-link-btn:hover, .dropdown-logout-btn:hover {
-  background: rgba(56, 189, 248, 0.15);
-  color: #f0f9ff;
-}
-
-.dropdown-logout-btn {
-  color: #f87171;
-}
-
-.dropdown-logout-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-}
-
-/* =============================================================================
-   9. ILLUMINATED ORACLE DIALOGUE SCROLL
-   ============================================================================= */
-.fantasy-oracle-parchment {
-  position: absolute;
-  top: 80px;
-  right: 28px;
-  width: 380px;
-  background: linear-gradient(180deg, #16283b 0%, #0d1a27 100%);
-  border: 2px solid #152433;
-  box-shadow: inset 0 0 0 1px #466e92, 0 20px 50px rgba(2, 8, 16, 0.9);
-  border-radius: 4px;
-  padding: 22px;
-  z-index: 60;
-  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.parchment-corner {
-  position: absolute;
-  font-size: 10px;
-  color: #608fae;
-  pointer-events: none;
-}
-
-.pc-tl { top: 4px; left: 6px; }
-.pc-tr { top: 4px; right: 6px; }
-.pc-bl { bottom: 4px; left: 6px; }
-.pc-br { bottom: 4px; right: 6px; }
-
-.oracle-scroll-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1.5px solid #203952;
-  padding-bottom: 12px;
-  margin-bottom: 16px;
-}
-
-.oracle-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.oracle-rune-sigil {
-  font-size: 20px;
-  color: #7dd3fc;
-  filter: drop-shadow(0 0 4px #38bdf8);
-}
-
-.oracle-scroll-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 14.5px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  color: #f0f9ff;
-}
-
-.btn-parchment-close, .btn-codex-dismiss {
-  background: none;
-  border: 1px solid #294765;
-  border-radius: 3px;
-  color: #8da4be;
-  font-size: 14px;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn-parchment-close:hover, .btn-codex-dismiss:hover {
-  border-color: #7dd3fc;
-  color: #ffffff;
-  background-color: rgba(56, 189, 248, 0.2);
-}
-
-.oracle-scroll-body {
-  margin-bottom: 18px;
-}
-
-.oracle-riddle-scrollbox {
-  background: rgba(8, 18, 29, 0.7);
-  border: 1px solid #1c354e;
-  border-radius: 4px;
-  padding: 16px;
-  margin-bottom: 12px;
-}
-
-.oracle-riddle-text {
-  margin: 0;
-  font-family: var(--font-riddle);
-  font-style: italic;
-  font-size: 19px;
-  line-height: 1.55;
-  color: #e2f2fc;
-}
-
-.oracle-lore-footer {
-  font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 0.05em;
-  color: #81a8ca;
-  display: block;
-  line-height: 1.5;
-}
-
-.oracle-scroll-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* Chiseled Stone Fantasy Button */
-.btn-fantasy-carved {
-  background: linear-gradient(180deg, #2b4c6e 0%, #172f48 100%);
-  border: 1.5px solid #162433;
-  box-shadow: inset 0 0 0 1px #5d92bf, 0 3px 0 #0d1a27, 0 6px 14px rgba(0, 0, 0, 0.6);
-  border-radius: 3px;
-  color: #f0f9ff;
-  font-family: var(--font-display);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: all 0.12s ease;
-}
-
-.btn-fantasy-carved:hover {
-  background: linear-gradient(180deg, #355d87 0%, #1e3c5c 100%);
-  box-shadow: inset 0 0 0 1px #a5f3fc, 0 3px 0 #0d1a27, 0 8px 20px rgba(56, 189, 248, 0.4);
-}
-
-.btn-fantasy-carved:active {
-  transform: translateY(2px);
-  box-shadow: inset 0 0 0 1px #5d92bf, 0 1px 0 #0d1a27;
-}
-
-/* =============================================================================
-   10. BASTION CODEX / CHALLENGE DOSSIER MODAL
-   ============================================================================= */
-.bastion-modal-overlay {
+#snowCanvas {
   position: fixed;
   inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* =========================================================================
+   TOP NAVIGATION BAR (Exact Match to User Reference Screenshot & Intro Module)
+   ========================================================================= */
+.sanctum-topbar {
+  position: sticky;
+  top: 0;
   z-index: 100;
-  background-color: rgba(3, 9, 18, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: rgba(4, 11, 19, 0.92);
+  border-bottom: 1.5px solid var(--color-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), inset 0 -1px 0 rgba(111, 214, 255, 0.15);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.topbar-sigil {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: radial-gradient(circle at 35% 35%, #13324d 0%, #061422 100%);
+  border: 1.5px solid var(--color-border);
+  box-shadow: 0 0 16px var(--color-cyan-glow);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  color: var(--color-cyan);
+  flex-shrink: 0;
 }
 
-.bastion-codex-card {
-  position: relative;
-  width: 100%;
-  max-width: 620px;
-  background: linear-gradient(180deg, #17293d 0%, #0d1a27 100%);
-  border: 2px solid #152433;
-  box-shadow: inset 0 0 0 1px #487297, 0 24px 60px rgba(2, 6, 14, 0.95);
-  border-radius: 6px;
+.topbar-brand {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.crack-propagation-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 50;
+.topbar-title {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-shadow: 0 0 12px var(--color-cyan-glow);
+  line-height: 1.15;
 }
 
-.codex-corner {
-  position: absolute;
-  font-size: 11px;
-  color: #6392b4;
-  pointer-events: none;
+.topbar-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-cyan-bright);
+  opacity: 0.85;
 }
 
-.cc-tl { top: 6px; left: 8px; }
-.cc-tr { top: 6px; right: 8px; }
-.cc-bl { bottom: 6px; left: 8px; }
-.cc-br { bottom: 6px; right: 8px; }
-
-.codex-header {
-  padding: 14px 24px;
-  background: #112030;
-  border-bottom: 1.5px solid #203952;
+.topbar-crumbs {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-left: 12px;
+  padding-left: 14px;
+  border-left: 1px solid var(--color-border);
 }
 
-.codex-banner-ribbon {
+.topbar-crumbs a {
+  color: var(--color-cyan);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.topbar-crumbs a:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px var(--color-cyan);
+}
+
+.crumb-sep {
+  color: var(--color-text-dim);
+}
+
+.topbar-crumbs span#navCrumbScene {
+  color: var(--color-frost-white);
+  font-weight: 500;
+}
+
+.topbar-right {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.codex-numeral {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  color: #f0f9ff;
-  background: #1b344d;
-  border: 1px solid #4a7499;
-  padding: 2px 10px;
-  border-radius: 2px;
-}
-
-.codex-role {
-  font-family: var(--font-display);
-  font-size: 12px;
+/* Capsule Buttons in Topbar (Matching User Reference) */
+.btn-topbar-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 9999px;
+  background: rgba(9, 21, 33, 0.88);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-main);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #93c5fd;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-cinematic);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
-.codex-body {
-  padding: 24px 28px;
+.btn-topbar-action .action-icon {
+  color: var(--color-cyan);
+  font-size: 0.92rem;
+}
+
+.btn-topbar-action:hover {
+  background: rgba(16, 36, 56, 0.95);
+  border-color: var(--color-cyan);
+  color: #ffffff;
+  box-shadow: 0 0 16px var(--color-cyan-glow);
+  transform: translateY(-1px);
+}
+
+.btn-topbar-action.active {
+  border-color: var(--color-cyan);
+  background: linear-gradient(135deg, rgba(16, 42, 66, 0.95) 0%, rgba(9, 24, 38, 0.95) 100%);
+  color: var(--color-cyan-bright);
+  box-shadow: 0 0 14px rgba(111, 214, 255, 0.3);
+}
+
+.btn-topbar-action.icon-only {
+  padding: 7px 12px;
+}
+
+/* Gate Clearance Diamond Pill (From User Screenshot) */
+.gate-progress-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(8, 19, 31, 0.92);
+  border: 1.5px solid var(--color-border);
+  border-radius: 9999px;
+  padding: 6px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-frost-white);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.gate-diamond-row {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.codex-bastion-name {
-  margin: 0;
-  font-family: var(--font-decorative);
-  font-size: 22px;
-  font-weight: 900;
-  color: #f0f9ff;
-  letter-spacing: 0.08em;
-  text-shadow: 0 2px 4px #0c1a28;
-}
-
-.codex-bastion-title {
-  font-family: var(--font-display);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #7dd3fc;
-  margin-top: -8px;
-}
-
-.codex-chronicle-box {
-  background-color: rgba(8, 18, 30, 0.75);
-  border: 1.5px solid #19324a;
-  border-radius: 4px;
-  display: flex;
-  overflow: hidden;
-}
-
-.chronicle-pillar-line {
-  width: 4px;
-  background: linear-gradient(180deg, #38bdf8 0%, #1d4ed8 100%);
-}
-
-.chronicle-text-wrap {
-  padding: 14px 18px;
-}
-
-.chronicle-label {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  color: #38bdf8;
-  margin-bottom: 6px;
-}
-
-.chronicle-text-wrap p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #cbd5e1;
-}
-
-.codex-stats-grid {
-  display: flex;
-  gap: 14px;
-}
-
-.codex-stat-panel {
-  flex: 1;
-  background-color: rgba(8, 18, 30, 0.75);
-  border: 1.5px solid #19324a;
-  border-radius: 4px;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 4px;
 }
 
-.stat-label {
-  font-family: var(--font-display);
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #64748b;
+.gate-diamond {
+  color: rgba(111, 214, 255, 0.25);
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
 }
 
-.stat-value {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
-  color: #f0f9ff;
+.gate-diamond.active {
+  color: var(--color-cyan);
+  text-shadow: 0 0 8px var(--color-cyan);
 }
 
-.stat-value.status-thawed {
-  color: #34d399;
-}
-
-.stat-value.status-sealed {
-  color: #7dd3fc;
-}
-
-/* Challenge Terminal */
-.codex-challenge-terminal {
-  background: #040912;
-  border: 1px solid #1e3a5a;
-  border-radius: 4px;
-  overflow: hidden;
-  font-family: var(--font-mono);
-}
-
-.term-header-bar {
-  background: #0f1d2e;
-  padding: 6px 12px;
-  display: flex;
+/* Return to Woodland Outpost Button */
+.btn-return-dashboard {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border-bottom: 1px solid #1e3a5a;
-}
-
-.term-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #334155;
-}
-
-.term-dot:nth-child(1) { background: #ef4444; }
-.term-dot:nth-child(2) { background: #f59e0b; }
-.term-dot:nth-child(3) { background: #10b981; }
-
-.term-title {
-  margin-left: 6px;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  color: #7dd3fc;
-}
-
-.term-body-content {
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.term-prompt-line {
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.term-ps1 {
-  color: #38bdf8;
-  margin-right: 6px;
-}
-
-.term-info-text {
-  color: #94a3b8;
-}
-
-.term-input-row {
-  display: flex;
   gap: 8px;
-}
-
-.term-input {
-  flex: 1;
-  background: #081320;
-  border: 1px solid #204368;
-  border-radius: 3px;
-  padding: 6px 10px;
-  font-family: var(--font-mono);
-  font-size: 12.5px;
-  color: #f0f9ff;
-  outline: none;
-}
-
-.term-input:focus {
-  border-color: #38bdf8;
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
-}
-
-.btn-term-verify {
-  background: #1e3a5c;
-  border: 1px solid #3b6b99;
-  border-radius: 3px;
-  padding: 6px 14px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: #e0f2fe;
+  background: linear-gradient(135deg, rgba(15, 36, 54, 0.95) 0%, rgba(8, 20, 32, 0.95) 100%);
+  border: 1.5px solid var(--color-border);
+  color: #ffffff;
+  padding: 7px 18px;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: all 0.25s var(--ease-cinematic);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
 }
 
-.btn-term-verify:hover {
-  background: #254d7d;
-  border-color: #7dd3fc;
+.btn-return-dashboard svg {
+  color: var(--color-cyan);
+  transition: transform 0.2s ease;
+}
+
+.btn-return-dashboard:hover {
+  background: linear-gradient(135deg, rgba(24, 54, 82, 0.95) 0%, rgba(12, 30, 48, 0.95) 100%);
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 20px var(--color-cyan-glow);
+  transform: translateY(-1px);
+}
+
+.btn-return-dashboard:hover svg {
+  transform: translateX(-3px);
   color: #ffffff;
 }
 
-.term-feedback {
-  font-size: 12px;
-  min-height: 18px;
-  line-height: 1.4;
-}
-
-.term-feedback.success {
-  color: #34d399;
-}
-
-.term-feedback.error {
-  color: #f87171;
-}
-
-/* Codex Footer */
-.codex-footer {
-  padding: 16px 28px;
-  background: #112030;
-  border-top: 1.5px solid #203952;
+/* =========================================================================
+   PAGE VIEW WRAPPERS & SCREEN SWITCHING
+   ========================================================================= */
+.module-content-wrapper {
+  position: relative;
+  z-index: 10;
+  min-height: calc(100vh - 64px);
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  flex-direction: column;
 }
 
-.btn-fantasy-carved.btn-shatter {
-  padding: 10px 24px;
-  font-size: 12.5px;
-  background: linear-gradient(180deg, #0284c7 0%, #03527e 100%);
-  box-shadow: inset 0 0 0 1px #7dd3fc, 0 3px 0 #082942, 0 6px 18px rgba(56, 189, 248, 0.45);
+.screen-view {
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s var(--ease-cinematic), transform 0.4s var(--ease-cinematic);
 }
 
-.btn-fantasy-carved.btn-shatter:hover {
-  background: linear-gradient(180deg, #0396e0 0%, #03659c 100%);
-  box-shadow: inset 0 0 0 1px #bae6fd, 0 3px 0 #082942, 0 8px 24px rgba(56, 189, 248, 0.6);
+.screen-view.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  animation: viewSlideIn 0.45s var(--ease-cinematic) forwards;
 }
 
-.codex-thawed-confirmed {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 700;
-  color: #34d399;
-  letter-spacing: 0.08em;
-}
-
-/* =============================================================================
-   11. SIGNATURE ANIMATIONS: THAW INTO PLACE & PERMAFROST SHATTER
-   ============================================================================= */
-.thaw-in {
-  animation: thawIntoPlace 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes thawIntoPlace {
-  0% {
-    filter: blur(6px) brightness(1.6);
+@keyframes viewSlideIn {
+  from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(14px) scale(0.99);
   }
-  60% {
-    filter: blur(1.5px) brightness(1.2);
-    opacity: 0.85;
-  }
-  100% {
-    filter: blur(0px) brightness(1);
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.shatter-active {
-  animation: permafrostShatter 0.75s ease-out;
-}
-
-@keyframes permafrostShatter {
-  0% {
-    filter: brightness(2) contrast(1.5);
-    transform: scale(1.02);
-  }
-  30% {
-    filter: brightness(2.4) drop-shadow(0 0 30px #ffffff);
-  }
-  60% {
-    filter: brightness(1.5);
-    transform: scale(0.995);
-  }
-  100% {
-    filter: brightness(1) contrast(1);
-    transform: scale(1);
-  }
-}
-
-@keyframes modalFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(14px) scale(0.97);
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .rimeguard-cinematic-hud {
-    left: 16px;
-    right: 16px;
-    top: 14px;
-  }
-  .cinematic-house-name {
-    font-size: 18px;
-  }
-  .fantasy-oracle-parchment {
-    width: 320px;
-    right: 16px;
+/* =========================================================================
+   SCREEN 1: CITADEL VIEWPORT HUB (Matching media_1790278306349.jpg)
+   Where the Castle Towers ARE the Interactive Buttons
+   ========================================================================= */
+.citadel-viewport-hub {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 64px);
+  min-height: 600px;
+  overflow: hidden;
+  background: #060e18;
+  display: flex;
+  flex-direction: column;
+}
+
+.citadel-stage-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* The High-Resolution Illustrated Scene Image */
+.citadel-scene-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+  filter: contrast(1.04) brightness(0.98);
+}
+
+/* Aurora Borealis Sky Ribbon */
+.citadel-aurora-ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 36%;
+  background: linear-gradient(180deg, 
+    rgba(111, 214, 255, 0.16) 0%, 
+    rgba(56, 189, 248, 0.09) 45%, 
+    rgba(147, 112, 219, 0.05) 75%, 
+    transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+  animation: auroraPulse 10s ease-in-out infinite alternate;
+}
+
+@keyframes auroraPulse {
+  0% { opacity: 0.7; transform: translateY(0) scaleY(1); }
+  50% { opacity: 1; transform: translateY(-4px) scaleY(1.08); }
+  100% { opacity: 0.8; transform: translateY(2px) scaleY(0.96); }
+}
+
+/* Glowing Cyan Data Fissures on Causeway Pavers */
+.bridge-fissures-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.fissure-glow {
+  fill: none;
+  stroke: var(--color-cyan);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+  animation: fissurePulse 3.5s ease-in-out infinite alternate;
+}
+
+.fissure-core {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.95;
+  stroke-dasharray: 14 26;
+  animation: fissureDataFlow 4s linear infinite;
+}
+
+.fissure-glow.branch {
+  stroke-width: 2.2;
+}
+
+.fissure-core.branch {
+  stroke-width: 1.2;
+}
+
+@keyframes fissurePulse {
+  0% { opacity: 0.55; stroke: #38bdf8; }
+  50% { opacity: 1; stroke: #6fd6ff; filter: drop-shadow(0 0 10px #6fd6ff); }
+  100% { opacity: 0.65; stroke: #aee7ff; }
+}
+
+@keyframes fissureDataFlow {
+  to { stroke-dashoffset: -80; }
+}
+
+/* Apex Rotating Ice-Core Crystal Landmark */
+.apex-ice-core-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 13.5%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 110px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.ice-core-orbit {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ice-core-corona {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(111, 214, 255, 0.4) 0%, rgba(56, 189, 248, 0.15) 50%, transparent 75%);
+  filter: blur(10px);
+  animation: coronaBreath 4.5s ease-in-out infinite alternate;
+}
+
+.ice-core-crystal {
+  width: 72px;
+  height: 94px;
+  filter: drop-shadow(0 0 16px rgba(111, 214, 255, 0.85));
+  animation: crystalSpin 9s linear infinite;
+}
+
+@keyframes coronaBreath {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.25); opacity: 1; }
+}
+
+@keyframes crystalSpin {
+  0% { transform: rotate(0deg) scaleY(1); }
+  25% { transform: rotate(90deg) scaleY(0.94); }
+  50% { transform: rotate(180deg) scaleY(1); }
+  75% { transform: rotate(270deg) scaleY(0.94); }
+  100% { transform: rotate(360deg) scaleY(1); }
+}
+
+/* =========================================================================
+   THE 5 CASTLE TOWER BUTTONS (Interactive Targets directly on the scene)
+   ========================================================================= */
+.castle-tower-btn {
+  position: absolute;
+  cursor: pointer;
+  z-index: 10;
+  outline: none;
+  border-radius: 12px;
+  transition: transform 0.3s var(--ease-cinematic);
+}
+
+/* Individual Responsive Tower Hitboxes Calibrated to Illustration */
+.castle-tower-btn.tower-1 {
+  left: 0.5%;
+  top: 23%;
+  width: 21.5%;
+  height: 75%;
+}
+
+.castle-tower-btn.tower-2 {
+  left: 26.2%;
+  top: 38%;
+  width: 10.5%;
+  height: 38%;
+}
+
+.castle-tower-btn.tower-3-apex {
+  left: 36.5%;
+  top: 13.5%;
+  width: 27%;
+  height: 52%;
+}
+
+.castle-tower-btn.tower-4 {
+  left: 63.8%;
+  top: 38%;
+  width: 10.5%;
+  height: 38%;
+}
+
+.castle-tower-btn.tower-5 {
+  left: 77.5%;
+  top: 23%;
+  width: 22%;
+  height: 75%;
+}
+
+/* Tower Frost Aura (Glows intensely around the tower on hover) */
+.tower-frost-aura {
+  position: absolute;
+  inset: -8px;
+  border-radius: 16px;
+  background: radial-gradient(ellipse at center, rgba(111, 214, 255, 0.22) 0%, rgba(111, 214, 255, 0.06) 60%, transparent 80%);
+  border: 1.5px solid rgba(111, 214, 255, 0.55);
+  box-shadow: 0 0 35px rgba(111, 214, 255, 0.45), inset 0 0 25px rgba(111, 214, 255, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.castle-tower-btn:hover .tower-frost-aura,
+.castle-tower-btn:focus .tower-frost-aura {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* Tower Heraldic Banner Flag */
+.tower-banner-flag {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(6, 17, 28, 0.94);
+  border: 1.5px solid var(--color-cyan);
+  border-radius: 8px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7), 0 0 16px var(--color-cyan-glow);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  animation: bannerSway 4s ease-in-out infinite alternate;
+}
+
+.flag-crest {
+  color: var(--color-cyan);
+  font-size: 0.95rem;
+}
+
+.flag-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.castle-tower-btn:hover .tower-banner-flag {
+  background: var(--color-cyan);
+  border-color: #ffffff;
+  box-shadow: 0 0 24px rgba(111, 214, 255, 0.8);
+  transform: translateX(-50%) translateY(-4px) scale(1.05);
+}
+
+.castle-tower-btn:hover .flag-crest,
+.castle-tower-btn:hover .flag-label {
+  color: #040911;
+}
+
+@keyframes bannerSway {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  50% { transform: translateX(-50%) rotate(1.5deg); }
+  100% { transform: translateX(-50%) rotate(-1.5deg); }
+}
+
+/* Perched Frost-Wolf Sentinel */
+.tower-sentinel-wolf {
+  position: absolute;
+  top: 50px;
+  right: 15%;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(111, 214, 255, 0.6));
+  transition: all 0.35s var(--ease-spring);
+  opacity: 0.85;
+}
+
+.wolf-eye-glow {
+  animation: wolfEyeBlink 3.8s ease-in-out infinite;
+}
+
+@keyframes wolfEyeBlink {
+  0%, 90%, 100% { opacity: 1; filter: drop-shadow(0 0 4px #6fd6ff); }
+  95% { opacity: 0.1; }
+}
+
+.castle-tower-btn:hover .tower-sentinel-wolf {
+  transform: translateY(-5px) scale(1.12);
+  opacity: 1;
+  filter: drop-shadow(0 0 16px rgba(111, 214, 255, 0.9));
+}
+
+/* When Sentinels are toggled OFF via topbar */
+body.sentinels-hidden .tower-sentinel-wolf {
+  opacity: 0 !important;
+  visibility: hidden;
+}
+
+/* Tactical HUD Tooltip (Floating Glass Dossier) */
+.tower-hud-card {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px) scale(0.95);
+  width: 290px;
+  background: rgba(5, 15, 25, 0.95);
+  border: 1.5px solid var(--color-cyan);
+  border-radius: 12px;
+  padding: 18px 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.85), 0 0 30px rgba(111, 214, 255, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.28s var(--ease-spring);
+  z-index: 50;
+  text-align: left;
+}
+
+.tower-hud-card.right-anchored {
+  left: auto;
+  right: 15px;
+  transform: translateY(12px) scale(0.95);
+}
+
+.castle-tower-btn:hover .tower-hud-card,
+.castle-tower-btn:focus .tower-hud-card {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.castle-tower-btn:hover .tower-hud-card.right-anchored,
+.castle-tower-btn:focus .tower-hud-card.right-anchored {
+  transform: translateY(0) scale(1);
+}
+
+.hud-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.hud-gate-code {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-cyan-bright);
+  letter-spacing: 0.08em;
+}
+
+.hud-status-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.hud-status-badge.unlocked {
+  background: rgba(111, 214, 255, 0.15);
+  border: 1px solid var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.hud-status-badge.frozen {
+  background: rgba(100, 116, 139, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #94a3b8;
+}
+
+.hud-status-badge.cleared {
+  background: rgba(56, 239, 125, 0.15);
+  border: 1px solid var(--color-success);
+  color: var(--color-success);
+}
+
+.hud-tower-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.hud-concept-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-cyan);
+  margin-bottom: 10px;
+}
+
+.hud-prompt {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+.hud-action-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(111, 214, 255, 0.2) 0%, rgba(2, 132, 199, 0.3) 100%);
+  border: 1px solid var(--color-cyan);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transition: all 0.2s ease;
+}
+
+.castle-tower-btn:hover .hud-action-cta {
+  background: var(--color-cyan);
+  color: #030812;
+}
+
+.cta-arrow {
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.castle-tower-btn:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
+/* Locked Tower Visual State */
+.castle-tower-btn.locked .tower-banner-flag {
+  border-color: rgba(148, 163, 184, 0.4);
+  background: rgba(6, 12, 18, 0.88);
+}
+
+.castle-tower-btn.locked .flag-crest {
+  color: #64748b;
+}
+
+.castle-tower-btn.locked .flag-label {
+  color: #94a3b8;
+}
+
+/* Shake Animation when a locked tower is clicked */
+.castle-tower-btn.shake-locked {
+  animation: lockedShake 0.5s ease;
+}
+
+@keyframes lockedShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* Bottom Ambient Status Strip */
+.citadel-hud-bottom-bar {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 20;
+}
+
+.hud-hint-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(5, 14, 24, 0.9);
+  border: 1.5px solid var(--color-border);
+  border-radius: 9999px;
+  padding: 8px 22px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  font-size: 0.84rem;
+  color: var(--color-text-main);
+}
+
+.hint-sparkle {
+  color: var(--color-cyan);
+  font-size: 1rem;
+}
+
+.btn-reset-gates-pill {
+  background: rgba(5, 14, 24, 0.85);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reset-gates-pill:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+/* =========================================================================
+   SPLIT-SCREEN CHALLENGE ROOMS (Screens 2 - 6)
+   100% Match to Introduction Module Architecture
+   ========================================================================= */
+.room-interactive-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 32px;
+  max-width: 1420px;
+  margin: 0 auto;
+  padding: 32px 32px 80px;
+  width: 100%;
+}
+
+@media (max-width: 1080px) {
+  .room-interactive-layout {
+    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
-  .rimeguard-cinematic-hud {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+/* Left Briefing Panel */
+.room-brief-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn-panel-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(7, 18, 30, 0.9);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-cyan-bright);
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 0.25s var(--ease-cinematic);
+}
+
+.btn-panel-back:hover {
+  background: rgba(14, 34, 54, 0.95);
+  border-color: var(--color-cyan);
+  color: #ffffff;
+  transform: translateX(-3px);
+  box-shadow: 0 0 16px var(--color-cyan-glow);
+}
+
+.room-brief-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gate-tag-pill {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-cyan);
+  background: rgba(111, 214, 255, 0.12);
+  border: 1px solid var(--color-border);
+  padding: 4px 12px;
+  border-radius: 9999px;
+}
+
+.gate-tag-pill.apex-pill {
+  color: #ffd166;
+  border-color: rgba(255, 209, 102, 0.4);
+  background: rgba(255, 209, 102, 0.12);
+}
+
+.room-brief-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(111, 214, 255, 0.3);
+  line-height: 1.25;
+}
+
+.concept-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* Oracle NPC Dialogue Card */
+.oracle-dialogue-card {
+  display: flex;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(8, 22, 36, 0.9) 0%, rgba(5, 14, 24, 0.94) 100%);
+  border: 1.5px solid var(--color-border);
+  border-radius: 14px;
+  padding: 20px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.oracle-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #133857 0%, #061524 100%);
+  border: 1.5px solid var(--color-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--color-cyan);
+  box-shadow: 0 0 14px var(--color-cyan-glow);
+  flex-shrink: 0;
+}
+
+.oracle-dialogue-body strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  color: var(--color-cyan-bright);
+  margin-bottom: 6px;
+}
+
+.oracle-dialogue-body p {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #c8dfea;
+  font-style: italic;
+}
+
+/* Mechanism Info Card */
+.mechanism-info-card {
+  background: rgba(7, 18, 30, 0.85);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 20px;
+  backdrop-filter: blur(12px);
+}
+
+.mechanism-info-card h4 {
+  font-family: var(--font-display);
+  font-size: 0.96rem;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.mechanism-info-card p {
+  font-size: 0.84rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.command-primer {
+  background: rgba(3, 10, 16, 0.9);
+  border: 1px solid rgba(111, 214, 255, 0.15);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #a4c9de;
+  line-height: 1.7;
+}
+
+.command-primer code {
+  color: var(--color-cyan);
+  font-weight: 600;
+}
+
+/* Hint Drawer */
+.hint-drawer {
+  background: rgba(7, 18, 30, 0.8);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.btn-hint-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: transparent;
+  border: none;
+  color: var(--color-cyan);
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hint-chevron {
+  transition: transform 0.25s ease;
+}
+
+.hint-drawer.open .hint-chevron {
+  transform: rotate(180deg);
+}
+
+.hint-content {
+  display: none;
+  padding: 0 18px 16px;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #bdd5e2;
+  border-top: 1px solid rgba(111, 214, 255, 0.1);
+  padding-top: 12px;
+}
+
+.hint-drawer.open .hint-content {
+  display: block;
+}
+
+/* Right Stage Panel */
+.room-stage-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stage-diagnostic-bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: rgba(6, 17, 28, 0.88);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.diag-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diag-label {
+  color: var(--color-text-dim);
+}
+
+.diag-val {
+  color: var(--color-cyan-bright);
+  font-weight: 600;
+}
+
+.diag-val.online {
+  color: var(--color-success);
+}
+
+.diag-val.error {
+  color: var(--color-error);
+}
+
+/* Interactive Cyber Terminal */
+.interactive-terminal-card {
+  display: flex;
+  flex-direction: column;
+  background: #030a12;
+  border: 1.5px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(111, 214, 255, 0.12);
+}
+
+.terminal-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(8, 20, 32, 0.95);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 7px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.dot.red { background: #ef4444; }
+.dot.yellow { background: #f59e0b; }
+.dot.green { background: #10b981; }
+
+.terminal-title {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.btn-term-clear {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-term-clear:hover {
+  color: #ffffff;
+  border-color: var(--color-cyan);
+}
+
+.terminal-output-body {
+  height: 280px;
+  padding: 16px 20px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #d1e5f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.term-line.system {
+  color: var(--color-cyan);
+}
+
+.term-line.error {
+  color: var(--color-error);
+}
+
+.term-line.success {
+  color: var(--color-success);
+}
+
+.term-highlight {
+  color: var(--color-cyan-bright);
+  font-weight: 600;
+}
+
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: rgba(6, 16, 26, 0.95);
+  border-top: 1px solid var(--color-border);
+}
+
+.term-prompt {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--color-cyan);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.term-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #ffffff;
+}
+
+.btn-term-exec {
+  background: linear-gradient(135deg, var(--color-cyan) 0%, var(--color-ice-blue) 100%);
+  border: none;
+  color: #030812;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 7px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-term-exec:hover {
+  box-shadow: 0 0 12px var(--color-cyan);
+  transform: translateY(-1px);
+}
+
+/* Flag Submission Card */
+.flag-submit-card {
+  background: rgba(7, 18, 30, 0.9);
+  border: 1.5px solid var(--color-border);
+  border-radius: 12px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flag-input-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.flag-icon {
+  color: var(--color-cyan);
+  font-size: 1.1rem;
+}
+
+.flag-text-input {
+  flex: 1;
+  background: rgba(3, 10, 16, 0.9);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.flag-text-input:focus {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 10px var(--color-cyan-glow);
+}
+
+.btn-submit-flag {
+  background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+  border: none;
+  color: #021a11;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.84rem;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s var(--ease-cinematic);
+}
+
+.btn-submit-flag:hover {
+  box-shadow: 0 0 20px rgba(56, 239, 125, 0.6);
+  transform: translateY(-2px);
+}
+
+.flag-validation-feedback {
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  min-height: 18px;
+}
+
+.flag-validation-feedback.error {
+  color: var(--color-error);
+}
+
+.flag-validation-feedback.success {
+  color: var(--color-success);
+}
+
+/* Flag Victory Success Banner */
+.flag-success-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: linear-gradient(135deg, rgba(8, 38, 28, 0.95) 0%, rgba(4, 20, 15, 0.98) 100%);
+  border: 1.5px solid var(--color-success);
+  border-radius: 12px;
+  padding: 22px 26px;
+  box-shadow: 0 0 35px rgba(56, 239, 125, 0.25);
+  animation: bannerFadeUp 0.5s var(--ease-spring) forwards;
+}
+
+.flag-success-banner.show {
+  display: flex;
+}
+
+@keyframes bannerFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.success-crest {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(56, 239, 125, 0.15);
+  border: 1.5px solid var(--color-success);
+  color: var(--color-success);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.success-text h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.success-text p {
+  font-size: 0.84rem;
+  color: #a7f3d0;
+}
+
+.btn-advance-gate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-success);
+  border: none;
+  color: #021a11;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.btn-advance-gate:hover {
+  background: #ffffff;
+  box-shadow: 0 0 20px #ffffff;
+  transform: translateY(-2px);
+}
+
+/* =========================================================================
+   MODALS (Oracle Dialogue & Master Victory)
+   ========================================================================= */
+.rime-modal-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(3, 8, 16, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.rime-modal-scrim.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rime-modal-card {
+  position: relative;
+  background: #081524;
+  border: 1.5px solid var(--color-cyan);
+  border-radius: 16px;
+  max-width: 580px;
+  width: 100%;
+  padding: 32px 36px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 45px var(--color-cyan-glow);
+  transform: scale(0.94);
+  transition: transform 0.4s var(--ease-spring);
+}
+
+.rime-modal-scrim.show .rime-modal-card {
+  transform: scale(1);
+}
+
+.modal-oracle-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.modal-oracle-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #133c5e 0%, #061828 100%);
+  border: 1.5px solid var(--color-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  color: var(--color-cyan);
+  box-shadow: 0 0 16px var(--color-cyan-glow);
+  flex-shrink: 0;
+}
+
+.modal-oracle-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #ffffff;
+}
+
+.modal-oracle-sub {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-cyan-bright);
+}
+
+.btn-modal-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn-modal-close:hover {
+  color: #ffffff;
+}
+
+.oracle-quote {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #cce3f0;
+  font-style: italic;
+  margin-bottom: 22px;
+  background: rgba(3, 10, 18, 0.6);
+  padding: 16px;
+  border-radius: 10px;
+  border-left: 3px solid var(--color-cyan);
+}
+
+.oracle-inquiries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.btn-oracle-query {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(6, 19, 32, 0.85);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--color-text-main);
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.btn-oracle-query span:first-child {
+  color: var(--color-cyan);
+}
+
+.btn-oracle-query:hover {
+  background: rgba(14, 38, 62, 0.95);
+  border-color: var(--color-cyan);
+  transform: translateX(4px);
+  color: #ffffff;
+}
+
+.modal-oracle-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Master Victory Celebration Card */
+.rime-modal-card.master-victory {
+  text-align: center;
+  max-width: 620px;
+}
+
+.victory-sigil {
+  font-size: 3rem;
+  color: var(--color-cyan);
+  text-shadow: 0 0 25px var(--color-cyan);
+  margin-bottom: 12px;
+  animation: victoryPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes victoryPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.15) rotate(15deg); }
+}
+
+.victory-title {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 20px var(--color-cyan-glow);
+  margin-bottom: 10px;
+}
+
+.victory-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #a4c9de;
+  margin-bottom: 24px;
+}
+
+.victory-stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.stat-pill {
+  background: rgba(3, 10, 18, 0.8);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-num {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-cyan);
+}
+
+.stat-lbl {
+  font-size: 0.7rem;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+}
+
+.btn-enter-rimeguard {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--color-cyan) 0%, var(--color-ice-blue) 100%);
+  border: none;
+  color: #030812;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 11px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.btn-enter-rimeguard:hover {
+  background: #ffffff;
+  box-shadow: 0 0 24px #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-action.ghost {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.84rem;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-action.ghost:hover {
+  color: #ffffff;
+  border-color: var(--color-cyan);
+}
+
+/* =========================================================================
+   RESPONSIVE DESIGN (Tablets & Mobile Viewports)
+   ========================================================================= */
+@media (max-width: 900px) {
+  .sanctum-topbar {
+    padding: 0 16px;
   }
-  .hud-cinematic-controls {
-    flex-wrap: wrap;
+  .topbar-subtitle,
+  .topbar-crumbs {
+    display: none;
+  }
+  .citadel-viewport-hub {
+    height: calc(100vh - 64px);
+  }
+  .citadel-hud-bottom-bar {
+    width: 90%;
+    flex-direction: column;
+    gap: 8px;
+    bottom: 12px;
+  }
+  .hud-hint-pill {
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    text-align: center;
   }
 }
