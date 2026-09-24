@@ -1,0 +1,1644 @@
+/* =============================================================================
+   HOUSE RIMEGUARD — FROZEN CITADEL STYLESHEET
+   Authentic 2D Game Fortress with Living Atmospheric Motion & Thaw Physics
+   ============================================================================= */
+
+:root {
+  /* Theme Palette (from theme-rimeguard contract) */
+  --house-bg: #040914;
+  --house-surface: #0d1a27;
+  --house-surface-light: #16283b;
+  --house-surface-deep: #08111a;
+  --house-accent: #38bdf8;
+  --house-accent-glow: rgba(56, 189, 248, 0.45);
+  --house-accent-strong: #f0f9ff;
+  --house-border: rgba(125, 211, 252, 0.3);
+  --house-border-strong: rgba(56, 189, 248, 0.65);
+  --house-text: #f0f9ff;
+  --house-text-muted: #93c5fd;
+
+  /* Typography */
+  --font-display: 'Cinzel', serif;
+  --font-decorative: 'Cinzel Decorative', 'Cinzel', serif;
+  --font-riddle: 'Cormorant Garamond', Georgia, serif;
+  --font-ui: 'Manrope', -apple-system, sans-serif;
+  --font-accent: 'Outfit', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--house-bg);
+  color: var(--house-text);
+  font-family: var(--font-ui);
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =============================================================================
+   1. VIEWPORT STAGE & BACKGROUND SCENIC CANVAS
+   ============================================================================= */
+.rimeguard-viewport-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--house-bg);
+}
+
+/* 60fps Snowdrift Canvas (Behind HUD and hotspots, above base art) */
+.snowdrift-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* Celestial Warp Radiance Bloom */
+.rimeguard-warp-flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #ffffff 0%, #bae6fd 60%, rgba(56, 189, 248, 0.8) 100%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+  transition: opacity 0.45s ease-out;
+}
+
+.rimeguard-warp-flash.flash-active {
+  opacity: 1;
+}
+
+/* Fortress Illustration Canvas */
+.fortress-illustration-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.fortress-illustrated-artwork {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  display: block;
+}
+
+/* =============================================================================
+   2. AUTHENTIC SCENE CLOUDS IN ALPINE DRIFT MOTION
+   ============================================================================= */
+.scene-clouds-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.scene-cloud-wrapper {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.cloud-left-wrapper {
+  left: 0;
+  width: 34%;
+  max-width: 530px;
+  transform-origin: 20% 10%;
+  animation: leftCloudAlpineDrift 20s ease-in-out infinite alternate;
+}
+
+.cloud-right-wrapper {
+  right: 0;
+  width: 35%;
+  max-width: 540px;
+  transform-origin: 80% 10%;
+  animation: rightCloudAlpineDrift 24s ease-in-out infinite alternate;
+}
+
+.cloud-sprite {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 4px 16px rgba(4, 15, 30, 0.12));
+}
+
+.cloud-left-sprite {
+  transform-origin: center bottom;
+  animation: cloudBillowPuffLeft 7.5s ease-in-out infinite alternate;
+}
+
+.cloud-right-sprite {
+  transform-origin: center bottom;
+  animation: cloudBillowPuffRight 8.8s ease-in-out infinite alternate;
+}
+
+@keyframes leftCloudAlpineDrift {
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  35% { transform: translate3d(32px, -8px, 0) scale(1.025) rotate(0.6deg); }
+  70% { transform: translate3d(-14px, 5px, 0) scale(0.985) rotate(-0.4deg); }
+  100% { transform: translate3d(20px, -4px, 0) scale(1.01) rotate(0.3deg); }
+}
+
+@keyframes rightCloudAlpineDrift {
+  0% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  30% { transform: translate3d(-35px, 6px, 0) scale(0.98) rotate(-0.6deg); }
+  75% { transform: translate3d(18px, -10px, 0) scale(1.03) rotate(0.5deg); }
+  100% { transform: translate3d(-20px, 4px, 0) scale(0.995) rotate(-0.3deg); }
+}
+
+@keyframes cloudBillowPuffLeft {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03) translateY(-4px); }
+}
+
+@keyframes cloudBillowPuffRight {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.035) translateY(-5px); }
+}
+
+/* =============================================================================
+   3. ANIMATED VECTOR FLAGS (SVG Overlay)
+   ============================================================================= */
+.rimeguard-animated-flags-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 18;
+  overflow: visible;
+}
+
+/* =============================================================================
+   4. ATMOSPHERIC AURORAS, SNOW GLINTS & CRACKED ICE DATA PULSES
+   ============================================================================= */
+.mountain-atmospheric-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Celestial Aurora Ribbon Sweep */
+.mountain-aurora-sweep {
+  position: absolute;
+  top: 6%;
+  left: 20%;
+  width: 60%;
+  height: 25%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(56, 189, 248, 0.16) 0%, rgba(16, 185, 129, 0.08) 45%, rgba(4, 9, 20, 0) 75%);
+  filter: blur(28px);
+  animation: auroraBorealisSweep 12s ease-in-out infinite alternate;
+}
+
+@keyframes auroraBorealisSweep {
+  0% { transform: translateY(0) scaleX(0.95); opacity: 0.5; }
+  50% { transform: translateY(-8px) scaleX(1.05); opacity: 0.85; filter: blur(22px); }
+  100% { transform: translateY(4px) scaleX(1); opacity: 0.6; }
+}
+
+/* Snow Crest Glints */
+.mountain-snow-glint {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ffffff, 0 0 18px #7dd3fc;
+  opacity: 0;
+  animation: snowGlintTwinkle 6s ease-in-out infinite;
+}
+
+.glint-1 { top: 28%; left: 24%; animation-delay: 0.5s; }
+.glint-2 { top: 32%; left: 74%; animation-delay: 2.5s; }
+.glint-3 { top: 22%; left: 63%; animation-delay: 4.2s; }
+
+@keyframes snowGlintTwinkle {
+  0%, 100% { opacity: 0; transform: scale(0.2); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* Frozen Waterfall Mid-Fall Sheen */
+.waterfall-ice-sheen {
+  position: absolute;
+  top: 32%;
+  right: 1.5%;
+  width: 14%;
+  height: 64%;
+  background: linear-gradient(180deg, rgba(224, 242, 254, 0) 0%, rgba(224, 242, 254, 0.18) 45%, rgba(56, 189, 248, 0.22) 80%, rgba(224, 242, 254, 0) 100%);
+  filter: blur(8px);
+  animation: waterfallSheenFlow 4.5s ease-in-out infinite alternate;
+}
+
+@keyframes waterfallSheenFlow {
+  0% { opacity: 0.45; transform: scaleY(0.96); }
+  100% { opacity: 0.9; transform: scaleY(1.02); }
+}
+
+/* Pulsing Cyan Data Streams in Cracked Ice Path */
+.path-fissure-pulse-layer {
+  position: absolute;
+  bottom: 0;
+  left: 36%;
+  width: 28%;
+  height: 48%;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.data-pulse-line {
+  position: absolute;
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.8) 0%, rgba(125, 211, 252, 0.2) 100%);
+  filter: drop-shadow(0 0 8px #38bdf8);
+  border-radius: 2px;
+  animation: dataStreamPulse 3.5s ease-in-out infinite alternate;
+}
+
+.pulse-line-1 {
+  top: 25%;
+  left: 48%;
+  width: 3px;
+  height: 60%;
+  transform: rotate(-3deg);
+}
+
+.pulse-line-2 {
+  top: 45%;
+  left: 54%;
+  width: 2.5px;
+  height: 45%;
+  transform: rotate(5deg);
+  animation-delay: 1.5s;
+}
+
+@keyframes dataStreamPulse {
+  0% { opacity: 0.3; filter: drop-shadow(0 0 3px #38bdf8); }
+  50% { opacity: 1; filter: drop-shadow(0 0 12px #a5f3fc); }
+  100% { opacity: 0.4; filter: drop-shadow(0 0 4px #38bdf8); }
+}
+
+/* =============================================================================
+   5. LANDMARK: ROTATING 3D ICE-CORE AT PINNACLE APEX
+   ============================================================================= */
+.landmark-ice-core-anchor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 16;
+}
+
+.ice-orbit-halo {
+  position: absolute;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(56, 189, 248, 0.85);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.7);
+  animation: orbitHaloSpin 16s linear infinite;
+}
+
+.ice-orbit-halo-inner {
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px dotted rgba(224, 242, 254, 0.9);
+  animation: orbitHaloSpin 10s linear infinite reverse;
+}
+
+@keyframes orbitHaloSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ice-prism-rotator {
+  position: relative;
+  width: 34px;
+  height: 52px;
+  animation: prismLevitate 4s ease-in-out infinite alternate;
+}
+
+@keyframes prismLevitate {
+  0% { transform: translateY(-4px) rotateY(0deg); }
+  50% { transform: translateY(4px) rotateY(180deg); }
+  100% { transform: translateY(-4px) rotateY(360deg); }
+}
+
+.prism-gem-facet {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(56, 189, 248, 0.85) 100%);
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 1));
+}
+
+.ice-core-ambient-flare {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(56, 189, 248, 0) 70%);
+  animation: flareBreathe 3s ease-in-out infinite alternate;
+}
+
+@keyframes flareBreathe {
+  0% { transform: scale(0.85); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+/* =============================================================================
+   6. DIEGETIC WAYSIDE RUNESTONE MONOLITH
+   ============================================================================= */
+.oracle-wayside-monolith {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.25s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.oracle-wayside-monolith:hover {
+  transform: translate(-50%, -55%) scale(1.1);
+}
+
+.monolith-stone-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 12px rgba(6, 16, 28, 0.85));
+}
+
+.monolith-svg {
+  width: 38px;
+  height: 52px;
+  display: block;
+}
+
+.monolith-carved-rune {
+  animation: runicFaintPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes runicFaintPulse {
+  0% { opacity: 0.6; filter: drop-shadow(0 0 2px #38bdf8); }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px #a5f3fc); }
+  100% { opacity: 0.7; filter: drop-shadow(0 0 3px #38bdf8); }
+}
+
+.monolith-frost-mist {
+  position: absolute;
+  bottom: 0;
+  width: 130%;
+  height: 12px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(186, 230, 253, 0.45) 0%, rgba(186, 230, 253, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.monolith-heraldic-tag {
+  margin-top: 4px;
+  background: linear-gradient(180deg, #1d3146 0%, #132232 100%);
+  border: 1.5px solid #162433;
+  box-shadow: 0 0 0 1px #486d91, 0 4px 12px rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  padding: 3px 9px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.oracle-wayside-monolith:hover .monolith-heraldic-tag {
+  opacity: 1;
+  transform: translateY(0);
+  box-shadow: 0 0 0 1px #7dd3fc, 0 4px 16px rgba(56, 189, 248, 0.5);
+}
+
+.monolith-tag-text {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #e0f2fe;
+  white-space: nowrap;
+}
+
+/* =============================================================================
+   7. INTERACTIVE GATE HOTSPOTS & FROST-WOLVES
+   ============================================================================= */
+.fortress-interactive-zone {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 22;
+  border-radius: 12px;
+}
+
+/* Organic Radial Aura on Hover */
+.radial-aura-spotlight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140%;
+  height: 140%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(56, 189, 248, 0.28) 0%, rgba(56, 189, 248, 0.1) 45%, rgba(56, 189, 248, 0) 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fortress-interactive-zone:hover .radial-aura-spotlight {
+  opacity: 1;
+  animation: auraBreathe 2s ease-in-out infinite alternate;
+}
+
+.radial-aura-spotlight.castle-aura {
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(56, 189, 248, 0.24) 0%, rgba(56, 189, 248, 0.08) 50%, rgba(56, 189, 248, 0) 70%);
+}
+
+@keyframes auraBreathe {
+  0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+}
+
+/* Sentinel Frost Beacon Indicator */
+.sentinel-frost-beacon {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 10;
+}
+
+.sentinel-frost-beacon.castle-beacon-pos {
+  top: 22%;
+}
+
+.beacon-star {
+  font-size: 14px;
+  color: #cbeafe;
+  filter: drop-shadow(0 0 6px #38bdf8);
+  animation: beaconTwinkle 3s ease-in-out infinite alternate;
+}
+
+.beacon-ripple {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  animation: beaconPulse 2.8s infinite cubic-bezier(0.2, 1, 0.4, 1);
+}
+
+body.sentinels-hidden .sentinel-frost-beacon {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes beaconTwinkle {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 10px #ffffff); }
+}
+
+@keyframes beaconPulse {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  80% { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* Heraldic Crest Shield Marker */
+.bastion-shield-marker {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 4px 10px rgba(10, 20, 32, 0.8));
+  transition: transform 0.25s cubic-bezier(0.2, 1, 0.4, 1), opacity 0.25s ease;
+  z-index: 12;
+}
+
+.bastion-shield-marker.castle-marker-pos {
+  top: 18%;
+}
+
+.heraldic-shield-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.shield-roman-numeral {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: #f0f9ff;
+  text-shadow: 0 1px 3px rgba(10, 20, 32, 0.9);
+  pointer-events: none;
+}
+
+.shield-glint-spark {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  width: 4px;
+  height: 4px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ffffff;
+  opacity: 0.8;
+  animation: shieldSparkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes shieldSparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Heraldic Ribbon Banner on Hover */
+.bastion-parchment-banner {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  filter: drop-shadow(0 8px 20px rgba(6, 16, 28, 0.85));
+}
+
+.fortress-interactive-zone:hover .bastion-parchment-banner {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+.bastion-parchment-banner.castle-banner-pos {
+  top: -38px;
+}
+
+.banner-ribbon-center {
+  background: linear-gradient(180deg, #1c3248 0%, #132434 100%);
+  border: 1.5px solid #162433;
+  box-shadow: inset 0 0 0 1px #466c8f;
+  padding: 5px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.banner-bastion-title {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #f0f9ff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.banner-status-tag {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  border: 1px solid #162433;
+}
+
+.banner-status-tag.status-thawed {
+  background-color: #064e3b;
+  border-color: #059669;
+  color: #6ee7b7;
+}
+
+.banner-status-tag.status-sealed {
+  background-color: #0c2d48;
+  border-color: #0284c7;
+  color: #7dd3fc;
+}
+
+.banner-ribbon-tail {
+  width: 10px;
+  height: 28px;
+  background: #111e2b;
+  position: relative;
+}
+
+.banner-ribbon-tail.tail-left {
+  clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
+}
+
+.banner-ribbon-tail.tail-right {
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+}
+
+/* Spectral Frost-Wolf (Guardian Characters on Hover) */
+.spectral-frost-wolf {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 58px;
+  height: 38px;
+  background: radial-gradient(ellipse at 50% 60%, rgba(224, 242, 254, 0.9) 0%, rgba(56, 189, 248, 0.5) 50%, rgba(56, 189, 248, 0) 100%);
+  border-radius: 50%;
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 1));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.fortress-interactive-zone:hover .spectral-frost-wolf {
+  opacity: 1;
+  animation: wolfPace 1.8s ease-in-out infinite alternate;
+}
+
+.spectral-frost-wolf.wolf-castle-pos {
+  bottom: 8%;
+}
+
+@keyframes wolfPace {
+  0% { transform: translateX(-60%) scaleX(1); }
+  100% { transform: translateX(-40%) scaleX(1.05); }
+}
+
+.wolf-glow-eye {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  width: 4px;
+  height: 4px;
+  background-color: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ffffff;
+}
+
+.wolf-frost-breath {
+  position: absolute;
+  top: 12px;
+  right: 6px;
+  width: 14px;
+  height: 8px;
+  background: radial-gradient(circle, rgba(224, 242, 254, 0.8) 0%, rgba(224, 242, 254, 0) 70%);
+  border-radius: 50%;
+  animation: wolfBreath 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes wolfBreath {
+  0% { opacity: 0.2; transform: scale(0.6); }
+  100% { opacity: 0.8; transform: scale(1.3); }
+}
+
+/* =============================================================================
+   8. TOP CINEMATIC HUD (Matching provided design)
+   ============================================================================= */
+.rimeguard-cinematic-hud {
+  position: absolute;
+  top: 18px;
+  left: 28px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 40;
+  pointer-events: none;
+}
+
+/* Left: Crest & Title */
+.hud-cinematic-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  pointer-events: auto;
+  filter: drop-shadow(0 2px 12px rgba(4, 12, 22, 0.95));
+}
+
+.cinematic-crest-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.45));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cinematic-crest-icon:hover {
+  transform: scale(1.08) rotate(-2deg);
+}
+
+.cinematic-title-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cinematic-house-name {
+  margin: 0;
+  font-family: var(--font-decorative);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: #f8fafc;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 24px rgba(186, 230, 253, 0.5);
+  line-height: 1.1;
+}
+
+.cinematic-realm-sub {
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  color: #93c5fd;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  opacity: 0.9;
+}
+
+/* Right Controls Cluster */
+.hud-cinematic-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+/* Toggle Sentinel Markers */
+.btn-sentinel-toggle {
+  background: rgba(15, 29, 44, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  box-shadow: 0 4px 16px rgba(2, 6, 12, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 7px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #bae6fd;
+  transition: all 0.25s ease;
+}
+
+.btn-sentinel-toggle:hover {
+  background: rgba(26, 49, 74, 0.85);
+  border-color: #38bdf8;
+  color: #f0f9ff;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+.sentinel-sigil {
+  font-size: 11px;
+  color: #38bdf8;
+}
+
+/* Commune with Oracle Button */
+.btn-cinematic-talisman {
+  background: rgba(15, 29, 44, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  box-shadow: 0 4px 16px rgba(2, 6, 12, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 7px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-cinematic-talisman:hover {
+  background: rgba(26, 49, 74, 0.85);
+  border-color: #7dd3fc;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+.talisman-rune {
+  font-size: 14px;
+  color: #7dd3fc;
+  filter: drop-shadow(0 0 4px #38bdf8);
+}
+
+.talisman-text {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #f0f9ff;
+}
+
+/* Gate Unsealed Progress Badge */
+.cinematic-defense-badge {
+  background: rgba(15, 29, 44, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  box-shadow: 0 4px 16px rgba(2, 6, 12, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 7px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.defense-gems-row {
+  display: flex;
+  gap: 6px;
+}
+
+.defense-gem-diamond {
+  width: 9px;
+  height: 9px;
+  transform: rotate(45deg);
+  border: 1px solid #1e3a53;
+  transition: all 0.3s ease;
+}
+
+.defense-gem-diamond.gem-thawed {
+  background: linear-gradient(135deg, #6ee7b7 0%, #10b981 100%);
+  border-color: #a7f3d0;
+  box-shadow: 0 0 8px #34d399;
+}
+
+.defense-gem-diamond.gem-sealed {
+  background: rgba(16, 32, 48, 0.85);
+  border-color: #3b5e7d;
+}
+
+.defense-status-text {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #bae6fd;
+}
+
+/* SFX Audio Button */
+.btn-sfx-toggle {
+  background: rgba(15, 29, 44, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #bae6fd;
+  transition: all 0.2s ease;
+}
+
+.btn-sfx-toggle:hover {
+  background: rgba(26, 49, 74, 0.85);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Profile Menu */
+.profile-menu-container {
+  position: relative;
+}
+
+.nav-avatar-btn {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  background: #0d1a27;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-avatar-btn:hover {
+  transform: scale(1.08);
+  border-color: #bae6fd;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+}
+
+.nav-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.user-badge-online {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 9px;
+  height: 9px;
+  background: #10b981;
+  border: 2px solid #060a10;
+  border-radius: 50%;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background: rgba(13, 26, 39, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(2, 6, 14, 0.9);
+  padding: 12px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 70;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.profile-dropdown.open {
+  display: flex;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 8px;
+}
+
+.dropdown-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #38bdf8;
+}
+
+.dropdown-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: #f0f9ff;
+}
+
+.dropdown-role {
+  font-size: 10.5px;
+  color: #7dd3fc;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(125, 211, 252, 0.2);
+  margin: 4px 0;
+}
+
+.dropdown-link-btn, .dropdown-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #cbd5e1;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: var(--font-ui);
+}
+
+.dropdown-link-btn:hover, .dropdown-logout-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: #f0f9ff;
+}
+
+.dropdown-logout-btn {
+  color: #f87171;
+}
+
+.dropdown-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}
+
+/* =============================================================================
+   9. ILLUMINATED ORACLE DIALOGUE SCROLL
+   ============================================================================= */
+.fantasy-oracle-parchment {
+  position: absolute;
+  top: 80px;
+  right: 28px;
+  width: 380px;
+  background: linear-gradient(180deg, #16283b 0%, #0d1a27 100%);
+  border: 2px solid #152433;
+  box-shadow: inset 0 0 0 1px #466e92, 0 20px 50px rgba(2, 8, 16, 0.9);
+  border-radius: 4px;
+  padding: 22px;
+  z-index: 60;
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.parchment-corner {
+  position: absolute;
+  font-size: 10px;
+  color: #608fae;
+  pointer-events: none;
+}
+
+.pc-tl { top: 4px; left: 6px; }
+.pc-tr { top: 4px; right: 6px; }
+.pc-bl { bottom: 4px; left: 6px; }
+.pc-br { bottom: 4px; right: 6px; }
+
+.oracle-scroll-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px solid #203952;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.oracle-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.oracle-rune-sigil {
+  font-size: 20px;
+  color: #7dd3fc;
+  filter: drop-shadow(0 0 4px #38bdf8);
+}
+
+.oracle-scroll-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #f0f9ff;
+}
+
+.btn-parchment-close, .btn-codex-dismiss {
+  background: none;
+  border: 1px solid #294765;
+  border-radius: 3px;
+  color: #8da4be;
+  font-size: 14px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-parchment-close:hover, .btn-codex-dismiss:hover {
+  border-color: #7dd3fc;
+  color: #ffffff;
+  background-color: rgba(56, 189, 248, 0.2);
+}
+
+.oracle-scroll-body {
+  margin-bottom: 18px;
+}
+
+.oracle-riddle-scrollbox {
+  background: rgba(8, 18, 29, 0.7);
+  border: 1px solid #1c354e;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.oracle-riddle-text {
+  margin: 0;
+  font-family: var(--font-riddle);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.55;
+  color: #e2f2fc;
+}
+
+.oracle-lore-footer {
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: #81a8ca;
+  display: block;
+  line-height: 1.5;
+}
+
+.oracle-scroll-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Chiseled Stone Fantasy Button */
+.btn-fantasy-carved {
+  background: linear-gradient(180deg, #2b4c6e 0%, #172f48 100%);
+  border: 1.5px solid #162433;
+  box-shadow: inset 0 0 0 1px #5d92bf, 0 3px 0 #0d1a27, 0 6px 14px rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  color: #f0f9ff;
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.btn-fantasy-carved:hover {
+  background: linear-gradient(180deg, #355d87 0%, #1e3c5c 100%);
+  box-shadow: inset 0 0 0 1px #a5f3fc, 0 3px 0 #0d1a27, 0 8px 20px rgba(56, 189, 248, 0.4);
+}
+
+.btn-fantasy-carved:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 0 0 1px #5d92bf, 0 1px 0 #0d1a27;
+}
+
+/* =============================================================================
+   10. BASTION CODEX / CHALLENGE DOSSIER MODAL
+   ============================================================================= */
+.bastion-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: rgba(3, 9, 18, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.bastion-codex-card {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  background: linear-gradient(180deg, #17293d 0%, #0d1a27 100%);
+  border: 2px solid #152433;
+  box-shadow: inset 0 0 0 1px #487297, 0 24px 60px rgba(2, 6, 14, 0.95);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.crack-propagation-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.codex-corner {
+  position: absolute;
+  font-size: 11px;
+  color: #6392b4;
+  pointer-events: none;
+}
+
+.cc-tl { top: 6px; left: 8px; }
+.cc-tr { top: 6px; right: 8px; }
+.cc-bl { bottom: 6px; left: 8px; }
+.cc-br { bottom: 6px; right: 8px; }
+
+.codex-header {
+  padding: 14px 24px;
+  background: #112030;
+  border-bottom: 1.5px solid #203952;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.codex-banner-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.codex-numeral {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  color: #f0f9ff;
+  background: #1b344d;
+  border: 1px solid #4a7499;
+  padding: 2px 10px;
+  border-radius: 2px;
+}
+
+.codex-role {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #93c5fd;
+}
+
+.codex-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.codex-bastion-name {
+  margin: 0;
+  font-family: var(--font-decorative);
+  font-size: 22px;
+  font-weight: 900;
+  color: #f0f9ff;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 4px #0c1a28;
+}
+
+.codex-bastion-title {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #7dd3fc;
+  margin-top: -8px;
+}
+
+.codex-chronicle-box {
+  background-color: rgba(8, 18, 30, 0.75);
+  border: 1.5px solid #19324a;
+  border-radius: 4px;
+  display: flex;
+  overflow: hidden;
+}
+
+.chronicle-pillar-line {
+  width: 4px;
+  background: linear-gradient(180deg, #38bdf8 0%, #1d4ed8 100%);
+}
+
+.chronicle-text-wrap {
+  padding: 14px 18px;
+}
+
+.chronicle-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #38bdf8;
+  margin-bottom: 6px;
+}
+
+.chronicle-text-wrap p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.codex-stats-grid {
+  display: flex;
+  gap: 14px;
+}
+
+.codex-stat-panel {
+  flex: 1;
+  background-color: rgba(8, 18, 30, 0.75);
+  border: 1.5px solid #19324a;
+  border-radius: 4px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #64748b;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #f0f9ff;
+}
+
+.stat-value.status-thawed {
+  color: #34d399;
+}
+
+.stat-value.status-sealed {
+  color: #7dd3fc;
+}
+
+/* Challenge Terminal */
+.codex-challenge-terminal {
+  background: #040912;
+  border: 1px solid #1e3a5a;
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+}
+
+.term-header-bar {
+  background: #0f1d2e;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #1e3a5a;
+}
+
+.term-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #334155;
+}
+
+.term-dot:nth-child(1) { background: #ef4444; }
+.term-dot:nth-child(2) { background: #f59e0b; }
+.term-dot:nth-child(3) { background: #10b981; }
+
+.term-title {
+  margin-left: 6px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #7dd3fc;
+}
+
+.term-body-content {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.term-prompt-line {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.term-ps1 {
+  color: #38bdf8;
+  margin-right: 6px;
+}
+
+.term-info-text {
+  color: #94a3b8;
+}
+
+.term-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.term-input {
+  flex: 1;
+  background: #081320;
+  border: 1px solid #204368;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: #f0f9ff;
+  outline: none;
+}
+
+.term-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.btn-term-verify {
+  background: #1e3a5c;
+  border: 1px solid #3b6b99;
+  border-radius: 3px;
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #e0f2fe;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-term-verify:hover {
+  background: #254d7d;
+  border-color: #7dd3fc;
+  color: #ffffff;
+}
+
+.term-feedback {
+  font-size: 12px;
+  min-height: 18px;
+  line-height: 1.4;
+}
+
+.term-feedback.success {
+  color: #34d399;
+}
+
+.term-feedback.error {
+  color: #f87171;
+}
+
+/* Codex Footer */
+.codex-footer {
+  padding: 16px 28px;
+  background: #112030;
+  border-top: 1.5px solid #203952;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn-fantasy-carved.btn-shatter {
+  padding: 10px 24px;
+  font-size: 12.5px;
+  background: linear-gradient(180deg, #0284c7 0%, #03527e 100%);
+  box-shadow: inset 0 0 0 1px #7dd3fc, 0 3px 0 #082942, 0 6px 18px rgba(56, 189, 248, 0.45);
+}
+
+.btn-fantasy-carved.btn-shatter:hover {
+  background: linear-gradient(180deg, #0396e0 0%, #03659c 100%);
+  box-shadow: inset 0 0 0 1px #bae6fd, 0 3px 0 #082942, 0 8px 24px rgba(56, 189, 248, 0.6);
+}
+
+.codex-thawed-confirmed {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #34d399;
+  letter-spacing: 0.08em;
+}
+
+/* =============================================================================
+   11. SIGNATURE ANIMATIONS: THAW INTO PLACE & PERMAFROST SHATTER
+   ============================================================================= */
+.thaw-in {
+  animation: thawIntoPlace 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes thawIntoPlace {
+  0% {
+    filter: blur(6px) brightness(1.6);
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  60% {
+    filter: blur(1.5px) brightness(1.2);
+    opacity: 0.85;
+  }
+  100% {
+    filter: blur(0px) brightness(1);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shatter-active {
+  animation: permafrostShatter 0.75s ease-out;
+}
+
+@keyframes permafrostShatter {
+  0% {
+    filter: brightness(2) contrast(1.5);
+    transform: scale(1.02);
+  }
+  30% {
+    filter: brightness(2.4) drop-shadow(0 0 30px #ffffff);
+  }
+  60% {
+    filter: brightness(1.5);
+    transform: scale(0.995);
+  }
+  100% {
+    filter: brightness(1) contrast(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes modalFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .rimeguard-cinematic-hud {
+    left: 16px;
+    right: 16px;
+    top: 14px;
+  }
+  .cinematic-house-name {
+    font-size: 18px;
+  }
+  .fantasy-oracle-parchment {
+    width: 320px;
+    right: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rimeguard-cinematic-hud {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .hud-cinematic-controls {
+    flex-wrap: wrap;
+  }
+}

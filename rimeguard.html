@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>House Rimeguard — The Frozen Citadel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="rimeguard.css" />
+  <script>
+    // Instant Auth Guard (Requires active Sanctum session)
+    (function() {
+      try {
+        if (sessionStorage.getItem('sanctumAuth') !== 'true') {
+          window.location.replace('index.html#login');
+          return;
+        }
+      } catch (e) {
+        window.location.replace('index.html#login');
+        return;
+      }
+    })();
+    window.addEventListener('pageshow', function() {
+      try {
+        if (sessionStorage.getItem('sanctumAuth') !== 'true') {
+          window.location.replace('index.html#login');
+        }
+      } catch (e) {}
+    });
+  </script>
+</head>
+<body class="rimeguard-body">
+
+  <!-- ========================================================================= -->
+  <!-- 1. FULL-VIEWPORT STAGE & CANVAS LAYERS                                     -->
+  <!-- ========================================================================= -->
+  <div class="rimeguard-viewport-stage" id="rimeguardViewport">
+
+    <!-- 60fps Subtle Snowdrift Particle System & Interactive Snow-Wisp Companion -->
+    <canvas id="snowdriftCanvas" class="snowdrift-canvas"></canvas>
+
+    <!-- Celestial Radiance Flash for Gate Warps / Unlocks -->
+    <div class="rimeguard-warp-flash" id="rimeguardWarpFlash"></div>
+
+    <!-- Background Illustration & Animated Scenic Elements -->
+    <div class="fortress-illustration-canvas" id="fortressIllustrationCanvas">
+      <img
+        src="rimeguard_fortress_scene_cleansky.jpg"
+        alt="House Rimeguard — The Frozen Citadel"
+        class="fortress-illustrated-artwork"
+        id="fortressArtImg"
+      />
+
+      <!-- Living Alpine Clouds (Drifting and billowing gracefully) -->
+      <div class="scene-clouds-container" aria-hidden="true">
+        <div class="scene-cloud-wrapper cloud-left-wrapper">
+          <img src="cloud_left.png" alt="" class="cloud-sprite cloud-left-sprite" />
+        </div>
+        <div class="scene-cloud-wrapper cloud-right-wrapper">
+          <img src="cloud_right.png" alt="" class="cloud-sprite cloud-right-sprite" />
+        </div>
+      </div>
+
+      <!-- Real-Time Vector Wavy Cloth Flags (Positioned in 1376x768 SVG space) -->
+      <svg class="rimeguard-animated-flags-layer" viewBox="0 0 1376 768" preserveAspectRatio="none" id="flagsSvg" aria-hidden="true">
+        <defs>
+          <linearGradient id="flag-royal-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#142a42" />
+            <stop offset="50%" stop-color="#244b70" />
+            <stop offset="100%" stop-color="#3b74a3" />
+          </linearGradient>
+          <linearGradient id="flag-blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#182e44" />
+            <stop offset="55%" stop-color="#24496d" />
+            <stop offset="100%" stop-color="#3c6b96" />
+          </linearGradient>
+          <linearGradient id="flag-crimson-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#691414" />
+            <stop offset="50%" stop-color="#a62626" />
+            <stop offset="100%" stop-color="#c93838" />
+          </linearGradient>
+          <linearGradient id="flag-road-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#15273a" />
+            <stop offset="50%" stop-color="#284869" />
+            <stop offset="100%" stop-color="#3d6891" />
+          </linearGradient>
+        </defs>
+        <!-- Procedural paths injected by rimeguard.js -->
+        <g id="proceduralFlagsGroup"></g>
+      </svg>
+
+      <!-- Atmospheric Overlays: Aurora Borealis Ribbons & Frozen Waterfall Sheen -->
+      <div class="mountain-atmospheric-overlay" aria-hidden="true">
+        <div class="mountain-aurora-sweep"></div>
+        <div class="mountain-snow-glint glint-1"></div>
+        <div class="mountain-snow-glint glint-2"></div>
+        <div class="mountain-snow-glint glint-3"></div>
+        <div class="waterfall-ice-sheen"></div>
+      </div>
+
+      <!-- Pulsing Cyan Data Streams trapped inside the cracked causeway ice -->
+      <div class="path-fissure-pulse-layer" aria-hidden="true">
+        <div class="data-pulse-line pulse-line-1"></div>
+        <div class="data-pulse-line pulse-line-2"></div>
+      </div>
+
+      <!-- Landmark: The Frozen Tower & Rotating 3D Ice-Core Apex -->
+      <div class="landmark-ice-core-anchor" id="landmarkIceCore" style="left: 50%; top: 11.2%;" title="The Permafrost Ice-Core — Heart of Rimeguard">
+        <div class="ice-orbit-halo"></div>
+        <div class="ice-orbit-halo-inner"></div>
+        <div class="ice-prism-rotator">
+          <div class="prism-gem-facet pf-1"></div>
+          <div class="prism-gem-facet pf-2"></div>
+          <div class="prism-gem-facet pf-3"></div>
+          <div class="prism-gem-facet pf-4"></div>
+        </div>
+        <div class="ice-core-ambient-flare"></div>
+      </div>
+
+      <!-- Diegetic Roadside Runestone Shrine (Commune with Ice-Bound Oracle) -->
+      <div class="oracle-wayside-monolith" id="waysideMonolith" style="left: 26%; top: 76%;" title="Commune with the Ancient Glacial Oracle">
+        <div class="monolith-stone-body">
+          <svg class="monolith-svg" viewBox="0 0 38 52" fill="none">
+            <polygon points="7,48 5,20 12,8 26,6 33,18 31,48" fill="#1b2a3a" stroke="#0f1924" stroke-width="2.2" stroke-linejoin="round" />
+            <polygon points="12,8 26,6 23,48 11,48" fill="#283e54" />
+            <path d="M19 14 L24 20 L19 26 L14 20 Z M19 26 V38 M19 14 V9" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="monolith-carved-rune" />
+          </svg>
+          <div class="monolith-frost-mist"></div>
+        </div>
+        <div class="monolith-heraldic-tag">
+          <span class="monolith-tag-text">Commune with Rime Oracle</span>
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- 2. INTERACTIVE GATE HOTSPOTS & GUARDIAN SENTINELS                     -->
+      <!-- ===================================================================== -->
+
+      <!-- Gate 1: Foreground West Bastion (Frostfang Bastion) -->
+      <div class="fortress-interactive-zone thawed" id="zone-tower-1" style="left: 11%; top: 56%; width: 18%; height: 42%;" data-gate-id="tower-1">
+        <div class="radial-aura-spotlight"></div>
+        <div class="sentinel-frost-beacon">
+          <span class="beacon-star">✦</span>
+          <div class="beacon-ripple"></div>
+        </div>
+        <div class="bastion-shield-marker">
+          <svg class="heraldic-shield-svg" viewBox="0 0 34 42" fill="none">
+            <path d="M17 2 L31 7 V22 C31 32 17 40 17 40 C17 40 3 32 3 22 V7 Z" fill="#142637" stroke="#38bdf8" stroke-width="1.8" />
+          </svg>
+          <span class="shield-roman-numeral">Ⅰ</span>
+          <div class="shield-glint-spark"></div>
+        </div>
+        <!-- Patrol Frost-Wolf (Materializes on Hover) -->
+        <div class="spectral-frost-wolf">
+          <div class="wolf-silhouette"></div>
+          <div class="wolf-glow-eye"></div>
+          <div class="wolf-frost-breath"></div>
+        </div>
+        <!-- Hover Title Banner -->
+        <div class="bastion-parchment-banner">
+          <div class="banner-ribbon-tail tail-left"></div>
+          <div class="banner-ribbon-center">
+            <span class="banner-bastion-title">Frostfang Bastion</span>
+            <span class="banner-status-tag status-thawed">Gate Thawed</span>
+          </div>
+          <div class="banner-ribbon-tail tail-right"></div>
+        </div>
+      </div>
+
+      <!-- Gate 2: Foreground East Bastion (Glacial Cascade Bastion) -->
+      <div class="fortress-interactive-zone thawed" id="zone-tower-2" style="left: 89%; top: 58%; width: 18%; height: 42%;" data-gate-id="tower-2">
+        <div class="radial-aura-spotlight"></div>
+        <div class="sentinel-frost-beacon">
+          <span class="beacon-star">✦</span>
+          <div class="beacon-ripple"></div>
+        </div>
+        <div class="bastion-shield-marker">
+          <svg class="heraldic-shield-svg" viewBox="0 0 34 42" fill="none">
+            <path d="M17 2 L31 7 V22 C31 32 17 40 17 40 C17 40 3 32 3 22 V7 Z" fill="#142637" stroke="#38bdf8" stroke-width="1.8" />
+          </svg>
+          <span class="shield-roman-numeral">Ⅱ</span>
+          <div class="shield-glint-spark"></div>
+        </div>
+        <!-- Patrol Frost-Wolf -->
+        <div class="spectral-frost-wolf">
+          <div class="wolf-silhouette"></div>
+          <div class="wolf-glow-eye"></div>
+          <div class="wolf-frost-breath"></div>
+        </div>
+        <!-- Hover Title Banner -->
+        <div class="bastion-parchment-banner">
+          <div class="banner-ribbon-tail tail-left"></div>
+          <div class="banner-ribbon-center">
+            <span class="banner-bastion-title">Glacial Cascade Bastion</span>
+            <span class="banner-status-tag status-thawed">Gate Thawed</span>
+          </div>
+          <div class="banner-ribbon-tail tail-right"></div>
+        </div>
+      </div>
+
+      <!-- Gate 3: Midground West Sentry (Rime Watchtower) -->
+      <div class="fortress-interactive-zone sealed" id="zone-tower-3" style="left: 31%; top: 54%; width: 9%; height: 22%;" data-gate-id="tower-3">
+        <div class="radial-aura-spotlight"></div>
+        <div class="sentinel-frost-beacon">
+          <span class="beacon-star">✦</span>
+          <div class="beacon-ripple"></div>
+        </div>
+        <div class="bastion-shield-marker">
+          <svg class="heraldic-shield-svg" viewBox="0 0 34 42" fill="none">
+            <path d="M17 2 L31 7 V22 C31 32 17 40 17 40 C17 40 3 32 3 22 V7 Z" fill="#101e2c" stroke="#2563eb" stroke-width="1.8" />
+          </svg>
+          <span class="shield-roman-numeral">Ⅲ</span>
+          <div class="shield-glint-spark"></div>
+        </div>
+        <!-- Patrol Frost-Wolf -->
+        <div class="spectral-frost-wolf">
+          <div class="wolf-silhouette"></div>
+          <div class="wolf-glow-eye"></div>
+          <div class="wolf-frost-breath"></div>
+        </div>
+        <!-- Hover Title Banner -->
+        <div class="bastion-parchment-banner">
+          <div class="banner-ribbon-tail tail-left"></div>
+          <div class="banner-ribbon-center">
+            <span class="banner-bastion-title">Rime Watchtower</span>
+            <span class="banner-status-tag status-sealed" id="tag-tower-3">Permafrost Sealed</span>
+          </div>
+          <div class="banner-ribbon-tail tail-right"></div>
+        </div>
+      </div>
+
+      <!-- Gate 4: Midground East Sentry (Aurora Spire) -->
+      <div class="fortress-interactive-zone sealed" id="zone-tower-4" style="left: 69.5%; top: 54%; width: 9%; height: 22%;" data-gate-id="tower-4">
+        <div class="radial-aura-spotlight"></div>
+        <div class="sentinel-frost-beacon">
+          <span class="beacon-star">✦</span>
+          <div class="beacon-ripple"></div>
+        </div>
+        <div class="bastion-shield-marker">
+          <svg class="heraldic-shield-svg" viewBox="0 0 34 42" fill="none">
+            <path d="M17 2 L31 7 V22 C31 32 17 40 17 40 C17 40 3 32 3 22 V7 Z" fill="#101e2c" stroke="#2563eb" stroke-width="1.8" />
+          </svg>
+          <span class="shield-roman-numeral">Ⅳ</span>
+          <div class="shield-glint-spark"></div>
+        </div>
+        <!-- Patrol Frost-Wolf -->
+        <div class="spectral-frost-wolf">
+          <div class="wolf-silhouette"></div>
+          <div class="wolf-glow-eye"></div>
+          <div class="wolf-frost-breath"></div>
+        </div>
+        <!-- Hover Title Banner -->
+        <div class="bastion-parchment-banner">
+          <div class="banner-ribbon-tail tail-left"></div>
+          <div class="banner-ribbon-center">
+            <span class="banner-bastion-title">Aurora Spire</span>
+            <span class="banner-status-tag status-sealed" id="tag-tower-4">Permafrost Sealed</span>
+          </div>
+          <div class="banner-ribbon-tail tail-right"></div>
+        </div>
+      </div>
+
+      <!-- Gate 5: Citadel Apex Donjon & Gate of the Permafrost Core -->
+      <div class="fortress-interactive-zone sealed" id="zone-citadel" style="left: 50%; top: 42%; width: 28%; height: 36%;" data-gate-id="citadel">
+        <div class="radial-aura-spotlight castle-aura"></div>
+        <div class="sentinel-frost-beacon castle-beacon-pos">
+          <span class="beacon-star">❖</span>
+          <div class="beacon-ripple"></div>
+        </div>
+        <div class="bastion-shield-marker castle-marker-pos">
+          <svg class="heraldic-shield-svg" viewBox="0 0 34 42" fill="none">
+            <path d="M17 2 L31 7 V22 C31 32 17 40 17 40 C17 40 3 32 3 22 V7 Z" fill="#0c1724" stroke="#7dd3fc" stroke-width="2" />
+          </svg>
+          <span class="shield-roman-numeral">✦</span>
+          <div class="shield-glint-spark"></div>
+        </div>
+        <!-- Guardian Wolf Pack -->
+        <div class="spectral-frost-wolf wolf-castle-pos">
+          <div class="wolf-silhouette"></div>
+          <div class="wolf-glow-eye"></div>
+          <div class="wolf-frost-breath"></div>
+        </div>
+        <!-- Hover Title Banner -->
+        <div class="bastion-parchment-banner castle-banner-pos">
+          <div class="banner-ribbon-tail tail-left"></div>
+          <div class="banner-ribbon-center">
+            <span class="banner-bastion-title">The Sovereign Donjon & Ice-Core</span>
+            <span class="banner-status-tag status-sealed" id="tag-citadel">Sanctum Sealed</span>
+          </div>
+          <div class="banner-ribbon-tail tail-right"></div>
+        </div>
+      </div>
+
+    </div><!-- End fortress-illustration-canvas -->
+
+    <!-- ========================================================================= -->
+    <!-- 3. TOP CINEMATIC HUD (Matching provided design)                           -->
+    <!-- ========================================================================= -->
+    <header class="rimeguard-cinematic-hud thaw-in" id="rimeguardHud">
+      <!-- House Crest & Noble Title -->
+      <div class="hud-cinematic-title">
+        <div class="cinematic-crest-icon" aria-hidden="true">
+          <svg viewBox="0 0 28 32" width="28" height="32" fill="none">
+            <path d="M14 2 L26 6 V16 C26 24 14 30 14 30 C14 30 2 24 2 16 V6 Z" fill="#122438" stroke="#7dd3fc" stroke-width="2" />
+            <polygon points="14,8 16.5,13.5 22,14.2 18,18 19,23.5 14,20.8 9,23.5 10,18 6,14.2 11.5,13.5" fill="#f0f9ff" />
+          </svg>
+        </div>
+        <div class="cinematic-title-text">
+          <h1 class="cinematic-house-name">HOUSE RIMEGUARD</h1>
+          <span class="cinematic-realm-sub">THE FROZEN CITADEL • REALM OF PERMAFROST</span>
+        </div>
+      </div>
+
+      <!-- Controls Cluster: Sentinel Toggle, Oracle Button, Gate Progress, Audio, Profile -->
+      <div class="hud-cinematic-controls">
+        <!-- Sentinel Visibility Toggle Button -->
+        <button type="button" class="btn-sentinel-toggle" id="btnSentinelToggle" title="Toggle Sentinel Patrol Markers" aria-label="Toggle Sentinel Patrol Markers">
+          <span class="sentinel-sigil">✦</span>
+          <span class="sentinel-toggle-label" id="sentinelToggleText">SENTINELS VISIBLE</span>
+        </button>
+
+        <!-- Commune with Oracle Button -->
+        <button type="button" class="btn-cinematic-talisman" id="btnOracleCommune" title="Commune with the Ancient Glacial Oracle" aria-label="Commune with Oracle">
+          <span class="talisman-rune">ᚢ</span>
+          <span class="talisman-text">ORACLE</span>
+        </button>
+
+        <!-- Live Gate Defense Diamond Status Pill -->
+        <div class="cinematic-defense-badge" id="defenseBadge">
+          <div class="defense-gems-row" id="defenseGemsRow">
+            <div class="defense-gem-diamond gem-thawed" title="Gate Ⅰ: Thawed"></div>
+            <div class="defense-gem-diamond gem-thawed" title="Gate Ⅱ: Thawed"></div>
+            <div class="defense-gem-diamond gem-sealed" id="gem-3" title="Gate Ⅲ: Sealed"></div>
+            <div class="defense-gem-diamond gem-sealed" id="gem-4" title="Gate Ⅳ: Sealed"></div>
+            <div class="defense-gem-diamond gem-sealed" id="gem-5" title="Gate Ⅴ: Sealed"></div>
+          </div>
+          <span class="defense-status-text" id="defenseStatusText">2 / 5 Gates</span>
+        </div>
+
+        <!-- Procedural SFX Audio Toggle -->
+        <button type="button" class="btn-sfx-toggle" id="btnRimeSfx" title="Toggle Sound FX" aria-label="Toggle Sound FX">
+          <svg class="sfx-icon-on" id="rimeSfxOn" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg class="sfx-icon-off hidden" id="rimeSfxOff" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <!-- Adventurer Profile Button with Logout Menu -->
+        <div class="profile-menu-container">
+          <button type="button" class="nav-avatar-btn" id="rimeAvatarBtn" title="Adventurer Profile" aria-label="Adventurer Profile">
+            <img src="user_avatar.png" class="nav-avatar-img" alt="Adventurer Avatar" />
+            <div class="user-badge-online"></div>
+          </button>
+          <div class="profile-dropdown" id="rimeProfileDropdown">
+            <div class="dropdown-header">
+              <img src="user_avatar.png" class="dropdown-avatar-img" alt="User Avatar" />
+              <div class="dropdown-user-info">
+                <span class="dropdown-name">Adventurer</span>
+                <span class="dropdown-role">Rimeguard Initiate</span>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="dashboard.html" class="dropdown-link-btn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span>Sanctum Chamber</span>
+            </a>
+            <a href="introduction-module/index.html" class="dropdown-link-btn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <span>Introduction Module</span>
+            </a>
+            <div class="dropdown-divider"></div>
+            <button type="button" class="dropdown-logout-btn" id="btnRimeLogout">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================================= -->
+    <!-- 4. ILLUMINATED ORACLE DIALOGUE DRAWER / SCROLL                            -->
+    <!-- ========================================================================= -->
+    <div class="fantasy-oracle-parchment" id="oracleDrawer" style="display: none;">
+      <span class="parchment-corner pc-tl">✦</span>
+      <span class="parchment-corner pc-tr">✦</span>
+      <span class="parchment-corner pc-bl">✦</span>
+      <span class="parchment-corner pc-br">✦</span>
+
+      <div class="oracle-scroll-header">
+        <div class="oracle-title-wrap">
+          <span class="oracle-rune-sigil">ᚢ</span>
+          <h2 class="oracle-scroll-title">THE ICE-BOUND ORACLE</h2>
+        </div>
+        <button type="button" class="btn-parchment-close" id="btnCloseOracle" aria-label="Close Oracle">✕</button>
+      </div>
+
+      <div class="oracle-scroll-body">
+        <div class="oracle-riddle-scrollbox">
+          <p class="oracle-riddle-text" id="oracleRiddleText">
+            "What speaks without a tongue, roars without a throat, and freezes iron in its breath? The North Glacier wind. Slow down and verify before you act."
+          </p>
+        </div>
+        <span class="oracle-lore-footer">
+          ✦ The Oracle perceives all five gates. Heed the aphorisms when navigating the permafrost.
+        </span>
+      </div>
+
+      <div class="oracle-scroll-actions">
+        <button type="button" class="btn-fantasy-carved" id="btnNextRiddle">Consult Another Riddle →</button>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 5. BASTION CODEX / CHALLENGE DOSSIER MODAL                                -->
+    <!-- ========================================================================= -->
+    <div class="bastion-modal-overlay" id="bastionModalOverlay" style="display: none;">
+      <div class="bastion-codex-card" id="bastionCodexCard">
+        <span class="codex-corner cc-tl">✦</span>
+        <span class="codex-corner cc-tr">✦</span>
+        <span class="codex-corner cc-bl">✦</span>
+        <span class="codex-corner cc-br">✦</span>
+
+        <!-- Spider-crack frost overlay canvas for the signature shatter animation -->
+        <canvas class="crack-propagation-canvas" id="crackCanvas"></canvas>
+
+        <div class="codex-header">
+          <div class="codex-banner-ribbon">
+            <span class="codex-numeral" id="modalNumeral">Ⅰ</span>
+            <span class="codex-role" id="modalRole">Western Palisade & Stone Rampart</span>
+          </div>
+          <button type="button" class="btn-codex-dismiss" id="btnCloseModal" aria-label="Close Codex">✕</button>
+        </div>
+
+        <div class="codex-body">
+          <h3 class="codex-bastion-name" id="modalName">THE FROSTFANG BASTION</h3>
+          <span class="codex-bastion-title" id="modalTitle">Foreground West Bastion</span>
+
+          <div class="codex-chronicle-box">
+            <div class="chronicle-pillar-line"></div>
+            <div class="chronicle-text-wrap">
+              <span class="chronicle-label">ANCIENT CHRONICLE</span>
+              <p id="modalLore">
+                The heavy bastion guarding the western approach. Armed with defensive timber palisades, ashlar masonry, and an eternal blue flame brazier.
+              </p>
+            </div>
+          </div>
+
+          <div class="codex-stats-grid">
+            <div class="codex-stat-panel">
+              <span class="stat-label">DEFENSIVE GARRISON</span>
+              <span class="stat-value" id="modalGarrison">Frostfang Sentry Wolves & Winterguard Marksmen</span>
+            </div>
+            <div class="codex-stat-panel">
+              <span class="stat-label">PERMAFROST SEAL</span>
+              <span class="stat-value status-thawed" id="modalStatus">Gate Thawed</span>
+            </div>
+          </div>
+
+          <!-- Challenge / Flag Verification Terminal inside the Codex -->
+          <div class="codex-challenge-terminal" id="codexTerminal">
+            <div class="term-header-bar">
+              <span class="term-dot"></span>
+              <span class="term-dot"></span>
+              <span class="term-dot"></span>
+              <span class="term-title" id="terminalTitle">GATE ACCESS CIPHER</span>
+            </div>
+            <div class="term-body-content" id="terminalBody">
+              <div class="term-prompt-line">
+                <span class="term-ps1">rimeguard@citadel:~$</span>
+                <span class="term-info-text" id="terminalPrompt">Input clearance cipher or click Shatter & Unlock to unseal.</span>
+              </div>
+              <div class="term-input-row" id="terminalInputRow">
+                <input type="text" class="term-input" id="termCipherInput" placeholder="Enter flag or cipher..." autocomplete="off" spellcheck="false" />
+                <button type="button" class="btn-term-verify" id="btnVerifyCipher">Verify Flag</button>
+              </div>
+              <div class="term-feedback" id="termFeedback"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="codex-footer">
+          <button type="button" class="btn-fantasy-carved btn-shatter" id="btnShatterGate">
+            <span class="shatter-btn-text">Shatter & Unlock Gate ❄</span>
+          </button>
+          <div class="codex-thawed-confirmed hidden" id="thawedConfirmedMsg">
+            ✦ PERMAFROST DISPELLED · GATEWAY OPEN
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- End rimeguard-viewport-stage -->
+
+  <!-- Application Logic -->
+  <script src="rimeguard.js"></script>
+</body>
+</html>

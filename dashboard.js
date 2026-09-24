@@ -612,19 +612,24 @@ class DashboardApp {
         this.dom.introNotice.classList.remove('unlocked');
       }
     } else {
-      // Gate is unlocked: ready to enter!
-      sfx.playClick();
+      // Gate is unlocked: ready to enter House Rimeguard!
+      sfx.playGateOpen();
 
       if (this.dom.mainGateBtn) {
         this.dom.mainGateBtn.classList.add('gate-unlock-burst');
-        setTimeout(() => {
-          if (this.dom.mainGateBtn) this.dom.mainGateBtn.classList.remove('gate-unlock-burst');
-        }, 800);
+      }
+
+      if (this.dom.dashboardWarpFlash) {
+        this.dom.dashboardWarpFlash.classList.add('flash-active');
       }
 
       if (typeof window.onGateEnter === 'function') {
         window.onGateEnter();
       }
+
+      setTimeout(() => {
+        window.location.href = 'rimeguard.html';
+      }, 650);
     }
   }
 
